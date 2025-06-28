@@ -1,21 +1,15 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
-/// TODO: new file
-final class AmountFormatOptions {
-  final String groupingSeparator;
-  final String decimalSeparator;
+import 'amount_format_separators.dart';
 
-  const AmountFormatOptions({
-    this.groupingSeparator = ',',
-    this.decimalSeparator = '.',
-  });
-}
+part 'utils/format_decimal.dart';
+part 'utils/unformat.dart';
 
 /// Controller for amount text field with formatting and parsing capability
 final class AmountEditingController extends ValueNotifier<Decimal> {
-  /// Options for formatting the amount
-  final AmountFormatOptions options;
+  /// Separators for parsing and formatting the text field set during initialization.
+  final AmountFormatSeparators separators;
 
   /// Focus Node that should be given to the text field
   final focusNode = FocusNode();
@@ -23,7 +17,7 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
   /// Text Editing Controller that should be given to the text field
   final textController = TextEditingController();
 
-  var _hadFocus = false;
+  var _hadFocus = false; // TODO: do we need this
 
   int? _fractionalDigits;
 
@@ -46,7 +40,7 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
   }
 
   /// Creates an [AmountEditingController] with the given [amount] and [fractionalDigits].
-  AmountEditingController({this.options = const AmountFormatOptions(), Decimal? amount, int? fractionalDigits})
+  AmountEditingController({this.separators = const AmountFormatSeparators(), Decimal? amount, int? fractionalDigits})
     : _fractionalDigits = fractionalDigits,
       super(amount ?? Decimal.zero) {
     focusNode.addListener(_onFocusNodeChange);
@@ -69,6 +63,7 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
     if (focusNode.hasFocus) {
       // textController.text = options.clear(textController.text);
     } else {
+      textController.text = _formatDecimal(value, separators: separators);
       // textController.text = options.format(value, fractionalDigits: fractionalDigits);
     }
   }
@@ -96,6 +91,14 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
     // if (value == newValue) return;
 
     // value = newValue;
+
+    final lol = Decimal.tryParse(_unformat(textController.text, separators: separators));
+
+    if (lol != null && lol != value) {
+      value = lol;
+    }
+
+    // todo edge case for empty input
   }
 
   @override

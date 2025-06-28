@@ -65,6 +65,7 @@ final class _ScreenState extends State<Screen> {
               },
             ),
           ),
+          // TODO: observe changes delivered by controller
         ],
       ),
     );
