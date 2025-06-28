@@ -8,7 +8,7 @@ part 'utils/format_decimal.dart';
 part 'utils/unformat.dart';
 
 /// Controller for amount text field with formatting and parsing capability
-final class AmountEditingController extends ValueNotifier<Decimal> {
+final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Separators for parsing and formatting the text field set during initialization.
   final AmountFormatSeparators separators;
 
@@ -30,7 +30,7 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
   int? get fractionalDigits => _fractionalDigits;
 
   @override
-  set value(Decimal newValue) {
+  set value(Decimal? newValue) {
     if (newValue == super.value) return;
 
     super.value = newValue;
@@ -62,10 +62,13 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
 
   void _format() {
     if (focusNode.hasFocus) {
-      // textController.text = options.clear(textController.text);
+      // if user is typing, we don't want to format the text
     } else {
-      textController.text = _formatDecimal(value, separators: separators);
-      // textController.text = options.format(value, fractionalDigits: fractionalDigits);
+      if (value != null) {
+        textController.text = _formatDecimal(value!, separators: separators);
+      } else {
+        textController.text = '';
+      }
     }
   }
 
@@ -92,23 +95,16 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
         // adds * after `(` if there is a `)` before `(`
         .replaceAllMapped(RegExp(r'\)\s*\('), (_) => ')*(');
 
-    // TODO: check if empty
-
-    final lol = _DecimalUtils.tryParseMathExpression(processed);
-
-    // final newValue = options.toDecimal(textController.text);
-
-    // if (value == newValue) return;
-
-    // value = newValue;
-
-    // final lol = Decimal.tryParse(_unformat(textController.text, separators: separators));
-
-    if (lol != null && lol != value) {
-      value = lol;
+    if (processed.isEmpty) {
+      value = null;
+      return;
     }
 
-    // todo edge case for empty input
+    final evaluated = _DecimalUtils.tryParseMathExpression(processed);
+
+    if (evaluated != null && evaluated != value) {
+      value = evaluated;
+    }
   }
 
   @override
