@@ -68,7 +68,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
       // if user is typing, we don't want to format the text
     } else {
       if (value != null) {
-        textController.text = _formatDecimal(value!, separators: separators);
+        textController.text = _formatDecimal(value!, separators: separators, fractionalDigits: fractionalDigits);
       } else {
         textController.text = '';
       }
