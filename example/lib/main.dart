@@ -28,7 +28,7 @@ final class Screen extends StatefulWidget {
 }
 
 final class _ScreenState extends State<Screen> {
-  final controller = AmountEditingController();
+  final controller = AmountEditingController(fractionalDigits: 2);
 
   @override
   void dispose() {
