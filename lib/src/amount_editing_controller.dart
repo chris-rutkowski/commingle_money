@@ -80,17 +80,19 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
       RegExp.escape('-'),
     ];
 
-
     final processed = _unformat(textController.text, separators: separators)
         .replaceAll(RegExp(r'^[\s.,]+|[\s.,]+$'), '')
         .replaceAll(RegExp('(${validOperators.join('|')})+\$'), '')
         .replaceAll(StringMath.plusSign, '+')
         .replaceAll(StringMath.multiplicationSign, '*')
         .replaceAll(StringMath.minusSign, '-')
-        .replaceAll(StringMath.divisionSign, '/');
+        .replaceAll(StringMath.divisionSign, '/')
+        // adds `*` before `(` if there is a number before `(`
+        .replaceAllMapped(RegExp(r'(\d)\s*\('), (match) => '${match[1]}*(')
+        // adds * after `(` if there is a `)` before `(`
+        .replaceAllMapped(RegExp(r'\)\s*\('), (_) => ')*(');
 
     // TODO: check if empty
-
 
     final lol = _DecimalUtils.tryParseMathExpression(processed);
 
