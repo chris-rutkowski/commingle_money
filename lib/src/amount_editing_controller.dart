@@ -1,10 +1,10 @@
+import 'package:amount_editing_controller/src/utils/decimal_utils.dart';
 import 'package:decimal/decimal.dart';
-import 'package:expressions/expressions.dart';
 import 'package:flutter/material.dart';
 
 import 'amount_format_separators.dart';
+import 'utils/evaluate_math_text.dart';
 
-part 'utils/evaluate_math_text.dart';
 part 'utils/format_decimal.dart';
 part 'utils/unformat.dart';
 
@@ -44,7 +44,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Creates an [AmountEditingController] with the given [amount] and [fractionalDigits].
   AmountEditingController({this.separators = const AmountFormatSeparators(), Decimal? amount, int? fractionalDigits})
     : _fractionalDigits = fractionalDigits,
-      super(amount ?? Decimal.zero) {
+      super(amount?.roundOptional(scale: fractionalDigits)) {
     focusNode.addListener(_onFocusNodeChange);
 
     if (amount != null) {
@@ -81,11 +81,8 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
       return;
     }
 
-    var evaluated = _evaluateMathText(_unformat(textController.text, separators: separators));
-
-    if (fractionalDigits != null) {
-      evaluated = evaluated?.round(scale: fractionalDigits!);
-    }
+    final unformatted = _unformat(textController.text, separators: separators);
+    final evaluated = evaluateMathText(unformatted)?.scaleOptional(scale: fractionalDigits);
 
     if (evaluated != null && evaluated != value) {
       value = evaluated;
@@ -97,5 +94,11 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     focusNode.dispose();
     textController.dispose();
     super.dispose();
+  }
+}
+
+extension OptionalRounding on Decimal {
+  Decimal scaleOptional({int? scale}) {
+    return scale != null ? round(scale: scale) : this;
   }
 }

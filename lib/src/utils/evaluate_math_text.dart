@@ -1,6 +1,10 @@
-part of '../amount_editing_controller.dart';
 
-Decimal? _evaluateMathText(String text) {
+import 'package:decimal/decimal.dart';
+import 'package:expressions/expressions.dart';
+
+import 'decimal_utils.dart';
+
+Decimal? evaluateMathText(String text) {
   const String plusSign = '+'; // standard plus sign
   const String minusSign = '‒'; // fancy minus sign
   const String multiplicationSign = '×'; // fancy multiplication sign
@@ -39,7 +43,7 @@ Decimal? _evaluateMathText(String text) {
     }
 
     if (result is double) {
-      return Decimal.parse(result.toString());
+      return DecimalUtils.fromDouble(result);
     }
 
     return null;

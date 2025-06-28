@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:amount_editing_controller/amount_editing_controller.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -28,7 +29,7 @@ final class Screen extends StatefulWidget {
 }
 
 final class _ScreenState extends State<Screen> {
-  final controller = AmountEditingController(fractionalDigits: 2);
+  final controller = AmountEditingController( fractionalDigits: 2, amount: Decimal.parse('3532.2312'));
 
   @override
   void dispose() {
@@ -51,12 +52,6 @@ final class _ScreenState extends State<Screen> {
             ),
           ),
           ListTile(
-            title: Text('Dismiss keyboard'),
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-          ),
-          ListTile(
             title: Text('Amount Controller Value'),
             subtitle: ValueListenableBuilder(
               valueListenable: controller,
@@ -65,6 +60,20 @@ final class _ScreenState extends State<Screen> {
               },
             ),
           ),
+          Text('Interact:'),
+          ListTile(
+            title: Text('Dismiss keyboard'),
+            onTap: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+          ListTile(
+            title: Text('Set value: 12345.6789'),
+            onTap: () {
+              controller.value = Decimal.parse('12345.6789');
+            },
+          ),
+
           // TODO: observe changes delivered by controller
         ],
       ),
