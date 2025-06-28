@@ -23,9 +23,18 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
 
   int? _fractionalDigits;
 
-  set fractionalDigits(int? value) {
-    if (_fractionalDigits == value) return;
-    _fractionalDigits = value;
+  set fractionalDigits(int? newFractionalDigits) {
+    if (_fractionalDigits == newFractionalDigits) return;
+
+    _fractionalDigits = newFractionalDigits;
+
+    final rounded = value?.roundOptional(scale: newFractionalDigits);
+    if (value == rounded) {
+      _format();
+      return;
+    }
+
+    value = rounded;
   }
 
   int? get fractionalDigits => _fractionalDigits;
@@ -49,10 +58,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
       super(amount?.roundOptional(scale: fractionalDigits)) {
     focusNode.addListener(_onFocusNodeChange);
 
-    if (amount != null) {
-      // textController.text = options.format(amount, fractionalDigits: fractionalDigits);
-    }
-
+    _format();
     textController.addListener(_onTextControllerChange);
   }
 
@@ -76,6 +82,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   }
 
   void _onTextControllerChange() {
+    print('_onTextControllerChange');
     // TODO: check how often this is called and if some logic is needed and if external controller get side effects
 
     if (textController.text.trim().isEmpty) {

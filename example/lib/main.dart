@@ -29,7 +29,29 @@ final class Screen extends StatefulWidget {
 }
 
 final class _ScreenState extends State<Screen> {
-  final controller = AmountEditingController( fractionalDigits: 2, amount: Decimal.parse('3532.2312'));
+  final controller = AmountEditingController(fractionalDigits: 2, amount: Decimal.parse('3532.2312'));
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(() {
+      debugPrint('Controller value changed: ${controller.value}');
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Controller value changed!'),
+              Text(controller.value.toString()),
+            ],
+          ),
+          duration: Duration(milliseconds: 500),
+        ),
+      );
+    });
+  }
 
   @override
   void dispose() {
@@ -60,7 +82,10 @@ final class _ScreenState extends State<Screen> {
               },
             ),
           ),
-          Text('Interact:'),
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0, top: 16),
+            child: Text('Interact:'),
+          ),
           ListTile(
             title: Text('Dismiss keyboard'),
             onTap: () {
@@ -72,6 +97,33 @@ final class _ScreenState extends State<Screen> {
             onTap: () {
               controller.value = Decimal.parse('12345.6789');
             },
+          ),
+          ListTile(
+            title: Text('Set fractional digits'),
+            subtitle: Wrap(
+              children: [
+                TextButton(
+                  onPressed: () => controller.fractionalDigits = null,
+                  child: const Text('null'),
+                ),
+                TextButton(
+                  onPressed: () => controller.fractionalDigits = 1,
+                  child: const Text('1'),
+                ),
+                TextButton(
+                  onPressed: () => controller.fractionalDigits = 2,
+                  child: const Text('2'),
+                ),
+                TextButton(
+                  onPressed: () => controller.fractionalDigits = 3,
+                  child: const Text('3'),
+                ),
+                TextButton(
+                  onPressed: () => controller.fractionalDigits = 8,
+                  child: const Text('8'),
+                ),
+              ],
+            ),
           ),
 
           // TODO: observe changes delivered by controller
