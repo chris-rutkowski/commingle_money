@@ -34,7 +34,9 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   set value(Decimal? newValue) {
     if (newValue == super.value) return;
 
-    super.value = newValue;
+    final rounded = newValue?.roundOptional(scale: fractionalDigits);
+
+    super.value = rounded;
 
     if (!focusNode.hasFocus) {
       _format();
@@ -82,7 +84,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     }
 
     final unformatted = _unformat(textController.text, separators: separators);
-    final evaluated = evaluateMathText(unformatted)?.scaleOptional(scale: fractionalDigits);
+    final evaluated = evaluateMathText(unformatted)?.roundOptional(scale: fractionalDigits);
 
     if (evaluated != null && evaluated != value) {
       value = evaluated;
@@ -94,11 +96,5 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     focusNode.dispose();
     textController.dispose();
     super.dispose();
-  }
-}
-
-extension OptionalRounding on Decimal {
-  Decimal scaleOptional({int? scale}) {
-    return scale != null ? round(scale: scale) : this;
   }
 }
