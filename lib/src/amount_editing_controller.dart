@@ -1,4 +1,5 @@
 import 'package:decimal/decimal.dart';
+import 'package:expressions/expressions.dart';
 import 'package:flutter/material.dart';
 
 import 'amount_format_separators.dart';
@@ -69,22 +70,29 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
   }
 
   void _onTextControllerChange() {
-    // final validOperators = [
-    //   RegExp.escape(StringMath.plusSign),
-    //   RegExp.escape(StringMath.minusSign),
-    //   RegExp.escape(StringMath.multiplicationSign),
-    //   RegExp.escape(StringMath.divisionSign),
-    //   RegExp.escape('*'),
-    //   RegExp.escape('-'),
-    // ];
+    // TODO: check how often this is called and if some logic is needed and if external controller get side effects
+    final validOperators = [
+      RegExp.escape(StringMath.plusSign),
+      RegExp.escape(StringMath.minusSign),
+      RegExp.escape(StringMath.multiplicationSign),
+      RegExp.escape(StringMath.divisionSign),
+      RegExp.escape('*'),
+      RegExp.escape('-'),
+    ];
 
-    // final processed = controller.text
-    //     .replaceAll(RegExp(r'^[\s.,]+|[\s.,]+$'), '')
-    //     .replaceAll(RegExp('(${validOperators.join('|')})+\$'), '')
-    //     .replaceAll(StringMath.plusSign, '+')
-    //     .replaceAll(StringMath.multiplicationSign, '*')
-    //     .replaceAll(StringMath.minusSign, '-')
-    //     .replaceAll(StringMath.divisionSign, '/');
+
+    final processed = _unformat(textController.text, separators: separators)
+        .replaceAll(RegExp(r'^[\s.,]+|[\s.,]+$'), '')
+        .replaceAll(RegExp('(${validOperators.join('|')})+\$'), '')
+        .replaceAll(StringMath.plusSign, '+')
+        .replaceAll(StringMath.multiplicationSign, '*')
+        .replaceAll(StringMath.minusSign, '-')
+        .replaceAll(StringMath.divisionSign, '/');
+
+    // TODO: check if empty
+
+
+    final lol = _DecimalUtils.tryParseMathExpression(processed);
 
     // final newValue = options.toDecimal(textController.text);
 
@@ -92,7 +100,7 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
 
     // value = newValue;
 
-    final lol = Decimal.tryParse(_unformat(textController.text, separators: separators));
+    // final lol = Decimal.tryParse(_unformat(textController.text, separators: separators));
 
     if (lol != null && lol != value) {
       value = lol;
@@ -106,5 +114,37 @@ final class AmountEditingController extends ValueNotifier<Decimal> {
     focusNode.dispose();
     textController.dispose();
     super.dispose();
+  }
+}
+
+extension StringMath on String {
+  static const String plusSign = '+';
+  static const String minusSign = '‒';
+  static const String multiplicationSign = '×';
+  static const String divisionSign = '÷';
+}
+
+extension _DecimalUtils on Decimal {
+  static Decimal fromDouble(double value) => Decimal.parse(value.toString());
+
+  static Decimal? tryParseMathExpression(String expression) {
+    const evaluator = ExpressionEvaluator();
+
+    try {
+      final parsed = Expression.parse(expression);
+      final result = evaluator.eval(parsed, {});
+
+      if (result is int) {
+        return Decimal.fromInt(result);
+      }
+
+      if (result is double) {
+        return _DecimalUtils.fromDouble(result);
+      }
+
+      return null;
+    } catch (_) {
+      return null;
+    }
   }
 }
