@@ -2,11 +2,11 @@ part of '../amount_editing_controller.dart';
 
 String _formatDecimal(
   Decimal value, {
-  int? fractionalDigits,
+  int? precision,
   required AmountFormatSeparators separators,
 }) {
-  // rounds the value if fractionalDigits is provided, otherwise uses the value as is
-  final roundedValue = fractionalDigits != null ? value.round(scale: fractionalDigits) : value;
+  // rounds the value if `precision` is provided, otherwise uses the value as is
+  final roundedValue = precision != null ? value.round(scale: precision) : value;
 
   final parts = roundedValue.toString().split('.');
 
@@ -23,8 +23,8 @@ String _formatDecimal(
     return formattedInteger;
   }
 
-  // pad the fraction with zeros if fractionalDigits is provided, otherwise leave it as is
-  final paddedFraction = fractionalDigits != null ? fraction.padRight(fractionalDigits, '0') : fraction;
+  // pad the fraction with zeros if `precision` is provided, otherwise leave it as is
+  final paddedFraction = precision != null ? fraction.padRight(precision, '0') : fraction;
 
   return '$formattedInteger${separators.decimal}$paddedFraction';
 }

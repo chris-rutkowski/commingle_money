@@ -19,16 +19,18 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Text Editing Controller that should be given to the text field
   final textController = TextEditingController();
 
-  var _hadFocus = false; // TODO: do we need this
+  int? _precision;
 
-  int? _fractionalDigits;
+  /// Precision used in formatting and parsing the amount.
+  int? get precision => _precision;
 
-  set fractionalDigits(int? newFractionalDigits) {
-    if (_fractionalDigits == newFractionalDigits) return;
+  /// Sets the precision for the amount and recalculates the value if necessary.
+  set precision(int? newPrecision) {
+    if (_precision == newPrecision) return;
 
-    _fractionalDigits = newFractionalDigits;
+    _precision = newPrecision;
 
-    final rounded = value?.roundOptional(scale: newFractionalDigits);
+    final rounded = value?.roundOptional(scale: newPrecision);
     if (value == rounded) {
       _format();
       return;
@@ -37,13 +39,11 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     value = rounded;
   }
 
-  int? get fractionalDigits => _fractionalDigits;
-
   @override
   set value(Decimal? newValue) {
     if (newValue == super.value) return;
 
-    final rounded = newValue?.roundOptional(scale: fractionalDigits);
+    final rounded = newValue?.roundOptional(scale: precision);
 
     super.value = rounded;
 
@@ -52,10 +52,10 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     }
   }
 
-  /// Creates an [AmountEditingController] with the given [amount] and [fractionalDigits].
-  AmountEditingController({this.separators = const AmountFormatSeparators(), Decimal? amount, int? fractionalDigits})
-    : _fractionalDigits = fractionalDigits,
-      super(amount?.roundOptional(scale: fractionalDigits)) {
+  /// Creates an [AmountEditingController] with the given [amount] and [precision].
+  AmountEditingController({this.separators = const AmountFormatSeparators(), Decimal? amount, int? precision})
+    : _precision = precision,
+      super(amount?.roundOptional(scale: precision)) {
     focusNode.addListener(_onFocusNodeChange);
 
     _format();
@@ -63,9 +63,6 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   }
 
   void _onFocusNodeChange() {
-    if (focusNode.hasFocus == _hadFocus) return;
-    _hadFocus = focusNode.hasFocus;
-
     _format();
   }
 
@@ -74,7 +71,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
       // if user is typing, we don't want to format the text
     } else {
       if (value != null) {
-        textController.text = _formatDecimal(value!, separators: separators, fractionalDigits: fractionalDigits);
+        textController.text = _formatDecimal(value!, separators: separators, precision: precision);
       } else {
         textController.text = '';
       }
@@ -91,7 +88,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     }
 
     final unformatted = _unformat(textController.text, separators: separators);
-    final evaluated = evaluateMathText(unformatted)?.roundOptional(scale: fractionalDigits);
+    final evaluated = evaluateMathText(unformatted)?.roundOptional(scale: precision);
 
     if (evaluated != null && evaluated != value) {
       value = evaluated;

@@ -12,7 +12,7 @@ final class AmountEditingControllerScreen extends StatefulWidget {
 }
 
 final class _AmountEditingControllerScreenState extends State<AmountEditingControllerScreen> {
-  final controller = AmountEditingController(fractionalDigits: 2, amount: Decimal.parse('3532.2312'));
+  final controller = AmountEditingController(precision: 2, amount: Decimal.parse('3532.2312'));
 
   @override
   void initState() {
@@ -82,27 +82,27 @@ final class _AmountEditingControllerScreenState extends State<AmountEditingContr
             },
           ),
           ListTile(
-            title: const Text('Set fractional digits'),
+            title: const Text('Set precision digits'),
             subtitle: Wrap(
               children: [
                 TextButton(
-                  onPressed: () => controller.fractionalDigits = null,
+                  onPressed: () => controller.precision = null,
                   child: const Text('null'),
                 ),
                 TextButton(
-                  onPressed: () => controller.fractionalDigits = 1,
+                  onPressed: () => controller.precision = 1,
                   child: const Text('1'),
                 ),
                 TextButton(
-                  onPressed: () => controller.fractionalDigits = 2,
+                  onPressed: () => controller.precision = 2,
                   child: const Text('2'),
                 ),
                 TextButton(
-                  onPressed: () => controller.fractionalDigits = 3,
+                  onPressed: () => controller.precision = 3,
                   child: const Text('3'),
                 ),
                 TextButton(
-                  onPressed: () => controller.fractionalDigits = 8,
+                  onPressed: () => controller.precision = 8,
                   child: const Text('8'),
                 ),
               ],
