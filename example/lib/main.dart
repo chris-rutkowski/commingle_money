@@ -16,19 +16,40 @@ final class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
-      home: const Screen(),
+      home: const AmountEditingControllerScreen(),
     );
   }
 }
 
-final class Screen extends StatefulWidget {
-  const Screen({super.key});
+final class MenuScreen extends StatelessWidget {
+  const MenuScreen({super.key});
 
   @override
-  State<Screen> createState() => _ScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Example Menu')),
+      body: ListView(
+        children: [
+          ListTile(
+            title: const Text('Amount Editing Controller'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AmountEditingControllerScreen()));
+            },
+          ),
+        ],
+      ),
+    );
+  }
 }
 
-final class _ScreenState extends State<Screen> {
+final class AmountEditingControllerScreen extends StatefulWidget {
+  const AmountEditingControllerScreen({super.key});
+
+  @override
+  State<AmountEditingControllerScreen> createState() => _AmountEditingControllerScreenState();
+}
+
+final class _AmountEditingControllerScreenState extends State<AmountEditingControllerScreen> {
   final controller = AmountEditingController(fractionalDigits: 2, amount: Decimal.parse('3532.2312'));
 
   @override
