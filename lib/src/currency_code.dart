@@ -9,6 +9,9 @@ abstract final class CurrencyCodes {
   /// AUD - Australian Dollar
   static const CurrencyCode aud = 'AUD';
 
+  /// BHD - Bahraini Dinar
+  static const CurrencyCode bhd = 'BHD';
+
   /// CAD - Canadian Dollar
   static const CurrencyCode cad = 'CAD';
 
@@ -29,6 +32,9 @@ abstract final class CurrencyCodes {
 
   /// INR - Indian Rupee
   static const CurrencyCode inr = 'INR';
+
+  /// IRR - Iranian Rial
+  static const CurrencyCode irr = 'IRR';
 
   /// JPY - Japanese Yen
   static const CurrencyCode jpy = 'JPY';

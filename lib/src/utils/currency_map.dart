@@ -87,8 +87,8 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇧🇬',
   ),
-  'BHD': const Currency(
-    code: 'BHD',
+  CurrencyCodes.bhd: const Currency(
+    code: CurrencyCodes.bhd,
     englishName: 'Bahraini Dinar',
     precision: 3,
     emoji: '🇧🇭',
@@ -153,7 +153,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇧🇿',
   ),
-  'CAD': const Currency(
+  CurrencyCodes.cad: const Currency(
     code: CurrencyCodes.cad,
     englishName: 'Canadian Dollar',
     precision: 2,
@@ -165,7 +165,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇨🇩',
   ),
-  'CHF': const Currency(
+  CurrencyCodes.chf: const Currency(
     code: CurrencyCodes.chf,
     englishName: 'Swiss Franc',
     precision: 2,
@@ -178,7 +178,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇨🇱',
   ),
-  'CNY': const Currency(
+  CurrencyCodes.cny: const Currency(
     code: CurrencyCodes.cny,
     englishName: 'Chinese Yuan',
     precision: 1,
@@ -256,7 +256,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇪🇹',
   ),
-  'EUR': const Currency(
+  CurrencyCodes.eur: const Currency(
     code: CurrencyCodes.eur,
     englishName: 'Euro',
     precision: 2,
@@ -275,7 +275,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇫🇰',
   ),
-  'GBP': const Currency(
+  CurrencyCodes.gbp: const Currency(
     code: CurrencyCodes.gbp,
     englishName: 'British Pound Sterling',
     precision: 2,
@@ -324,7 +324,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇬🇾',
   ),
-  'HKD': const Currency(
+  CurrencyCodes.hkd: const Currency(
     code: CurrencyCodes.hkd,
     englishName: 'Hong Kong Dollar',
     precision: 2,
@@ -367,7 +367,7 @@ final Map<String, Currency> _currencyMap = {
     emoji: '🇮🇱',
     symbol: '₪',
   ),
-  'INR': const Currency(
+  CurrencyCodes.inr: const Currency(
     code: CurrencyCodes.inr,
     englishName: 'Indian Rupee',
     precision: 2,
@@ -380,8 +380,8 @@ final Map<String, Currency> _currencyMap = {
     precision: 3,
     emoji: '🇮🇶',
   ),
-  'IRR': const Currency(
-    code: 'IRR',
+  CurrencyCodes.irr: const Currency(
+    code: CurrencyCodes.irr,
     englishName: 'Iranian Rial',
     precision: 0,
     emoji: '🇮🇷',
@@ -404,7 +404,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇯🇴',
   ),
-  'JPY': const Currency(
+  CurrencyCodes.jpy: const Currency(
     code: CurrencyCodes.jpy,
     englishName: 'Japanese Yen',
     precision: 2,
@@ -659,7 +659,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇵🇰',
   ),
-  'PLN': const Currency(
+  CurrencyCodes.pln: const Currency(
     code: CurrencyCodes.pln,
     englishName: 'Polish Złoty',
     precision: 2,
@@ -735,7 +735,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇸🇪',
   ),
-  'SGD': const Currency(
+  CurrencyCodes.sgd: const Currency(
     code: CurrencyCodes.sgd,
     englishName: 'Singapore Dollar',
     precision: 1,
@@ -869,7 +869,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇺🇬',
   ),
-  'USD': const Currency(
+  CurrencyCodes.usd: const Currency(
     code: CurrencyCodes.usd,
     englishName: 'United States Dollar',
     precision: 2,
@@ -949,7 +949,7 @@ final Map<String, Currency> _currencyMap = {
     precision: 2,
     emoji: '🇾🇪',
   ),
-  'ZAR': const Currency(
+  CurrencyCodes.zar: const Currency(
     code: CurrencyCodes.zar,
     englishName: 'South African Rand',
     precision: 2,

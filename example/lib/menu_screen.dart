@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'amount_editing_controller_screen.dart';
+import 'money_editing_controller_screen.dart';
 
 final class MenuScreen extends StatelessWidget {
   const MenuScreen({super.key});
@@ -17,6 +18,12 @@ final class MenuScreen extends StatelessWidget {
             title: const Text('Amount Editing Controller'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AmountEditingControllerScreen()));
+            },
+          ),
+          ListTile(
+            title: const Text('Money Editing Controller'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const MoneyEditingControllerScreen()));
             },
           ),
         ],

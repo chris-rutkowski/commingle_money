@@ -6,20 +6,20 @@ import 'currency_code.dart';
 /// A value object that represents a monetary amount in a specific currency.
 final class Money extends Equatable {
   /// The ISO 4217 currency code (e.g. "USD", "EUR", "AED").
-  final CurrencyCode currency;
+  final CurrencyCode currencyCode;
 
   /// The monetary amount, represented as a [Decimal] for high precision.
   final Decimal amount;
 
-  /// Creates a [Money] instance with the given [currency] and [amount].
+  /// Creates a [Money] instance with the given [currencyCode] and [amount].
   const Money({
-    required this.currency,
+    required this.currencyCode,
     required this.amount,
   });
 
   @override
-  List<Object?> get props => [currency, amount];
+  List<Object?> get props => [currencyCode, amount];
 
   @override
-  String toString() => '$currency $amount';
+  String toString() => '$currencyCode $amount';
 }
