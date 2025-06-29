@@ -1,7 +1,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
-import '../amount_editing_controller.dart';
+import '../commingle_money.dart';
 
 final class MoneyEditingController extends ChangeNotifier {
   /// Focus Node that should be given to the text field

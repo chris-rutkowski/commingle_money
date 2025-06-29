@@ -7,7 +7,7 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
-  amount_editing_controller:
+  commingle_money:
     path: ..
   cupertino_icons:
   decimal:

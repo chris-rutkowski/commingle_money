@@ -1,6 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:amount_editing_controller/amount_editing_controller.dart';
+import 'package:commingle_money/commingle_money.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
