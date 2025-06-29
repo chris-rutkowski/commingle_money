@@ -1,6 +1,7 @@
-import 'package:amount_editing_controller/src/currency_code.dart';
 import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
+
+import 'currency_code.dart';
 
 /// A value object that represents a monetary amount in a specific currency.
 final class Money extends Equatable {

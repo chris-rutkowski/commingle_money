@@ -1,8 +1,8 @@
-import 'package:amount_editing_controller/src/utils/decimal_utils.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import 'amount_format_separators.dart';
+import 'utils/decimal_utils.dart';
 import 'utils/evaluate_math_text.dart';
 
 part 'utils/format_decimal.dart';

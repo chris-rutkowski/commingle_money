@@ -21,941 +21,941 @@ final Map<String, Currency> _currencyMap = {
     emoji: '🇦🇱',
   ),
 
-  'AMD': Currency(
+  'AMD': const Currency(
     code: 'AMD',
     englishName: 'Armenian Dram',
     precision: 2,
     emoji: '🇦🇲',
   ),
-  'ANG': Currency(
+  'ANG': const Currency(
     code: 'ANG',
     englishName: 'Netherlands Antillean Guilder',
     precision: 2,
     emoji: '🇳🇱',
   ),
-  'AOA': Currency(
+  'AOA': const Currency(
     code: 'AOA',
     englishName: 'Angolan Kwanza',
     precision: 2,
     emoji: '🇦🇴',
   ),
-  'ARS': Currency(
+  'ARS': const Currency(
     code: 'ARS',
     englishName: 'Argentine Peso',
     precision: 2,
     emoji: '🇦🇷',
   ),
-  'AUD': Currency(
+  'AUD': const Currency(
     code: 'AUD',
     englishName: 'Australian Dollar',
     precision: 2,
     emoji: '🇦🇺',
   ),
-  'AWG': Currency(
+  'AWG': const Currency(
     code: 'AWG',
     englishName: 'Aruban Florin',
     precision: 2,
     emoji: '🇦🇼',
   ),
-  'AZN': Currency(
+  'AZN': const Currency(
     code: 'AZN',
     englishName: 'Azerbaijani Manat',
     precision: 2,
     emoji: '🇦🇿',
   ),
-  'BAM': Currency(
+  'BAM': const Currency(
     code: 'BAM',
     englishName: 'Bosnia and Herzegovina Convertible Mark',
     precision: 2,
     emoji: '🇧🇦',
   ),
-  'BBD': Currency(
+  'BBD': const Currency(
     code: 'BBD',
     englishName: 'Barbadian Dollar',
     precision: 2,
     emoji: '🇧🇧',
   ),
-  'BDT': Currency(
+  'BDT': const Currency(
     code: 'BDT',
     englishName: 'Bangladeshi Taka',
     precision: 2,
     emoji: '🇧🇩',
   ),
-  'BGN': Currency(
+  'BGN': const Currency(
     code: 'BGN',
     englishName: 'Bulgarian Lev',
     precision: 2,
     emoji: '🇧🇬',
   ),
-  'BHD': Currency(
+  'BHD': const Currency(
     code: 'BHD',
     englishName: 'Bahraini Dinar',
     precision: 3,
     emoji: '🇧🇭',
   ),
-  'BIF': Currency(
+  'BIF': const Currency(
     code: 'BIF',
     englishName: 'Burundian Franc',
     precision: 2,
     emoji: '🇧🇮',
   ),
-  'BMD': Currency(
+  'BMD': const Currency(
     code: 'BMD',
     englishName: 'Bermudian Dollar',
     precision: 2,
     emoji: '🇧🇲',
   ),
-  'BND': Currency(
+  'BND': const Currency(
     code: 'BND',
     englishName: 'Brunei Dollar',
     precision: 1,
     emoji: '🇧🇳',
   ),
-  'BOB': Currency(
+  'BOB': const Currency(
     code: 'BOB',
     englishName: 'Bolivian Boliviano',
     precision: 2,
     emoji: '🇧🇴',
   ),
-  'BRL': Currency(
+  'BRL': const Currency(
     code: 'BRL',
     englishName: 'Brazilian Real',
     precision: 2,
     emoji: '🇧🇷',
   ),
-  'BSD': Currency(
+  'BSD': const Currency(
     code: 'BSD',
     englishName: 'Bahamian Dollar',
     precision: 2,
     emoji: '🇧🇸',
   ),
-  'BTN': Currency(
+  'BTN': const Currency(
     code: 'BTN',
     englishName: 'Bhutanese Ngultrum',
     precision: 2,
     emoji: '🇧🇹',
   ),
-  'BWP': Currency(
+  'BWP': const Currency(
     code: 'BWP',
     englishName: 'Botswana Pula',
     precision: 2,
     emoji: '🇧🇼',
   ),
-  'BYN': Currency(
+  'BYN': const Currency(
     code: 'BYN',
     englishName: 'Belarusian Ruble',
     precision: 2,
     emoji: '🇧🇾',
   ),
-  'BZD': Currency(
+  'BZD': const Currency(
     code: 'BZD',
     englishName: 'Belize Dollar',
     precision: 2,
     emoji: '🇧🇿',
   ),
-  'CAD': Currency(
+  'CAD': const Currency(
     code: CurrencyCodes.cad,
     englishName: 'Canadian Dollar',
     precision: 2,
     emoji: '🇨🇦',
   ),
-  'CDF': Currency(
+  'CDF': const Currency(
     code: 'CDF',
     englishName: 'Congolese Franc',
     precision: 2,
     emoji: '🇨🇩',
   ),
-  'CHF': Currency(
+  'CHF': const Currency(
     code: CurrencyCodes.chf,
     englishName: 'Swiss Franc',
     precision: 2,
     emoji: '🇨🇭',
     symbol: 'Fr',
   ),
-  'CLP': Currency(
+  'CLP': const Currency(
     code: 'CLP',
     englishName: 'Chilean Peso',
     precision: 2,
     emoji: '🇨🇱',
   ),
-  'CNY': Currency(
+  'CNY': const Currency(
     code: CurrencyCodes.cny,
     englishName: 'Chinese Yuan',
     precision: 1,
     emoji: '🇨🇳',
   ),
-  'COP': Currency(
+  'COP': const Currency(
     code: 'COP',
     englishName: 'Colombian Peso',
     precision: 2,
     emoji: '🇨🇴',
   ),
-  'CRC': Currency(
+  'CRC': const Currency(
     code: 'CRC',
     englishName: 'Costa Rican Colón',
     precision: 2,
     emoji: '🇨🇷',
   ),
-  'CUP': Currency(
+  'CUP': const Currency(
     code: 'CUP',
     englishName: 'Cuban Peso',
     precision: 2,
     emoji: '🇨🇺',
   ),
-  'CVE': Currency(
+  'CVE': const Currency(
     code: 'CVE',
     englishName: 'Cape Verdean Escudo',
     precision: 2,
     emoji: '🇨🇻',
   ),
-  'CZK': Currency(
+  'CZK': const Currency(
     code: 'CZK',
     englishName: 'Czech Koruna',
     precision: 2,
     emoji: '🇨🇿',
   ),
-  'DJF': Currency(
+  'DJF': const Currency(
     code: 'DJF',
     englishName: 'Djiboutian Franc',
     precision: 2,
     emoji: '🇩🇯',
   ),
-  'DKK': Currency(
+  'DKK': const Currency(
     code: 'DKK',
     englishName: 'Danish Krone',
     precision: 2,
     emoji: '🇩🇰',
   ),
-  'DOP': Currency(
+  'DOP': const Currency(
     code: 'DOP',
     englishName: 'Dominican Peso',
     precision: 2,
     emoji: '🇩🇴',
   ),
-  'DZD': Currency(
+  'DZD': const Currency(
     code: 'DZD',
     englishName: 'Algerian Dinar',
     precision: 2,
     emoji: '🇩🇿',
   ),
-  'EGP': Currency(
+  'EGP': const Currency(
     code: 'EGP',
     englishName: 'Egyptian Pound',
     precision: 2,
     emoji: '🇪🇬',
   ),
-  'ERN': Currency(
+  'ERN': const Currency(
     code: 'ERN',
     englishName: 'Eritrean Nakfa',
     precision: 2,
     emoji: '🇪🇷',
   ),
-  'ETB': Currency(
+  'ETB': const Currency(
     code: 'ETB',
     englishName: 'Ethiopian Birr',
     precision: 2,
     emoji: '🇪🇹',
   ),
-  'EUR': Currency(
+  'EUR': const Currency(
     code: CurrencyCodes.eur,
     englishName: 'Euro',
     precision: 2,
     emoji: '🇪🇺',
     symbol: '€',
   ),
-  'FJD': Currency(
+  'FJD': const Currency(
     code: 'FJD',
     englishName: 'Fijian Dollar',
     precision: 2,
     emoji: '🇫🇯',
   ),
-  'FKP': Currency(
+  'FKP': const Currency(
     code: 'FKP',
     englishName: 'Falkland Islands Pound',
     precision: 2,
     emoji: '🇫🇰',
   ),
-  'GBP': Currency(
+  'GBP': const Currency(
     code: CurrencyCodes.gbp,
     englishName: 'British Pound Sterling',
     precision: 2,
     emoji: '🇬🇧',
     symbol: '£',
   ),
-  'GEL': Currency(
+  'GEL': const Currency(
     code: 'GEL',
     englishName: 'Georgian Lari',
     precision: 2,
     emoji: '🇬🇪',
   ),
-  'GHS': Currency(
+  'GHS': const Currency(
     code: 'GHS',
     englishName: 'Ghanaian Cedi',
     precision: 2,
     emoji: '🇬🇭',
   ),
-  'GIP': Currency(
+  'GIP': const Currency(
     code: 'GIP',
     englishName: 'Gibraltar Pound',
     precision: 2,
     emoji: '🇬🇮',
   ),
-  'GMD': Currency(
+  'GMD': const Currency(
     code: 'GMD',
     englishName: 'Gambian Dalasi',
     precision: 2,
     emoji: '🇬🇲',
   ),
-  'GNF': Currency(
+  'GNF': const Currency(
     code: 'GNF',
     englishName: 'Guinean Franc',
     precision: 2,
     emoji: '🇬🇳',
   ),
-  'GTQ': Currency(
+  'GTQ': const Currency(
     code: 'GTQ',
     englishName: 'Guatemalan Quetzal',
     precision: 2,
     emoji: '🇬🇹',
   ),
-  'GYD': Currency(
+  'GYD': const Currency(
     code: 'GYD',
     englishName: 'Guyanese Dollar',
     precision: 2,
     emoji: '🇬🇾',
   ),
-  'HKD': Currency(
+  'HKD': const Currency(
     code: CurrencyCodes.hkd,
     englishName: 'Hong Kong Dollar',
     precision: 2,
     emoji: '🇭🇰',
   ),
-  'HNL': Currency(
+  'HNL': const Currency(
     code: 'HNL',
     englishName: 'Honduran Lempira',
     precision: 2,
     emoji: '🇭🇳',
   ),
-  'HRK': Currency(
+  'HRK': const Currency(
     code: 'HRK',
     englishName: 'Croatian Kuna',
     precision: 2,
     emoji: '🇭🇷',
   ),
-  'HTG': Currency(
+  'HTG': const Currency(
     code: 'HTG',
     englishName: 'Haitian Gourde',
     precision: 2,
     emoji: '🇭🇹',
   ),
-  'HUF': Currency(
+  'HUF': const Currency(
     code: 'HUF',
     englishName: 'Hungarian Forint',
     precision: 2,
     emoji: '🇭🇺',
   ),
-  'IDR': Currency(
+  'IDR': const Currency(
     code: 'IDR',
     englishName: 'Indonesian Rupiah',
     precision: 2,
     emoji: '🇮🇩',
   ),
-  'ILS': Currency(
+  'ILS': const Currency(
     code: 'ILS',
     englishName: 'Israeli New Shekel',
     precision: 2,
     emoji: '🇮🇱',
     symbol: '₪',
   ),
-  'INR': Currency(
+  'INR': const Currency(
     code: CurrencyCodes.inr,
     englishName: 'Indian Rupee',
     precision: 2,
     emoji: '🇮🇳',
     symbol: '₹',
   ),
-  'IQD': Currency(
+  'IQD': const Currency(
     code: 'IQD',
     englishName: 'Iraqi Dinar',
     precision: 3,
     emoji: '🇮🇶',
   ),
-  'IRR': Currency(
+  'IRR': const Currency(
     code: 'IRR',
     englishName: 'Iranian Rial',
     precision: 0,
     emoji: '🇮🇷',
   ),
-  'ISK': Currency(
+  'ISK': const Currency(
     code: 'ISK',
     englishName: 'Icelandic Króna',
     precision: 2,
     emoji: '🇮🇸',
   ),
-  'JMD': Currency(
+  'JMD': const Currency(
     code: 'JMD',
     englishName: 'Jamaican Dollar',
     precision: 2,
     emoji: '🇯🇲',
   ),
-  'JOD': Currency(
+  'JOD': const Currency(
     code: 'JOD',
     englishName: 'Jordanian Dinar',
     precision: 2,
     emoji: '🇯🇴',
   ),
-  'JPY': Currency(
+  'JPY': const Currency(
     code: CurrencyCodes.jpy,
     englishName: 'Japanese Yen',
     precision: 2,
     emoji: '🇯🇵',
   ),
-  'KES': Currency(
+  'KES': const Currency(
     code: 'KES',
     englishName: 'Kenyan Shilling',
     precision: 2,
     emoji: '🇰🇪',
   ),
-  'KGS': Currency(
+  'KGS': const Currency(
     code: 'KGS',
     englishName: 'Kyrgyzstani Som',
     precision: 2,
     emoji: '🇰🇬',
   ),
-  'KHR': Currency(
+  'KHR': const Currency(
     code: 'KHR',
     englishName: 'Cambodian Riel',
     precision: 2,
     emoji: '🇰🇭',
   ),
-  'KMF': Currency(
+  'KMF': const Currency(
     code: 'KMF',
     englishName: 'Comorian Franc',
     precision: 2,
     emoji: '🇰🇲',
   ),
-  'KPW': Currency(
+  'KPW': const Currency(
     code: 'KPW',
     englishName: 'North Korean Won',
     precision: 2,
     emoji: '🇰🇵',
   ),
-  'KRW': Currency(
+  'KRW': const Currency(
     code: 'KRW',
     englishName: 'South Korean Won',
     precision: 2,
     emoji: '🇰🇷',
   ),
-  'KWD': Currency(
+  'KWD': const Currency(
     code: 'KWD',
     englishName: 'Kuwaiti Dinar',
     precision: 3,
     emoji: '🇰🇼',
   ),
-  'KYD': Currency(
+  'KYD': const Currency(
     code: 'KYD',
     englishName: 'Cayman Islands Dollar',
     precision: 2,
     emoji: '🇰🇾',
   ),
-  'KZT': Currency(
+  'KZT': const Currency(
     code: 'KZT',
     englishName: 'Kazakhstani Tenge',
     precision: 2,
     emoji: '🇰🇿',
   ),
-  'LAK': Currency(
+  'LAK': const Currency(
     code: 'LAK',
     englishName: 'Lao Kip',
     precision: 2,
     emoji: '🇱🇦',
   ),
-  'LBP': Currency(
+  'LBP': const Currency(
     code: 'LBP',
     englishName: 'Lebanese Pound',
     precision: 2,
     emoji: '🇱🇧',
   ),
-  'LKR': Currency(
+  'LKR': const Currency(
     code: 'LKR',
     englishName: 'Sri Lankan Rupee',
     precision: 2,
     emoji: '🇱🇰',
   ),
-  'LRD': Currency(
+  'LRD': const Currency(
     code: 'LRD',
     englishName: 'Liberian Dollar',
     precision: 2,
     emoji: '🇱🇷',
   ),
-  'LSL': Currency(
+  'LSL': const Currency(
     code: 'LSL',
     englishName: 'Lesotho Loti',
     precision: 2,
     emoji: '🇱🇸',
   ),
-  'LYD': Currency(
+  'LYD': const Currency(
     code: 'LYD',
     englishName: 'Libyan Dinar',
     precision: 3,
     emoji: '🇱🇾',
   ),
-  'MAD': Currency(
+  'MAD': const Currency(
     code: 'MAD',
     englishName: 'Moroccan Dirham',
     precision: 2,
     emoji: '🇲🇦',
   ),
-  'MDL': Currency(
+  'MDL': const Currency(
     code: 'MDL',
     englishName: 'Moldovan Leu',
     precision: 2,
     emoji: '🇲🇩',
   ),
-  'MGA': Currency(
+  'MGA': const Currency(
     code: 'MGA',
     englishName: 'Malagasy Ariary',
     precision: 1,
     emoji: '🇲🇬',
   ),
-  'MKD': Currency(
+  'MKD': const Currency(
     code: 'MKD',
     englishName: 'Macedonian Denar',
     precision: 2,
     emoji: '🇲🇰',
   ),
-  'MMK': Currency(
+  'MMK': const Currency(
     code: 'MMK',
     englishName: 'Myanmar Kyat',
     precision: 2,
     emoji: '🇲🇲',
   ),
-  'MNT': Currency(
+  'MNT': const Currency(
     code: 'MNT',
     englishName: 'Mongolian Tögrög',
     precision: 2,
     emoji: '🇲🇳',
   ),
-  'MOP': Currency(
+  'MOP': const Currency(
     code: 'MOP',
     englishName: 'Macanese Pataca',
     precision: 2,
     emoji: '🇲🇴',
   ),
-  'MRU': Currency(
+  'MRU': const Currency(
     code: 'MRU',
     englishName: 'Mauritanian Ouguiya',
     precision: 1,
     emoji: '🇲🇷',
   ),
-  'MUR': Currency(
+  'MUR': const Currency(
     code: 'MUR',
     englishName: 'Mauritian Rupee',
     precision: 2,
     emoji: '🇲🇺',
   ),
-  'MVR': Currency(
+  'MVR': const Currency(
     code: 'MVR',
     englishName: 'Maldivian Rufiyaa',
     precision: 2,
     emoji: '🇲🇻',
   ),
-  'MWK': Currency(
+  'MWK': const Currency(
     code: 'MWK',
     englishName: 'Malawian Kwacha',
     precision: 2,
     emoji: '🇲🇼',
   ),
-  'MXN': Currency(
+  'MXN': const Currency(
     code: 'MXN',
     englishName: 'Mexican Peso',
     precision: 2,
     emoji: '🇲🇽',
   ),
-  'MYR': Currency(
+  'MYR': const Currency(
     code: 'MYR',
     englishName: 'Malaysian Ringgit',
     precision: 2,
     emoji: '🇲🇾',
   ),
-  'MZN': Currency(
+  'MZN': const Currency(
     code: 'MZN',
     englishName: 'Mozambican Metical',
     precision: 2,
     emoji: '🇲🇿',
   ),
-  'NAD': Currency(
+  'NAD': const Currency(
     code: 'NAD',
     englishName: 'Namibian Dollar',
     precision: 2,
     emoji: '🇳🇦',
   ),
-  'NGN': Currency(
+  'NGN': const Currency(
     code: 'NGN',
     englishName: 'Nigerian Naira',
     precision: 2,
     emoji: '🇳🇬',
     symbol: '₦',
   ),
-  'NIO': Currency(
+  'NIO': const Currency(
     code: 'NIO',
     englishName: 'Nicaraguan Córdoba',
     precision: 2,
     emoji: '🇳🇮',
   ),
-  'NOK': Currency(
+  'NOK': const Currency(
     code: 'NOK',
     englishName: 'Norwegian Krone',
     precision: 2,
     emoji: '🇳🇴',
   ),
-  'NPR': Currency(
+  'NPR': const Currency(
     code: 'NPR',
     englishName: 'Nepalese Rupee',
     precision: 2,
     emoji: '🇳🇵',
   ),
-  'NZD': Currency(
+  'NZD': const Currency(
     code: 'NZD',
     englishName: 'New Zealand Dollar',
     precision: 2,
     emoji: '🇳🇿',
   ),
-  'OMR': Currency(
+  'OMR': const Currency(
     code: 'OMR',
     englishName: 'Omani Rial',
     precision: 3,
     emoji: '🇴🇲',
   ),
-  'PAB': Currency(
+  'PAB': const Currency(
     code: 'PAB',
     englishName: 'Panamanian Balboa',
     precision: 2,
     emoji: '🇵🇦',
   ),
-  'PEN': Currency(
+  'PEN': const Currency(
     code: 'PEN',
     englishName: 'Peruvian Sol',
     precision: 2,
     emoji: '🇵🇪',
     symbol: 'S/',
   ),
-  'PGK': Currency(
+  'PGK': const Currency(
     code: 'PGK',
     englishName: 'Papua New Guinean Kina',
     precision: 2,
     emoji: '🇵🇬',
   ),
-  'PHP': Currency(
+  'PHP': const Currency(
     code: 'PHP',
     englishName: 'Philippine Peso',
     precision: 2,
     emoji: '🇵🇭',
     symbol: '₱',
   ),
-  'PKR': Currency(
+  'PKR': const Currency(
     code: 'PKR',
     englishName: 'Pakistani Rupee',
     precision: 2,
     emoji: '🇵🇰',
   ),
-  'PLN': Currency(
+  'PLN': const Currency(
     code: CurrencyCodes.pln,
     englishName: 'Polish Złoty',
     precision: 2,
     emoji: '🇵🇱',
     symbol: 'zł',
   ),
-  'PYG': Currency(
+  'PYG': const Currency(
     code: 'PYG',
     englishName: 'Paraguayan Guaraní',
     precision: 2,
     emoji: '🇵🇾',
     symbol: '₲',
   ),
-  'QAR': Currency(
+  'QAR': const Currency(
     code: 'QAR',
     englishName: 'Qatari Riyal',
     precision: 2,
     emoji: '🇶🇦',
     symbol: 'QR',
   ),
-  'RON': Currency(
+  'RON': const Currency(
     code: 'RON',
     englishName: 'Romanian Leu',
     precision: 2,
     emoji: '🇷🇴',
   ),
-  'RSD': Currency(
+  'RSD': const Currency(
     code: 'RSD',
     englishName: 'Serbian Dinar',
     precision: 2,
     emoji: '🇷🇸',
   ),
-  'RUB': Currency(
+  'RUB': const Currency(
     code: 'RUB',
     englishName: 'Russian Ruble',
     precision: 2,
     emoji: '🇷🇺',
     symbol: '₽',
   ),
-  'RWF': Currency(
+  'RWF': const Currency(
     code: 'RWF',
     englishName: 'Rwandan Franc',
     precision: 2,
     emoji: '🇷🇼',
   ),
-  'SAR': Currency(
+  'SAR': const Currency(
     code: 'SAR',
     englishName: 'Saudi Riyal',
     precision: 2,
     emoji: '🇸🇦',
   ),
-  'SBD': Currency(
+  'SBD': const Currency(
     code: 'SBD',
     englishName: 'Solomon Islands Dollar',
     precision: 2,
     emoji: '🇸🇧',
   ),
-  'SCR': Currency(
+  'SCR': const Currency(
     code: 'SCR',
     englishName: 'Seychellois Rupee',
     precision: 2,
     emoji: '🇸🇨',
   ),
-  'SDG': Currency(
+  'SDG': const Currency(
     code: 'SDG',
     englishName: 'Sudanese Pound',
     precision: 2,
     emoji: '🇸🇩',
   ),
-  'SEK': Currency(
+  'SEK': const Currency(
     code: 'SEK',
     englishName: 'Swedish Krona',
     precision: 2,
     emoji: '🇸🇪',
   ),
-  'SGD': Currency(
+  'SGD': const Currency(
     code: CurrencyCodes.sgd,
     englishName: 'Singapore Dollar',
     precision: 1,
     emoji: '🇸🇬',
   ),
-  'SHP': Currency(
+  'SHP': const Currency(
     code: 'SHP',
     englishName: 'Saint Helena Pound',
     precision: 2,
     emoji: '🇸🇭',
   ),
-  'SLE': Currency(
+  'SLE': const Currency(
     code: 'SLE',
     englishName: 'Sierra Leonean Leone',
     precision: 2,
     emoji: '🇸🇱',
   ),
-  'SLL': Currency(
+  'SLL': const Currency(
     code: 'SLL',
     englishName: 'Sierra Leonean Leone',
     precision: 2,
     emoji: '🇸🇱',
   ),
-  'SOS': Currency(
+  'SOS': const Currency(
     code: 'SOS',
     englishName: 'Somali Shilling',
     precision: 2,
     emoji: '🇸🇴',
   ),
-  'SRD': Currency(
+  'SRD': const Currency(
     code: 'SRD',
     englishName: 'Surinamese Dollar',
     precision: 2,
     emoji: '🇸🇷',
   ),
-  'SSP': Currency(
+  'SSP': const Currency(
     code: 'SSP',
     englishName: 'South Sudanese Pound',
     precision: 2,
     emoji: '🇸🇸',
   ),
-  'STN': Currency(
+  'STN': const Currency(
     code: 'STN',
     englishName: 'São Tomé and Príncipe Dobra',
     precision: 2,
     emoji: '🇸🇹',
   ),
-  'SVC': Currency(
+  'SVC': const Currency(
     code: 'SVC',
     englishName: 'Salvadoran Colón',
     precision: 2,
     emoji: '🇸🇻',
   ),
-  'SYP': Currency(
+  'SYP': const Currency(
     code: 'SYP',
     englishName: 'Syrian Pound',
     precision: 2,
     emoji: '🇸🇾',
   ),
-  'SZL': Currency(
+  'SZL': const Currency(
     code: 'SZL',
     englishName: 'Eswatini Lilangeni',
     precision: 2,
     emoji: '🇸🇿',
   ),
-  'THB': Currency(
+  'THB': const Currency(
     code: 'THB',
     englishName: 'Thai Baht',
     precision: 2,
     emoji: '🇹🇭',
     symbol: '฿',
   ),
-  'TJS': Currency(
+  'TJS': const Currency(
     code: 'TJS',
     englishName: 'Tajikistani Somoni',
     precision: 2,
     emoji: '🇹🇯',
   ),
-  'TMT': Currency(
+  'TMT': const Currency(
     code: 'TMT',
     englishName: 'Turkmenistani Manat',
     precision: 2,
     emoji: '🇹🇲',
   ),
-  'TND': Currency(
+  'TND': const Currency(
     code: 'TND',
     englishName: 'Tunisian Dinar',
     precision: 2,
     emoji: '🇹🇳',
   ),
-  'TOP': Currency(
+  'TOP': const Currency(
     code: 'TOP',
     englishName: 'Tongan Paʻanga',
     precision: 2,
     emoji: '🇹🇴',
   ),
-  'TRY': Currency(
+  'TRY': const Currency(
     code: 'TRY',
     englishName: 'Turkish Lira',
     precision: 2,
     emoji: '🇹🇷',
     symbol: '₺',
   ),
-  'TTD': Currency(
+  'TTD': const Currency(
     code: 'TTD',
     englishName: 'Trinidad and Tobago Dollar',
     precision: 2,
     emoji: '🇹🇹',
   ),
-  'TWD': Currency(
+  'TWD': const Currency(
     code: 'TWD',
     englishName: 'New Taiwan Dollar',
     precision: 2,
     emoji: '🇹🇼',
   ),
-  'TZS': Currency(
+  'TZS': const Currency(
     code: 'TZS',
     englishName: 'Tanzanian Shilling',
     precision: 2,
     emoji: '🇹🇿',
   ),
-  'UAH': Currency(
+  'UAH': const Currency(
     code: 'UAH',
     englishName: 'Ukrainian Hryvnia',
     precision: 2,
     emoji: '🇺🇦',
   ),
-  'UGX': Currency(
+  'UGX': const Currency(
     code: 'UGX',
     englishName: 'Ugandan Shilling',
     precision: 2,
     emoji: '🇺🇬',
   ),
-  'USD': Currency(
+  'USD': const Currency(
     code: CurrencyCodes.usd,
     englishName: 'United States Dollar',
     precision: 2,
     emoji: '🇺🇸',
     symbol: '\$',
   ),
-  'UYU': Currency(
+  'UYU': const Currency(
     code: 'UYU',
     englishName: 'Uruguayan Peso',
     precision: 2,
     emoji: '🇺🇾',
   ),
-  'UZS': Currency(
+  'UZS': const Currency(
     code: 'UZS',
     englishName: 'Uzbekistani Som',
     precision: 2,
     emoji: '🇺🇿',
   ),
-  'VED': Currency(
+  'VED': const Currency(
     code: 'VED',
     englishName: 'Venezuelan Bolívar Digital',
     precision: 2,
     emoji: '🇻🇪',
   ),
-  'VES': Currency(
+  'VES': const Currency(
     code: 'VES',
     englishName: 'Venezuelan Bolívar Soberano',
     precision: 0,
     emoji: '🇻🇪',
   ),
-  'VND': Currency(
+  'VND': const Currency(
     code: 'VND',
     englishName: 'Vietnamese Đồng',
     precision: 2,
     emoji: '🇻🇳',
     symbol: '₫',
   ),
-  'VUV': Currency(
+  'VUV': const Currency(
     code: 'VUV',
     englishName: 'Vanuatu Vatu',
     precision: 2,
     emoji: '🇻🇺',
   ),
-  'WST': Currency(
+  'WST': const Currency(
     code: 'WST',
     englishName: 'Samoan Tala',
     precision: 2,
     emoji: '🇼🇸',
   ),
-  'XAF': Currency(
+  'XAF': const Currency(
     code: 'XAF',
     englishName: 'Central African CFA Franc',
     precision: 2,
     emoji: '🇨🇲',
   ),
-  'XCD': Currency(
+  'XCD': const Currency(
     code: 'XCD',
     englishName: 'East Caribbean Dollar',
     precision: 2,
     emoji: '🇦🇮',
   ),
-  'XOF': Currency(
+  'XOF': const Currency(
     code: 'XOF',
     englishName: 'West African CFA Franc',
     precision: 2,
     emoji: '🇧🇯',
   ),
-  'XPF': Currency(
+  'XPF': const Currency(
     code: 'XPF',
     englishName: 'CFP Franc',
     precision: 2,
     emoji: '🇵🇫',
   ),
-  'YER': Currency(
+  'YER': const Currency(
     code: 'YER',
     englishName: 'Yemeni Rial',
     precision: 2,
     emoji: '🇾🇪',
   ),
-  'ZAR': Currency(
+  'ZAR': const Currency(
     code: CurrencyCodes.zar,
     englishName: 'South African Rand',
     precision: 2,
     emoji: '🇿🇦',
   ),
-  'ZMW': Currency(
+  'ZMW': const Currency(
     code: 'ZMW',
     englishName: 'Zambian Kwacha',
     precision: 2,

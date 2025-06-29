@@ -1,5 +1,6 @@
-import 'package:amount_editing_controller/src/currency_code.dart';
 import 'package:equatable/equatable.dart';
+
+import 'currency_code.dart';
 
 part 'utils/currency_map.dart';
 

@@ -9,15 +9,16 @@ environment:
 dependencies:
   amount_editing_controller:
     path: ..
-  flutter:
-    sdk: flutter
   cupertino_icons:
   decimal:
+  flutter:
+    sdk: flutter
+  
 
 dev_dependencies:
+flutter_lints:
   flutter_test:
     sdk: flutter
-  flutter_lints:
 
 flutter:
   uses-material-design: true

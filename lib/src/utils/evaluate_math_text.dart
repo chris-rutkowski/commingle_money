@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs
 
 import 'package:decimal/decimal.dart';
 import 'package:expressions/expressions.dart';
@@ -5,10 +6,10 @@ import 'package:expressions/expressions.dart';
 import 'decimal_utils.dart';
 
 Decimal? evaluateMathText(String text) {
-  const String plusSign = '+'; // standard plus sign
-  const String minusSign = '‒'; // fancy minus sign
-  const String multiplicationSign = '×'; // fancy multiplication sign
-  const String divisionSign = '÷'; // fancy division sign
+  const plusSign = '+'; // standard plus sign
+  const minusSign = '‒'; // fancy minus sign
+  const multiplicationSign = '×'; // fancy multiplication sign
+  const divisionSign = '÷'; // fancy division sign
 
   final validOperators = [
     RegExp.escape(plusSign),
