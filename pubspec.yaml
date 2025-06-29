@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   decimal:
+  equatable:
   expressions:
   flutter:
     sdk: flutter
