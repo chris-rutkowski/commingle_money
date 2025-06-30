@@ -21,6 +21,9 @@ final class Currency extends Equatable {
   /// The full English name of the currency (e.g. "United States Dollar").
   final String englishName;
 
+  /// A set of English country names where this currency is used.
+  final Set<String> englishCountryNames;
+
   /// Creates a [Currency] object.
   const Currency({
     required this.code,
@@ -28,6 +31,7 @@ final class Currency extends Equatable {
     this.emojiFlag,
     this.symbol,
     required this.englishName,
+    required this.englishCountryNames,
   });
 
   /// Returns a [Currency] instance based on the provided ISO 4217 currency code.
