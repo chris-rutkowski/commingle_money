@@ -12,8 +12,8 @@ final class Currency extends Equatable {
   /// The number of decimal places used for this currency.
   final int precision;
 
-  /// An optional emoji associated with the currency (e.g. 🇺🇸 for USD).
-  final String? emoji;
+  /// An optional emoji flag associated with the currency (e.g. 🇺🇸 for USD).
+  final String? emojiFlag;
 
   /// An optional symbol for the currency (e.g. $ for USD).
   final String? symbol;
@@ -25,13 +25,18 @@ final class Currency extends Equatable {
   const Currency({
     required this.code,
     required this.precision,
-    this.emoji,
+    this.emojiFlag,
     this.symbol,
     required this.englishName,
   });
 
   /// Returns a [Currency] instance based on the provided ISO 4217 currency code.
-  static Currency? fromCode(CurrencyCode code) => _currencyMap[code];
+  /// Returns `null` if the code is `null` or not recognised.
+  static Currency? fromCode(CurrencyCode? code) {
+    if (code == null) return null;
+
+    return _currencyMap[code.toUpperCase()];
+  }
 
   @override
   List<Object?> get props => [code];
