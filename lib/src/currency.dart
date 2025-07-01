@@ -35,17 +35,32 @@ final class Currency extends Equatable {
     required this.englishCountryNames,
   });
 
-  /// Returns a [Currency] instance based on the provided ISO 4217 currency code.
-  /// Returns `null` if the code is `null` or not recognised.
+  /// Returns the [Currency] associated with the given ISO 4217 [code].
+  /// Returns `null` if the [code] is `null` or not recognised.
   static Currency? fromCode(CurrencyCode? code) {
     if (code == null) return null;
 
     return _currencyMap[code.toUpperCase()];
   }
 
-  @override
-  List<Object?> get props => [code];
+  /// Returns the number of decimal places (precision) for the given currency [code].
+  /// Returns `2` if the [code] is `null` or not recognised.
+  // https://github.com/dart-lang/language/issues/1711 (in order to drop `get` from the method name)
+  static int getPrecision(CurrencyCode? code) {
+    return fromCode(code)?.precision ?? 2;
+  }
+
+  /// Returns a list of all available currencies, sorted by [code] by default.
+  /// If a [compare] function is provided, it will be used instead.
+  static List<Currency> list({int Function(Currency a, Currency b)? compare}) {
+    final items = _currencyMap.values.toList();
+    items.sort(compare ?? (a, b) => a.code.compareTo(b.code));
+    return items;
+  }
 
   /// Returns the smallest fractional unit for this currency, e.g. 0.01 for USD, 0.001 for BHD.
   Decimal get smallestAmount => Decimal.fromInt(10).pow(-precision).toDecimal();
+
+  @override
+  List<Object?> get props => [code];
 }
