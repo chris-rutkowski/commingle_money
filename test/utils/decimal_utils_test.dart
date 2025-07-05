@@ -37,5 +37,19 @@ void main() {
       expect(Decimal.parse('0.0001').round2(), Decimal.parse('0.00'));
       expect(Decimal.zero.round2(), Decimal.zero);
     });
+
+    test('max', () {
+      expect(DecimalUtils.max(Decimal.parse('5.5'), Decimal.parse('2.2')), Decimal.parse('5.5'));
+      expect(DecimalUtils.max(Decimal.parse('-1.0'), Decimal.parse('-2.0')), Decimal.parse('-1.0'));
+      expect(DecimalUtils.max(Decimal.parse('3.1415'), Decimal.parse('3.1415')), Decimal.parse('3.1415'));
+      expect(DecimalUtils.max(Decimal.zero, Decimal.parse('0.0001')), Decimal.parse('0.0001'));
+    });
+
+    test('min', () {
+      expect(DecimalUtils.min(Decimal.parse('5.5'), Decimal.parse('2.2')), Decimal.parse('2.2'));
+      expect(DecimalUtils.min(Decimal.parse('-1.0'), Decimal.parse('-2.0')), Decimal.parse('-2.0'));
+      expect(DecimalUtils.min(Decimal.parse('3.1415'), Decimal.parse('3.1415')), Decimal.parse('3.1415'));
+      expect(DecimalUtils.min(Decimal.zero, Decimal.parse('0.0001')), Decimal.zero);
+    });
   });
 }

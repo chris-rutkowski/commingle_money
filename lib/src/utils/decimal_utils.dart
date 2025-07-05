@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:decimal/decimal.dart';
 
 /// Various Decimal utilities
@@ -16,5 +18,15 @@ extension DecimalUtils on Decimal {
   /// Rounds the [Decimal] value to the specified `scale` or the default of 2.
   Decimal round2({int? scale}) {
     return round(scale: scale ?? 2);
+  }
+
+  /// Returns the larger of two numbers.
+  static Decimal max(Decimal a, Decimal b) {
+    return a > b ? a : b;
+  }
+
+  /// Returns the lesser of two numbers.
+  static Decimal min(Decimal a, Decimal b) {
+    return a < b ? a : b;
   }
 }
