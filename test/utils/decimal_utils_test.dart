@@ -32,6 +32,80 @@ void main() {
       expect(Decimal.parse('9').lowerBound, Decimal.parse('9'));
     });
 
+    group('additional upper/lower bound', () {
+      test('upper bound positive', () {
+        expect(Decimal.parse('433375.78').upperBound, Decimal.parse('440000'));
+        expect(Decimal.parse('430000.01').upperBound, Decimal.parse('440000'));
+        expect(Decimal.parse('430000.00').upperBound, Decimal.parse('430000'));
+
+        expect(Decimal.parse('433.37').upperBound, Decimal.parse('440'));
+        expect(Decimal.parse('430.01').upperBound, Decimal.parse('440'));
+        expect(Decimal.parse('430.00').upperBound, Decimal.parse('430'));
+
+        expect(Decimal.parse('43.37').upperBound, Decimal.parse('44'));
+        expect(Decimal.parse('43.01').upperBound, Decimal.parse('44'));
+        expect(Decimal.parse('43.00').upperBound, Decimal.parse('43'));
+
+        expect(Decimal.parse('9.99').upperBound, Decimal.parse('10'));
+        expect(Decimal.parse('3.99').upperBound, Decimal.parse('4'));
+        expect(Decimal.parse('0.99').upperBound, Decimal.parse('1'));
+        expect(Decimal.parse('0.39').upperBound, Decimal.parse('1'));
+        expect(Decimal.parse('0.09').upperBound, Decimal.parse('1'));
+        expect(Decimal.parse('0.00').upperBound, Decimal.parse('0'));
+      });
+
+      test('upper bound negative', () {
+        expect(Decimal.parse('-433375.78').upperBound, Decimal.parse('-430000'));
+        expect(Decimal.parse('-430000.01').upperBound, Decimal.parse('-430000'));
+        expect(Decimal.parse('-430000.00').upperBound, Decimal.parse('-430000'));
+        expect(Decimal.parse('-429999.99').upperBound, Decimal.parse('-420000'));
+
+        expect(Decimal.parse('-43.37').upperBound, Decimal.parse('-43'));
+        expect(Decimal.parse('-43.01').upperBound, Decimal.parse('-43'));
+        expect(Decimal.parse('-43.00').upperBound, Decimal.parse('-43'));
+        expect(Decimal.parse('-42.99').upperBound, Decimal.parse('-42'));
+        expect(Decimal.parse('-9.99').upperBound, Decimal.parse('-9'));
+        expect(Decimal.parse('-0.39').upperBound, Decimal.parse('0'));
+        expect(Decimal.parse('-0.09').upperBound, Decimal.parse('0'));
+      });
+
+      test('lower bound positive', () {
+        expect(Decimal.parse('433375.78').lowerBound, Decimal.parse('430000'));
+        expect(Decimal.parse('430000.01').lowerBound, Decimal.parse('430000'));
+        expect(Decimal.parse('430000.00').lowerBound, Decimal.parse('430000'));
+
+        expect(Decimal.parse('433.37').lowerBound, Decimal.parse('430'));
+        expect(Decimal.parse('430.01').lowerBound, Decimal.parse('430'));
+        expect(Decimal.parse('430.00').lowerBound, Decimal.parse('430'));
+
+        expect(Decimal.parse('43.37').lowerBound, Decimal.parse('43'));
+        expect(Decimal.parse('43.01').lowerBound, Decimal.parse('43'));
+        expect(Decimal.parse('43.00').lowerBound, Decimal.parse('43'));
+
+        expect(Decimal.parse('9.99').lowerBound, Decimal.parse('9'));
+        expect(Decimal.parse('3.99').lowerBound, Decimal.parse('3'));
+        expect(Decimal.parse('0.99').lowerBound, Decimal.parse('0'));
+        expect(Decimal.parse('0.39').lowerBound, Decimal.parse('0'));
+        expect(Decimal.parse('0.09').lowerBound, Decimal.parse('0'));
+        expect(Decimal.parse('0.00').lowerBound, Decimal.parse('0'));
+      });
+
+      test('lower bound negative', () {
+        expect(Decimal.parse('-433375.78').lowerBound, Decimal.parse('-440000'));
+        expect(Decimal.parse('-430000.01').lowerBound, Decimal.parse('-440000'));
+        expect(Decimal.parse('-430000.00').lowerBound, Decimal.parse('-430000'));
+        expect(Decimal.parse('-429999.99').lowerBound, Decimal.parse('-430000'));
+
+        expect(Decimal.parse('-43.37').lowerBound, Decimal.parse('-44'));
+        expect(Decimal.parse('-43.01').lowerBound, Decimal.parse('-44'));
+        expect(Decimal.parse('-43.00').lowerBound, Decimal.parse('-43'));
+        expect(Decimal.parse('-42.99').lowerBound, Decimal.parse('-43'));
+        expect(Decimal.parse('-9.99').lowerBound, Decimal.parse('-10'));
+        expect(Decimal.parse('-0.39').lowerBound, Decimal.parse('-1'));
+        expect(Decimal.parse('-0.09').lowerBound, Decimal.parse('-1'));
+      });
+    });
+
     test('fromDouble', () {
       expect(DecimalUtils.fromDouble(123.45), Decimal.parse('123.45'));
       expect(DecimalUtils.fromDouble(0.0000001), Decimal.parse('0.0000001'));
