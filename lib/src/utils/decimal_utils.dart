@@ -31,6 +31,9 @@ extension DecimalUtils on Decimal {
     return floored.shift(roundedPrecision - 2);
   }
 
+  /// Converts this [Decimal] to an [int] by truncating any fractional part.
+  int toInt() => toBigInt().toInt();
+
   /// Converts a [double] to a [Decimal].
   static Decimal fromDouble(double value) => Decimal.parse(value.toString());
 

@@ -106,6 +106,13 @@ void main() {
       });
     });
 
+    test('toInt', () {
+      expect(Decimal.parse('42.99').toInt(), 42);
+      expect(Decimal.parse('-42.99').toInt(), -42);
+      expect(Decimal.parse('0.0001').toInt(), 0);
+      expect(Decimal.parse('100').toInt(), 100);
+    });
+
     test('fromDouble', () {
       expect(DecimalUtils.fromDouble(123.45), Decimal.parse('123.45'));
       expect(DecimalUtils.fromDouble(0.0000001), Decimal.parse('0.0000001'));
