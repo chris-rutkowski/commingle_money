@@ -17,9 +17,25 @@ final class Money extends Equatable {
     required this.amount,
   });
 
+  /// Creates a [Money] instance with the given [currencyCode] and `0` [amount].
+  static Money zero(CurrencyCode currencyCode) => Money(amount: Decimal.zero, currencyCode: currencyCode);
+
   @override
   List<Object?> get props => [currencyCode, amount];
 
   @override
   String toString() => '$currencyCode $amount';
+
+  /// Creates a copy of this [Money] instance with the given fields replaced.
+  ///
+  /// If a parameter is not provided, the existing value from this instance is used
+  Money copyWith({
+    CurrencyCode? currencyCode,
+    Decimal? amount,
+  }) {
+    return Money(
+      currencyCode: currencyCode ?? this.currencyCode,
+      amount: amount ?? this.amount,
+    );
+  }
 }
