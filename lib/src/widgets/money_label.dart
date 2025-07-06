@@ -18,11 +18,6 @@ final class MoneyLabel extends StatefulWidget {
   final Money money;
   final MoneyLabelFractionalMode fractionalMode;
   // TODO: or listenable<Money> but not both
-  // fractionalMode
-  // - always - display always e.g. 12.00
-  // - round - will round the value -> 12.99 -> 13
-  // - flexible - will display fractional part only if needed
-  // - accurate - will display as many values as there are in this value
 
   final TextStyle? primaryTextStyle;
   final TextStyle? secondaryTextStyle;
