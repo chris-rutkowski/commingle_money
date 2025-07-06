@@ -53,4 +53,22 @@ final class Money extends Equatable {
       fractional: (amount - main).shift(precision).abs().toInt(),
     );
   }
+
+  /// Returns a new [Money] instance with the amount rounded to the nearest whole number.
+  Money rounded() {
+    return Money(
+      currencyCode: currencyCode,
+      amount: amount.round(),
+    );
+  }
+
+  /// Returns a new [Money] instance with the amount rounded to the currency's precision.
+  /// e.g. `USD 1.249` becomes `USD 1.25`.
+  Money roundedToCurrencyPrecision() {
+    final precision = Currency.getPrecision(currencyCode);
+    return Money(
+      currencyCode: currencyCode,
+      amount: amount.round(scale: precision),
+    );
+  }
 }

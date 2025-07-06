@@ -10,7 +10,7 @@ import '../../commingle_money.dart';
 enum MoneyLabelFractionalMode {
   flexible,
   always,
-  // round,
+  round,
   // accurate,
 }
 
@@ -50,7 +50,11 @@ final class MoneyLabel extends StatefulWidget {
 final class _MoneyLabelState extends State<MoneyLabel> {
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = resolveEffectiveColor();
+    final effectiveMoney = widget.fractionalMode == MoneyLabelFractionalMode.round
+        ? widget.money.rounded()
+        : widget.money.roundedToCurrencyPrecision();
+
+    final effectiveColor = resolveEffectiveColor(effectiveMoney);
 
     final effectivePrimaryStyle = (Theme.of(context).textTheme.headlineMedium ?? DefaultTextStyle.of(context).style)
         .merge(widget.primaryTextStyle)
@@ -61,8 +65,8 @@ final class _MoneyLabelState extends State<MoneyLabel> {
     final effectiveSecondaryPadding =
         widget.secondaryPadding ?? approximateSecondaryBottomPadding(effectivePrimaryStyle, effectiveSecondaryStyle);
 
-    final currency = Currency.fromCode(widget.money.currencyCode);
-    final components = widget.money.components;
+    final currency = Currency.fromCode(effectiveMoney.currencyCode);
+    final components = effectiveMoney.components;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -95,7 +99,7 @@ final class _MoneyLabelState extends State<MoneyLabel> {
               Padding(
                 padding: effectiveSecondaryPadding,
                 child: AnimatedFlipCounter(
-                  wholeDigits: Currency.getPrecision(widget.money.currencyCode),
+                  wholeDigits: Currency.getPrecision(effectiveMoney.currencyCode),
                   textStyle: effectiveSecondaryStyle,
                   curve: Curves.easeOut,
                   duration: const Duration(milliseconds: 200),
@@ -126,10 +130,10 @@ final class _MoneyLabelState extends State<MoneyLabel> {
     );
   }
 
-  Color? resolveEffectiveColor() {
-    if (widget.money.amount > Decimal.zero) {
+  Color? resolveEffectiveColor(Money money) {
+    if (money.amount > Decimal.zero) {
       return widget.positiveColor;
-    } else if (widget.money.amount < Decimal.zero) {
+    } else if (money.amount < Decimal.zero) {
       return widget.negativeColor;
     } else {
       return widget.zeroColor;
@@ -142,8 +146,8 @@ final class _MoneyLabelState extends State<MoneyLabel> {
         return components.fractional != 0;
       case MoneyLabelFractionalMode.always:
         return true;
-      // case MoneyLabelFractionalMode.round:
-      //   return components.fractional != Decimal.zero && components.main != Decimal.zero;
+      case MoneyLabelFractionalMode.round:
+        return false;
       // case MoneyLabelFractionalMode.accurate:
       //   return true; // always display accurate
     }
