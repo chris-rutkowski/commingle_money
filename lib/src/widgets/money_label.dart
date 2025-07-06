@@ -11,7 +11,7 @@ enum MoneyLabelFractionalMode {
   flexible,
   always,
   round,
-  // accurate,
+  accurate,
 }
 
 final class MoneyLabel extends StatefulWidget {
@@ -50,10 +50,7 @@ final class MoneyLabel extends StatefulWidget {
 final class _MoneyLabelState extends State<MoneyLabel> {
   @override
   Widget build(BuildContext context) {
-    final effectiveMoney = widget.fractionalMode == MoneyLabelFractionalMode.round
-        ? widget.money.rounded()
-        : widget.money.roundedToCurrencyPrecision();
-
+    final effectiveMoney = resolveEffectiveMoney(widget.money);
     final effectiveColor = resolveEffectiveColor(effectiveMoney);
 
     final effectivePrimaryStyle = (Theme.of(context).textTheme.headlineMedium ?? DefaultTextStyle.of(context).style)
@@ -66,7 +63,9 @@ final class _MoneyLabelState extends State<MoneyLabel> {
         widget.secondaryPadding ?? approximateSecondaryBottomPadding(effectivePrimaryStyle, effectiveSecondaryStyle);
 
     final currency = Currency.fromCode(effectiveMoney.currencyCode);
-    final components = effectiveMoney.components;
+    final components = widget.fractionalMode == MoneyLabelFractionalMode.accurate
+        ? DecimalComponents.fromDecimal(effectiveMoney.amount)
+        : effectiveMoney.components;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -99,7 +98,9 @@ final class _MoneyLabelState extends State<MoneyLabel> {
               Padding(
                 padding: effectiveSecondaryPadding,
                 child: AnimatedFlipCounter(
-                  wholeDigits: Currency.getPrecision(effectiveMoney.currencyCode),
+                  wholeDigits: widget.fractionalMode == MoneyLabelFractionalMode.accurate
+                      ? 1
+                      : Currency.getPrecision(effectiveMoney.currencyCode),
                   textStyle: effectiveSecondaryStyle,
                   curve: Curves.easeOut,
                   duration: const Duration(milliseconds: 200),
@@ -140,6 +141,19 @@ final class _MoneyLabelState extends State<MoneyLabel> {
     }
   }
 
+  Money resolveEffectiveMoney(Money money) {
+    switch (widget.fractionalMode) {
+      case MoneyLabelFractionalMode.flexible:
+        return money.roundedToCurrencyPrecision();
+      case MoneyLabelFractionalMode.always:
+        return money.roundedToCurrencyPrecision();
+      case MoneyLabelFractionalMode.round:
+        return money.rounded();
+      case MoneyLabelFractionalMode.accurate:
+        return money;
+    }
+  }
+
   bool shouldDisplayFractionalPart(DecimalComponents components) {
     switch (widget.fractionalMode) {
       case MoneyLabelFractionalMode.flexible:
@@ -148,8 +162,8 @@ final class _MoneyLabelState extends State<MoneyLabel> {
         return true;
       case MoneyLabelFractionalMode.round:
         return false;
-      // case MoneyLabelFractionalMode.accurate:
-      //   return true; // always display accurate
+      case MoneyLabelFractionalMode.accurate:
+        return components.fractional != 0;
     }
   }
 }

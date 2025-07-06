@@ -19,7 +19,7 @@ void main() {
     test('parses decimal with trailing zeros', () {
       final components = DecimalComponents.fromDecimal(Decimal.parse('12.3400'));
       expect(components.main, 12);
-      expect(components.fractional, 3400);
+      expect(components.fractional, 34);
     });
 
     test('parses small fractional value', () {

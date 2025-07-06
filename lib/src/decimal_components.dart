@@ -23,7 +23,7 @@ final class DecimalComponents {
     final main = value.truncate().toInt();
 
     final fractionalRaw = value - Decimal.fromInt(main);
-    final fractional = fractionalRaw.shift(value.scale).toInt();
+    final fractional = fractionalRaw.abs().shift(value.scale).toInt();
     return DecimalComponents(main: main, fractional: fractional);
   }
 
