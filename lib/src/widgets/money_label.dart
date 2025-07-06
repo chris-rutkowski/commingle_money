@@ -9,7 +9,7 @@ import '../../commingle_money.dart';
 
 enum MoneyLabelFractionalMode {
   flexible,
-  // always,
+  always,
   // round,
   // accurate,
 }
@@ -140,8 +140,8 @@ final class _MoneyLabelState extends State<MoneyLabel> {
     switch (widget.fractionalMode) {
       case MoneyLabelFractionalMode.flexible:
         return components.fractional != 0;
-      // case MoneyLabelFractionalMode.always:
-      //   return true;
+      case MoneyLabelFractionalMode.always:
+        return true;
       // case MoneyLabelFractionalMode.round:
       //   return components.fractional != Decimal.zero && components.main != Decimal.zero;
       // case MoneyLabelFractionalMode.accurate:
