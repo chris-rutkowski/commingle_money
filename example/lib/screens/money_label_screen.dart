@@ -10,12 +10,13 @@ final class MoneyLabelScreen extends StatefulWidget {
 }
 
 final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
-  bool displayCurrency = true;
-  bool isNegative = false;
+  var fractionalMode = MoneyLabelFractionalMode.flexible;
+  var displayCurrency = true;
+  var isNegative = false;
 
-  int highSlider = 12; // controls XX00
-  int lowSlider = 34; // controls units and tens
-  int decimalSlider = 56; // controls .XX
+  var highSlider = 12;
+  var lowSlider = 34;
+  var decimalSlider = 56;
 
   Money get currentMoney {
     final whole = highSlider * 100 + lowSlider;
@@ -40,6 +41,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
             child: Center(
               child: MoneyLabel(
                 money: currentMoney,
+                fractionalMode: fractionalMode,
                 displayCurrency: displayCurrency,
                 positiveColor: Colors.green,
                 negativeColor: Colors.red,
@@ -78,6 +80,24 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                   title: 'Amount ____.${decimalSlider}',
                   value: decimalSlider,
                   onChanged: (x) => setState(() => decimalSlider = x),
+                ),
+                DropdownButtonFormField<MoneyLabelFractionalMode>(
+                  value: fractionalMode,
+                  decoration: const InputDecoration(
+                    labelText: 'Fractional mode',
+                    border: OutlineInputBorder(),
+                  ),
+                  items: MoneyLabelFractionalMode.values.map((mode) {
+                    return DropdownMenuItem(
+                      value: mode,
+                      child: Text(mode.name),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    if (value != null) {
+                      setState(() => fractionalMode = value);
+                    }
+                  },
                 ),
               ],
             ),
