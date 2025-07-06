@@ -71,6 +71,25 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
               },
             ),
           ),
+          ListenableBuilder(
+            listenable: controller,
+            builder: (context, _) {
+              return Row(
+                children: [
+                  const SizedBox(width: 16.0),
+                  const Text('Money label:'),
+                  const SizedBox(width: 16.0),
+                  MoneyLabel(
+                    money: controller.value ?? Money.zero(controller.currencyCode),
+                    positiveColor: Colors.green,
+                    negativeColor: Colors.red,
+                    zeroColor: Colors.grey,
+                    secondaryPadding: const EdgeInsets.only(top: 10),
+                  ),
+                ],
+              );
+            },
+          ),
           const Padding(
             padding: EdgeInsets.only(left: 16.0, top: 16),
             child: Text('Interact:'),
