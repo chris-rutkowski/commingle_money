@@ -21,7 +21,10 @@ final class Money extends Equatable {
   });
 
   /// Creates a [Money] instance with the given [currencyCode] and `0` [amount].
-  static Money zero(CurrencyCode currencyCode) => Money(amount: Decimal.zero, currencyCode: currencyCode);
+  static Money zero(CurrencyCode currencyCode) => Money(
+    amount: Decimal.zero,
+    currencyCode: currencyCode,
+  );
 
   @override
   List<Object?> get props => [currencyCode, amount];
