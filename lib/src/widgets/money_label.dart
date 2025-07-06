@@ -7,8 +7,16 @@ import 'package:flutter/material.dart';
 
 import '../../commingle_money.dart';
 
+enum MoneyLabelFractionalMode {
+  flexible,
+  // always,
+  // round,
+  // accurate,
+}
+
 final class MoneyLabel extends StatefulWidget {
   final Money money;
+  final MoneyLabelFractionalMode fractionalMode;
   // TODO: or listenable<Money> but not both
   // fractionalMode
   // - always - display always e.g. 12.00
@@ -26,6 +34,7 @@ final class MoneyLabel extends StatefulWidget {
   const MoneyLabel({
     super.key,
     required this.money,
+    this.fractionalMode = MoneyLabelFractionalMode.flexible,
     this.primaryTextStyle,
     this.secondaryTextStyle,
     this.positiveColor,
@@ -73,26 +82,27 @@ final class _MoneyLabelState extends State<MoneyLabel> {
               curve: Curves.easeOut,
               duration: const Duration(milliseconds: 200),
               value: components.main,
-              thousandSeparator: 'k',
+              thousandSeparator: 'k', // TODO: inject separator
             ),
-            Padding(
-              padding: effectiveSecondaryPadding,
-              child: Text(
-                '.',
-                style: effectiveSecondaryStyle,
+            if (shouldDisplayFractionalPart(components)) ...[
+              Padding(
+                padding: effectiveSecondaryPadding,
+                child: Text(
+                  '.', // TODO: inject separator
+                  style: effectiveSecondaryStyle,
+                ),
               ),
-            ),
-            Padding(
-              padding: effectiveSecondaryPadding,
-              child: AnimatedFlipCounter(
-                wholeDigits: Currency.getPrecision(widget.money.currencyCode),
-                textStyle: effectiveSecondaryStyle,
-                curve: Curves.easeOut,
-                duration: const Duration(milliseconds: 200),
-                value: components.fractional,
-                thousandSeparator: 'k',
+              Padding(
+                padding: effectiveSecondaryPadding,
+                child: AnimatedFlipCounter(
+                  wholeDigits: Currency.getPrecision(widget.money.currencyCode),
+                  textStyle: effectiveSecondaryStyle,
+                  curve: Curves.easeOut,
+                  duration: const Duration(milliseconds: 200),
+                  value: components.fractional,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ],
@@ -123,6 +133,19 @@ final class _MoneyLabelState extends State<MoneyLabel> {
       return widget.negativeColor;
     } else {
       return widget.zeroColor;
+    }
+  }
+
+  bool shouldDisplayFractionalPart(DecimalComponents components) {
+    switch (widget.fractionalMode) {
+      case MoneyLabelFractionalMode.flexible:
+        return components.fractional != 0;
+      // case MoneyLabelFractionalMode.always:
+      //   return true;
+      // case MoneyLabelFractionalMode.round:
+      //   return components.fractional != Decimal.zero && components.main != Decimal.zero;
+      // case MoneyLabelFractionalMode.accurate:
+      //   return true; // always display accurate
     }
   }
 }
