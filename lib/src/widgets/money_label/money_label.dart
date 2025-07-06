@@ -9,6 +9,8 @@ import '../../../commingle_money.dart';
 import '../../utils/amount_formatter.dart';
 import 'money_label_animation.dart';
 
+// TODO: convert to stateless widget after tests
+
 final class MoneyLabel extends StatefulWidget {
   final Money money;
   final MoneyLabelFractionalMode fractionalMode;
