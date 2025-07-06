@@ -6,12 +6,14 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../../../commingle_money.dart';
+import '../../utils/amount_formatter.dart';
+import 'money_label_animation.dart';
 
 final class MoneyLabel extends StatefulWidget {
   final Money money;
   final MoneyLabelFractionalMode fractionalMode;
   // TODO: or listenable<Money> but not both
-
+  final MoneyLabelAnimation? animation;
   final bool displayCurrency;
   final AmountFormatSeparators separators;
   final TextStyle? primaryTextStyle;
@@ -25,8 +27,9 @@ final class MoneyLabel extends StatefulWidget {
     super.key,
     required this.money,
     this.fractionalMode = MoneyLabelFractionalMode.flexible,
-    this.separators = const AmountFormatSeparators(),
+    this.animation = const MoneyLabelAnimation(),
     this.displayCurrency = true,
+    this.separators = const AmountFormatSeparators(),
     this.primaryTextStyle,
     this.secondaryTextStyle,
     this.positiveColor,
@@ -72,13 +75,20 @@ final class _MoneyLabelState extends State<MoneyLabel> {
                   style: effectiveSecondaryStyle,
                 ),
               ),
-            AnimatedFlipCounter(
-              textStyle: effectivePrimaryStyle,
-              curve: Curves.easeOut,
-              duration: const Duration(milliseconds: 200),
-              value: components.main,
-              thousandSeparator: widget.separators.grouping,
-            ),
+            if (widget.animation == null)
+              Text(
+                AmountFormatter.formattedMain(components.main, widget.separators.grouping),
+                style: effectivePrimaryStyle,
+              ),
+            if (widget.animation != null)
+              AnimatedFlipCounter(
+                textStyle: effectivePrimaryStyle,
+                curve: widget.animation!.curve,
+                duration: widget.animation!.duration,
+                negativeSignDuration: widget.animation!.duration,
+                value: components.main,
+                thousandSeparator: widget.separators.grouping,
+              ),
             if (shouldDisplayFractionalPart(components)) ...[
               Padding(
                 padding: effectiveSecondaryPadding,
@@ -89,15 +99,18 @@ final class _MoneyLabelState extends State<MoneyLabel> {
               ),
               Padding(
                 padding: effectiveSecondaryPadding,
-                child: AnimatedFlipCounter(
-                  wholeDigits: widget.fractionalMode == MoneyLabelFractionalMode.accurate
-                      ? 1
-                      : Currency.getPrecision(effectiveMoney.currencyCode),
-                  textStyle: effectiveSecondaryStyle,
-                  curve: Curves.easeOut,
-                  duration: const Duration(milliseconds: 200),
-                  value: components.fractional,
-                ),
+                child: widget.animation == null
+                    ? Text(
+                        (components.fractional.toString()).padLeft(resolveFractionalDigits(effectiveMoney), '0'),
+                        style: effectiveSecondaryStyle,
+                      )
+                    : AnimatedFlipCounter(
+                        wholeDigits: resolveFractionalDigits(effectiveMoney),
+                        textStyle: effectiveSecondaryStyle,
+                        curve: widget.animation!.curve,
+                        duration: widget.animation!.duration,
+                        value: components.fractional,
+                      ),
               ),
             ],
           ],
@@ -131,6 +144,10 @@ final class _MoneyLabelState extends State<MoneyLabel> {
     } else {
       return widget.zeroColor;
     }
+  }
+
+  int resolveFractionalDigits(Money money) {
+    return widget.fractionalMode == MoneyLabelFractionalMode.accurate ? 1 : Currency.getPrecision(money.currencyCode);
   }
 
   Money resolveEffectiveMoney(Money money) {
