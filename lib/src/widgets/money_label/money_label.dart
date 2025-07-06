@@ -6,13 +6,13 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../../../commingle_money.dart';
-import 'money_label_fractional_mode.dart';
 
 final class MoneyLabel extends StatefulWidget {
   final Money money;
   final MoneyLabelFractionalMode fractionalMode;
   // TODO: or listenable<Money> but not both
 
+  final bool displayCurrency;
   final TextStyle? primaryTextStyle;
   final TextStyle? secondaryTextStyle;
   final Color? positiveColor;
@@ -24,6 +24,7 @@ final class MoneyLabel extends StatefulWidget {
     super.key,
     required this.money,
     this.fractionalMode = MoneyLabelFractionalMode.flexible,
+    this.displayCurrency = true,
     this.primaryTextStyle,
     this.secondaryTextStyle,
     this.positiveColor,
@@ -61,11 +62,11 @@ final class _MoneyLabelState extends State<MoneyLabel> {
       children: [
         Row(
           children: [
-            if (currency != null)
+            if (widget.displayCurrency)
               Padding(
                 padding: effectiveSecondaryPadding,
                 child: Text(
-                  '${currency.symbol ?? currency.code} ',
+                  '${currency?.symbol ?? effectiveMoney.currencyCode} ',
                   style: effectiveSecondaryStyle,
                 ),
               ),
