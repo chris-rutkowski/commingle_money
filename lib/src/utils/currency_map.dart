@@ -972,7 +972,7 @@ final Map<String, Currency> _currencyMap = {
   'TND': const Currency(
     code: 'TND',
     englishName: 'Tunisian Dinar',
-    precision: 2,
+    precision: 3,
     emojiFlag: '🇹🇳',
     englishCountryNames: {'Tunisia'},
   ),

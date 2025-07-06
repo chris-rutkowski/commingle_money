@@ -1,7 +1,10 @@
 import 'package:decimal/decimal.dart';
 import 'package:equatable/equatable.dart';
 
+import 'currency.dart';
 import 'currency_code.dart';
+import 'decimal_components.dart';
+import 'utils/decimal_utils.dart';
 
 /// A value object that represents a monetary amount in a specific currency.
 final class Money extends Equatable {
@@ -36,6 +39,18 @@ final class Money extends Equatable {
     return Money(
       currencyCode: currencyCode ?? this.currencyCode,
       amount: amount ?? this.amount,
+    );
+  }
+
+  /// Returns the [DecimalComponents] of this [Money] instance.
+  DecimalComponents get components {
+    final main = amount.truncate();
+
+    final precision = Currency.getPrecision(currencyCode);
+
+    return DecimalComponents(
+      main: main.toInt(),
+      fractional: (amount - main).shift(precision).abs().toInt(),
     );
   }
 }
