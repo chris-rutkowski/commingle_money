@@ -68,6 +68,7 @@ final class _MoneyLabelState extends State<MoneyLabel> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (widget.displayCurrency)
               Padding(
