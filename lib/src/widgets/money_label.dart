@@ -14,6 +14,7 @@ final class MoneyLabel extends StatefulWidget {
   // - always - display always e.g. 12.00
   // - round - will round the value -> 12.99 -> 13
   // - flexible - will display fractional part only if needed
+  // - accurate - will display as many values as there are in this value
 
   final TextStyle? primaryTextStyle;
   final TextStyle? secondaryTextStyle;
@@ -40,11 +41,7 @@ final class MoneyLabel extends StatefulWidget {
 final class _MoneyLabelState extends State<MoneyLabel> {
   @override
   Widget build(BuildContext context) {
-    final effectiveColor = widget.money.amount > Decimal.zero
-        ? widget.positiveColor
-        : widget.money.amount < Decimal.zero
-        ? widget.negativeColor
-        : widget.zeroColor;
+    final effectiveColor = resolveEffectiveColor();
 
     final effectivePrimaryStyle = (Theme.of(context).textTheme.headlineMedium ?? DefaultTextStyle.of(context).style)
         .merge(widget.primaryTextStyle)
@@ -56,7 +53,7 @@ final class _MoneyLabelState extends State<MoneyLabel> {
         widget.secondaryPadding ?? approximateSecondaryBottomPadding(effectivePrimaryStyle, effectiveSecondaryStyle);
 
     final currency = Currency.fromCode(widget.money.currencyCode);
-    final components = DecimalComponents.fromDecimal(widget.money.amount);
+    final components = widget.money.components;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -81,8 +78,19 @@ final class _MoneyLabelState extends State<MoneyLabel> {
             Padding(
               padding: effectiveSecondaryPadding,
               child: Text(
-                '.33',
+                '.',
                 style: effectiveSecondaryStyle,
+              ),
+            ),
+            Padding(
+              padding: effectiveSecondaryPadding,
+              child: AnimatedFlipCounter(
+                wholeDigits: Currency.getPrecision(widget.money.currencyCode),
+                textStyle: effectiveSecondaryStyle,
+                curve: Curves.easeOut,
+                duration: const Duration(milliseconds: 200),
+                value: components.fractional,
+                thousandSeparator: 'k',
               ),
             ),
           ],
@@ -106,5 +114,15 @@ final class _MoneyLabelState extends State<MoneyLabel> {
     return EdgeInsets.only(
       top: (primaryFontSize - secondaryFontSize),
     );
+  }
+
+  Color? resolveEffectiveColor() {
+    if (widget.money.amount > Decimal.zero) {
+      return widget.positiveColor;
+    } else if (widget.money.amount < Decimal.zero) {
+      return widget.negativeColor;
+    } else {
+      return widget.zeroColor;
+    }
   }
 }
