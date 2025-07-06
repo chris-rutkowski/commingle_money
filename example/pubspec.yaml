@@ -13,7 +13,7 @@ dependencies:
   decimal:
   flutter:
     sdk: flutter
-  
+  locale_plus:
 
 dev_dependencies:
 flutter_lints:

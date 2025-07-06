@@ -13,6 +13,7 @@ final class MoneyLabel extends StatefulWidget {
   // TODO: or listenable<Money> but not both
 
   final bool displayCurrency;
+  final AmountFormatSeparators separators;
   final TextStyle? primaryTextStyle;
   final TextStyle? secondaryTextStyle;
   final Color? positiveColor;
@@ -24,6 +25,7 @@ final class MoneyLabel extends StatefulWidget {
     super.key,
     required this.money,
     this.fractionalMode = MoneyLabelFractionalMode.flexible,
+    this.separators = const AmountFormatSeparators(),
     this.displayCurrency = true,
     this.primaryTextStyle,
     this.secondaryTextStyle,
@@ -75,13 +77,13 @@ final class _MoneyLabelState extends State<MoneyLabel> {
               curve: Curves.easeOut,
               duration: const Duration(milliseconds: 200),
               value: components.main,
-              thousandSeparator: 'k', // TODO: inject separator
+              thousandSeparator: widget.separators.grouping,
             ),
             if (shouldDisplayFractionalPart(components)) ...[
               Padding(
                 padding: effectiveSecondaryPadding,
                 child: Text(
-                  '.', // TODO: inject separator
+                  widget.separators.decimal,
                   style: effectiveSecondaryStyle,
                 ),
               ),

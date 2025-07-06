@@ -11,4 +11,11 @@ final class AmountFormatSeparators {
     this.grouping = ',',
     this.decimal = '.',
   });
+
+  /// Common format for the `pl_PL` locale where the grouping separator is a space
+  /// and the decimal separator is a comma.
+  factory AmountFormatSeparators.pl() => const AmountFormatSeparators(
+    grouping: ' ',
+    decimal: ',',
+  );
 }
