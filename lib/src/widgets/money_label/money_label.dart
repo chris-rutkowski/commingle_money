@@ -5,14 +5,8 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
-import '../../commingle_money.dart';
-
-enum MoneyLabelFractionalMode {
-  flexible,
-  always,
-  round,
-  accurate,
-}
+import '../../../commingle_money.dart';
+import 'money_label_fractional_mode.dart';
 
 final class MoneyLabel extends StatefulWidget {
   final Money money;
