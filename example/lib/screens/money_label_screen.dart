@@ -12,8 +12,8 @@ final class MoneyLabelScreen extends StatefulWidget {
 final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
   var fractionalMode = MoneyLabelFractionalMode.flexible;
   var displayCurrency = true;
+  var animated = true;
   var isNegative = false;
-
   var highSlider = 12;
   var lowSlider = 34;
   var decimalSlider = 56;
@@ -41,6 +41,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
             child: Center(
               child: MoneyLabel(
                 money: currentMoney,
+                animation: animated ? const MoneyLabelAnimation() : null,
                 fractionalMode: fractionalMode,
                 displayCurrency: displayCurrency,
                 positiveColor: Colors.green,
@@ -54,6 +55,11 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
             child: ListView(
               padding: const EdgeInsets.all(16),
               children: [
+                SwitchListTile(
+                  title: const Text('Animated'),
+                  value: animated,
+                  onChanged: (value) => setState(() => animated = value),
+                ),
                 SwitchListTile(
                   title: const Text('Display currency'),
                   value: displayCurrency,
