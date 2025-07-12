@@ -159,7 +159,7 @@ You can also use constants like `CurrencyCodes.chf` for quick access to a curate
 - utility functions like `min`, `max`, and `sum`
 - converters `Decimal` → `int` as well as `double` → `Decimal`
 
-⚠️ Known Issues
+## ⚠️ Known Issues
 
 Aligning `MoneyLabel` precisely to the baseline can be tricky. By design, the widget displays the currency symbol and decimal part using a smaller font than the main number.
 
@@ -167,7 +167,7 @@ I experimented with multiple approaches - `CrossAxisAlignment.baseline`, `RichTe
 
 As a workaround, the widget exposes `secondaryPadding` property that lets you manually tweak the vertical alignment of secondary elements. While not ideal, this gives you full control to fine-tune the appearance for your chosen font and style.
 
-# 🙌 Acknowledgements
+## 🙌 Acknowledgements
 
 This library wouldn’t be possible without the excellent work of the Flutter community.
 
@@ -175,9 +175,16 @@ This library wouldn’t be possible without the excellent work of the Flutter co
 
 While not part of the core library, I recommend using [locale_plus](https://pub.dev/packages/locale_plus) like demonstrated in Example app.
 
-# 🤝 Contributing
+## 🤝 Contributing
 
 Contributions are very welcome! If you spot a bug, want to improve something, or add a feature, feel free to fork the repository and raise a pull request.
+
+## Trivia
+
+- Tests: code coverage: 96%
+- [pub.dev](https://pub.dev/packages/commingle_money)
+- [GitHub](https://github.com/chris-rutkowski/commingle_money)
+- [Commingle](https://commingle.app)
 
 ## 📄 Copyright and License
 

@@ -66,6 +66,19 @@ final class MoneyEditingController extends ChangeNotifier {
     _amountController.addListener(_onAmountChanged);
   }
 
+  /// Creates a [MoneyEditingController] using separators from the [AmountFormatSeparators] inherited widget, if available.
+  factory MoneyEditingController.context({
+    required BuildContext context,
+    required CurrencyCode currencyCode,
+    Decimal? amount,
+  }) {
+    return MoneyEditingController(
+      currencyCode: currencyCode,
+      amount: amount,
+      separators: AmountFormatSeparators.maybeOf(context) ?? const AmountFormatSeparatorsData(),
+    );
+  }
+
   void _onAmountChanged() {
     notifyListeners();
   }
