@@ -147,6 +147,8 @@ You can retrieve all currencies using: `Currency.list()`, or filter them as user
 Currency.list((c) => c.englishName.contains(searchQuery))
 ```
 
+You can also use constants like `CurrencyCodes.chf` for quick access to a curated subset of popular currencies.
+
 ## 🧮 Decimal Utilities
 
 `DecimalUtils` is an extension on `Decimal` that provides helpful utilities for rounding, scaling, and working with numeric data in a finance-friendly way.
