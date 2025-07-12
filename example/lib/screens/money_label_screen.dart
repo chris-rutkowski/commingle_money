@@ -12,6 +12,7 @@ final class MoneyLabelScreen extends StatefulWidget {
 final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
   var separatorsType = _SeparatorsType.fromLocalePlus;
   var fractionalMode = MoneyLabelFractionalMode.flexible;
+  CurrencyCode currency = CurrencyCodes.usd;
   var displayCurrency = true;
   var displayNegativeSign = true;
   var animated = true;
@@ -27,7 +28,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
 
     return Money(
       amount: isNegative ? -total : total,
-      currencyCode: 'USD',
+      currencyCode: currency,
     );
   }
 
@@ -96,7 +97,31 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                   value: decimalSlider,
                   onChanged: (x) => setState(() => decimalSlider = x),
                 ),
+
                 const SizedBox(height: 16),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: DropdownButtonFormField<CurrencyCode>(
+                    value: currency,
+                    decoration: const InputDecoration(
+                      labelText: 'Currency',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: [CurrencyCodes.usd, CurrencyCodes.bhd, CurrencyCodes.sgd, CurrencyCodes.irr].map((e) {
+                      return DropdownMenuItem(
+                        value: e,
+                        child: Text(e),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => currency = value);
+                      }
+                    },
+                  ),
+                ),
+                const SizedBox(height: 24),
 
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -106,10 +131,10 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                       labelText: 'Fractional mode',
                       border: OutlineInputBorder(),
                     ),
-                    items: MoneyLabelFractionalMode.values.map((mode) {
+                    items: MoneyLabelFractionalMode.values.map((e) {
                       return DropdownMenuItem(
-                        value: mode,
-                        child: Text(mode.name),
+                        value: e,
+                        child: Text(e.name),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -128,10 +153,10 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                       labelText: 'Separators',
                       border: OutlineInputBorder(),
                     ),
-                    items: _SeparatorsType.values.map((mode) {
+                    items: _SeparatorsType.values.map((e) {
                       return DropdownMenuItem(
-                        value: mode,
-                        child: Text(mode.name),
+                        value: e,
+                        child: Text(e.name),
                       );
                     }).toList(),
                     onChanged: (value) {
