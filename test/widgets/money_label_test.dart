@@ -141,6 +141,60 @@ void main() {
 
     await tester.snapshot();
   });
+
+  testWidgets('accurate 4 digits INR', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      SnapshotWrapper(
+        child: MoneyLabel(
+          separators: const AmountFormatSeparatorsData(),
+          fractionalMode: MoneyLabelFractionalMode.accurate,
+          money: Money(
+            currencyCode: CurrencyCodes.inr,
+            amount: Decimal.parse('84321.6225'),
+          ),
+          secondaryPadding: const EdgeInsets.only(top: 10),
+        ),
+      ),
+    );
+
+    await tester.snapshot();
+  });
+
+  testWidgets('accurate 1 digits IRR', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      SnapshotWrapper(
+        child: MoneyLabel(
+          separators: const AmountFormatSeparatorsData(),
+          fractionalMode: MoneyLabelFractionalMode.accurate,
+          money: Money(
+            currencyCode: CurrencyCodes.irr,
+            amount: Decimal.parse('7281.1'),
+          ),
+          secondaryPadding: const EdgeInsets.only(top: 10),
+        ),
+      ),
+    );
+
+    await tester.snapshot();
+  });
+
+   testWidgets('accurate 0 digits ZAR', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      SnapshotWrapper(
+        child: MoneyLabel(
+          separators: const AmountFormatSeparatorsData(),
+          fractionalMode: MoneyLabelFractionalMode.accurate,
+          money: Money(
+            currencyCode: CurrencyCodes.zar,
+            amount: Decimal.parse('241'),
+          ),
+          secondaryPadding: const EdgeInsets.only(top: 10),
+        ),
+      ),
+    );
+
+    await tester.snapshot();
+  });
 }
 
 extension _Snapshot on WidgetTester {
