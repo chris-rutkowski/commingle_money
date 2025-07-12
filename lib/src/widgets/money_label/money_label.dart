@@ -60,7 +60,7 @@ final class MoneyLabel extends StatelessWidget {
   /// Alternatively will use [Colors.grey].
   final Color? zeroColor;
 
-  /// Check README.
+  /// Check README - Known limitations.
   final EdgeInsets? secondaryPadding;
 
   /// Creates a [MoneyLabel] widget.
@@ -222,9 +222,7 @@ final class MoneyLabel extends StatelessWidget {
       return defaultValue;
     }
 
-    // Wish I could find an easy way to automatically calculate the baseline between two text styles.
-    // I tried using alphabetic baselines as well as TextPainter.
-    // There were always edge cases especially when MoneyLabel changes are animated.
+    // Check README - Known limitations.
     final primaryFontSize = primaryTextStyle.fontSize;
     final secondaryFontSize = secondaryTextStyle.fontSize;
 

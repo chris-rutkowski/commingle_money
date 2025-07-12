@@ -2,19 +2,17 @@
 
 A Flutter package for working with monetary values, open sourced from the [Commingle](https://commingle.app) app. It includes global currency definitions, widgets for displaying amounts, input controllers for smooth, user-friendly editing and other monetary utilities.
 
-## Check out Example app
+##  Explore the Example App
 
-Clone the repository and check out the Example app to interact with 
+Clone the repository and run the included Example app to see the library in action. The interactive demos let you explore features, validate their usefulness, and inspect the underlying implementation.
 
 <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/example_app.webp" width="830" height="434" title="MoneyLabel demo"/>
-
 
 ## 🏷️ Money Label
 
 <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/money_label.gif" width="144" height="55" title="MoneyLabel demo"/>
 
-
-`MoneyLabel` is a rich and flexible widget for presenting `Money` values. It supports:
+`MoneyLabel` is a rich and flexible widget for presenting `Money` values.
 
 - **Odometer-style animations** for amount changes
 - Configurable **decimal behavior** - e.g. round, show when needed…
@@ -159,5 +157,22 @@ Currency.list((c) => c.englishName.contains(searchQuery))
 - utility functions like `min`, `max`, and `sum`
 - converters `Decimal` → `int` as well as `double` → `Decimal`
 
+⚠️ Known Issues
+
+Aligning `MoneyLabel` precisely to the baseline can be tricky. By design, the widget displays the currency symbol and decimal part using a smaller font than the main number.
+
+I experimented with multiple approaches - `CrossAxisAlignment.baseline`, `RichText` and even low-level `TextPainter` font metrics. None produced fully reliable results across fonts, especially with Odometer animation.
+
+As a workaround, the widget exposes `secondaryPadding` property that lets you manually tweak the vertical alignment of secondary elements. While not ideal, this gives you full control to fine-tune the appearance for your chosen font and style.
+
+# 🙌 Acknowledgements
+
+This library wouldn’t be possible without the excellent work of the Flutter community.
+
+[decimal](https://pub.dev/packages/decimal), [equatable](https://pub.dev/packages/equatable), [expressions](https://pub.dev/packages/expressions), [animated_flip_counter](animated_flip_counter)
+
+While not part of the core library, I recommend using [locale_plus](https://pub.dev/packages/locale_plus) like demonstrated in Example app.
+
 ## Improvements
 padding for money label
+

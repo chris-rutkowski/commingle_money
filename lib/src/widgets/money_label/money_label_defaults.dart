@@ -41,7 +41,7 @@ final class MoneyLabelDefaultsData extends Equatable {
   /// Colour to use when the amount is zero.
   final Color? zeroColor;
 
-  /// Check README.
+  /// Check README - Known limitations.
   final EdgeInsets? secondaryPadding;
 
   /// Creates a [MoneyLabelDefaultsData] object.
