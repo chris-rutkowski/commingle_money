@@ -7,5 +7,6 @@ export 'src/money.dart';
 export 'src/money_editing_controller.dart';
 export 'src/utils/decimal_utils.dart';
 export 'src/widgets/money_label/money_label.dart';
-export 'src/widgets/money_label/money_label_fractional_mode.dart';
 export 'src/widgets/money_label/money_label_animation.dart';
+export 'src/widgets/money_label/money_label_defaults.dart';
+export 'src/widgets/money_label/money_label_fractional_mode.dart';

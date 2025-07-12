@@ -11,6 +11,7 @@ import '../../decimal_components.dart';
 import '../../money.dart';
 import '../../utils/amount_formatter.dart';
 import 'money_label_animation.dart';
+import 'money_label_defaults.dart';
 import 'money_label_fractional_mode.dart';
 
 final class MoneyLabel extends StatelessWidget {
@@ -49,9 +50,7 @@ final class MoneyLabel extends StatelessWidget {
     final effectiveMoney = resolveEffectiveMoney(money);
     final effectiveColor = resolveEffectiveColor(effectiveMoney);
 
-    final effectivePrimaryStyle = (Theme.of(context).textTheme.headlineMedium ?? DefaultTextStyle.of(context).style)
-        .merge(primaryTextStyle)
-        .copyWith(color: effectiveColor);
+    final effectivePrimaryStyle = resolveEffectivePrimaryStyle(context, effectiveColor);
     final effectiveSecondaryStyle = (Theme.of(context).textTheme.bodyMedium ?? DefaultTextStyle.of(context).style)
         .merge(secondaryTextStyle)
         .copyWith(color: effectiveColor);
@@ -124,7 +123,9 @@ final class MoneyLabel extends StatelessWidget {
     );
   }
 
-  // Wish I can find easy way to actually calculate the baseline between two text styles
+  // Wish I could find an easy way to automatically calculate the baseline between two text styles.
+  // I tried using alphabetic baselines as well as TextPainter.
+  // There were always edge cases especially when MoneyLabel changes are animated.
   EdgeInsets approximateSecondaryBottomPadding(TextStyle primaryTextStyle, TextStyle secondaryTextStyle) {
     final primaryFontSize = primaryTextStyle.fontSize;
     final secondaryFontSize = secondaryTextStyle.fontSize;
@@ -136,6 +137,15 @@ final class MoneyLabel extends StatelessWidget {
     return EdgeInsets.only(
       top: (primaryFontSize - secondaryFontSize),
     );
+  }
+
+  TextStyle resolveEffectivePrimaryStyle(BuildContext context, Color? color) {
+    final base =
+        MoneyLabelDefaults.maybeOf(context)?.primaryTextStyle ??
+        Theme.of(context).textTheme.headlineMedium ??
+        DefaultTextStyle.of(context).style;
+
+    return base.merge(primaryTextStyle).copyWith(color: color);
   }
 
   Color? resolveEffectiveColor(Money money) {
