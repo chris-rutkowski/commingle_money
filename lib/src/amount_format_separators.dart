@@ -6,7 +6,6 @@ import 'widgets/money_label/money_label.dart';
 /// Provides default separators to be used by [MoneyLabel] and other widgets and utilities
 /// below this widget in the widget tree.
 final class AmountFormatSeparators extends InheritedWidget {
-
   /// The actual configuration.
   final AmountFormatSeparatorsData data;
 
@@ -42,11 +41,11 @@ final class AmountFormatSeparatorsData extends Equatable {
 
   /// Common format for the `pl_PL` locale where the grouping separator is a space
   /// and the decimal separator is a comma.
-  factory AmountFormatSeparatorsData.pl() => const AmountFormatSeparatorsData(
+  static const AmountFormatSeparatorsData pl = AmountFormatSeparatorsData(
     grouping: ' ',
     decimal: ',',
   );
-  
+
   @override
   List<Object?> get props => [grouping, decimal];
 }

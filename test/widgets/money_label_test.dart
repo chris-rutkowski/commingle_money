@@ -20,7 +20,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'USD',
               amount: Decimal.parse('1234.56'),
@@ -37,7 +36,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'EUR',
               amount: Decimal.parse('-6126.99'),
@@ -54,7 +52,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(grouping: 'K', decimal: 'D'),
+            separators: const AmountFormatSeparatorsData(),
             money: Money(
               currencyCode: 'GBP',
               amount: Decimal.parse('1234567.89'),
@@ -97,22 +95,25 @@ final class SnapshotWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MoneyLabelDefaults(
-      data: const MoneyLabelDefaultsData(
-        primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
-        secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
-        positiveColor: Colors.blue,
-        negativeColor: Colors.red,
-      ),
-      child: Directionality(
-        textDirection: TextDirection.ltr,
-        child: DefaultTextHeightBehavior(
-          textHeightBehavior: const TextHeightBehavior(),
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: child,
+    return AmountFormatSeparators(
+      data:  AmountFormatSeparatorsData.pl,
+      child: MoneyLabelDefaults(
+        data: const MoneyLabelDefaultsData(
+          primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
+          secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
+          positiveColor: Colors.blue,
+          negativeColor: Colors.red,
+        ),
+        child: Directionality(
+          textDirection: TextDirection.ltr,
+          child: DefaultTextHeightBehavior(
+            textHeightBehavior: const TextHeightBehavior(),
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.all(16),
+              child: Center(
+                child: child,
+              ),
             ),
           ),
         ),
