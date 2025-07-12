@@ -89,6 +89,19 @@ void main() {
       expectState(text: '4', value: Decimal.parse('5'), quiet: false);
       await tester.dismissKeyboard(controller);
       expectState(text: '5', value: Decimal.parse('5'), quiet: true);
+
+      // App erases value
+      controller.value = null;
+      await tester.pump();
+      expectState(text: '', value: null, quiet: false);
+
+      // User erases value
+      await tester.type('1234.56');
+      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false);
+      await tester.type('');
+      expectState(text: '', value: null, quiet: false);
+
+      controller.dispose();
     });
   });
 }
