@@ -69,6 +69,23 @@ void main() {
       await tester.snapshot();
     });
   });
+
+  testWidgets('zero HKD', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      SnapshotWrapper(
+        child: MoneyLabel(
+          separators: const AmountFormatSeparatorsData(),
+          money: Money(
+            currencyCode: 'HKD',
+            amount: Decimal.zero,
+          ),
+          secondaryPadding: const EdgeInsets.only(top: 10),
+        ),
+      ),
+    );
+
+    await tester.snapshot();
+  });
 }
 
 extension _Snapshot on WidgetTester {
@@ -96,13 +113,14 @@ final class SnapshotWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AmountFormatSeparators(
-      data:  AmountFormatSeparatorsData.pl,
+      data: AmountFormatSeparatorsData.pl,
       child: MoneyLabelDefaults(
         data: const MoneyLabelDefaultsData(
           primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
           secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
           positiveColor: Colors.blue,
           negativeColor: Colors.red,
+          zeroColor: Colors.grey
         ),
         child: Directionality(
           textDirection: TextDirection.ltr,
