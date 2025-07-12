@@ -1,6 +1,3 @@
-// TODO: to drop and anim
-// ignore_for_file: public_member_api_docs
-
 import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -46,13 +43,13 @@ final class MoneyLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveMoney = resolveEffectiveMoney(money);
-    final effectiveColor = resolveEffectiveColor(effectiveMoney);
+    final effectiveMoney = _resolveEffectiveMoney(money);
+    final effectiveColor = _resolveEffectiveColor(effectiveMoney);
 
-    final effectivePrimaryStyle = resolveEffectivePrimaryStyle(context, effectiveColor);
-    final effectiveSecondaryStyle = resolveEffectiveSecondaryStyle(context, effectiveColor);
+    final effectivePrimaryStyle = _resolveEffectivePrimaryStyle(context, effectiveColor);
+    final effectiveSecondaryStyle = _resolveEffectiveSecondaryStyle(context, effectiveColor);
     final effectiveSecondaryPadding =
-        secondaryPadding ?? approximateSecondaryBottomPadding(effectivePrimaryStyle, effectiveSecondaryStyle);
+        secondaryPadding ?? _approximateSecondaryBottomPadding(effectivePrimaryStyle, effectiveSecondaryStyle);
 
     final currency = Currency.fromCode(effectiveMoney.currencyCode);
     final components = fractionalMode == MoneyLabelFractionalMode.accurate
@@ -90,7 +87,7 @@ final class MoneyLabel extends StatelessWidget {
                 value: displayNegativeSign ? components.main.abs() : components.main,
                 thousandSeparator: separators.grouping,
               ),
-            if (shouldDisplayFractionalPart(components)) ...[
+            if (_shouldDisplayFractionalPart(components)) ...[
               Padding(
                 padding: effectiveSecondaryPadding,
                 child: Text(
@@ -102,11 +99,11 @@ final class MoneyLabel extends StatelessWidget {
                 padding: effectiveSecondaryPadding,
                 child: animation == MoneyLabelAnimation.none
                     ? Text(
-                        (components.fractional.toString()).padLeft(resolveFractionalDigits(effectiveMoney), '0'),
+                        (components.fractional.toString()).padLeft(_resolveFractionalDigits(effectiveMoney), '0'),
                         style: effectiveSecondaryStyle,
                       )
                     : AnimatedFlipCounter(
-                        wholeDigits: resolveFractionalDigits(effectiveMoney),
+                        wholeDigits: _resolveFractionalDigits(effectiveMoney),
                         textStyle: effectiveSecondaryStyle,
                         curve: animation.curve,
                         duration: animation.duration,
@@ -123,7 +120,7 @@ final class MoneyLabel extends StatelessWidget {
   // Wish I could find an easy way to automatically calculate the baseline between two text styles.
   // I tried using alphabetic baselines as well as TextPainter.
   // There were always edge cases especially when MoneyLabel changes are animated.
-  EdgeInsets approximateSecondaryBottomPadding(TextStyle primaryTextStyle, TextStyle secondaryTextStyle) {
+  EdgeInsets _approximateSecondaryBottomPadding(TextStyle primaryTextStyle, TextStyle secondaryTextStyle) {
     final primaryFontSize = primaryTextStyle.fontSize;
     final secondaryFontSize = secondaryTextStyle.fontSize;
 
@@ -136,7 +133,7 @@ final class MoneyLabel extends StatelessWidget {
     );
   }
 
-  TextStyle resolveEffectivePrimaryStyle(BuildContext context, Color? color) {
+  TextStyle _resolveEffectivePrimaryStyle(BuildContext context, Color? color) {
     final base =
         MoneyLabelDefaults.maybeOf(context)?.primaryTextStyle ??
         Theme.of(context).textTheme.headlineMedium ??
@@ -145,7 +142,7 @@ final class MoneyLabel extends StatelessWidget {
     return base.merge(primaryTextStyle).copyWith(color: color);
   }
 
-  TextStyle resolveEffectiveSecondaryStyle(BuildContext context, Color? color) {
+  TextStyle _resolveEffectiveSecondaryStyle(BuildContext context, Color? color) {
     final base =
         MoneyLabelDefaults.maybeOf(context)?.secondaryTextStyle ??
         Theme.of(context).textTheme.bodyMedium ??
@@ -154,7 +151,7 @@ final class MoneyLabel extends StatelessWidget {
     return base.merge(secondaryTextStyle).copyWith(color: color);
   }
 
-  Color? resolveEffectiveColor(Money money) {
+  Color? _resolveEffectiveColor(Money money) {
     if (money.amount > Decimal.zero) {
       return positiveColor;
     } else if (money.amount < Decimal.zero) {
@@ -164,11 +161,11 @@ final class MoneyLabel extends StatelessWidget {
     }
   }
 
-  int resolveFractionalDigits(Money money) {
+  int _resolveFractionalDigits(Money money) {
     return fractionalMode == MoneyLabelFractionalMode.accurate ? 1 : Currency.getPrecision(money.currencyCode);
   }
 
-  Money resolveEffectiveMoney(Money money) {
+  Money _resolveEffectiveMoney(Money money) {
     switch (fractionalMode) {
       case MoneyLabelFractionalMode.flexible:
         return money.roundedToCurrencyPrecision();
@@ -181,7 +178,7 @@ final class MoneyLabel extends StatelessWidget {
     }
   }
 
-  bool shouldDisplayFractionalPart(DecimalComponents components) {
+  bool _shouldDisplayFractionalPart(DecimalComponents components) {
     switch (fractionalMode) {
       case MoneyLabelFractionalMode.flexible:
         return components.fractional != 0;
