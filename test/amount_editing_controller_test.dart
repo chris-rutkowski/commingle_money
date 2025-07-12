@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'test_utils/widget_tester_ext.dart';
+
 void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +43,7 @@ void main() {
       }
 
       await tester.pumpWidget(
-        SnapshotWrapper(
+        _Wrapper(
           child: TextField(
             controller: controller.textController,
             focusNode: controller.focusNode,
@@ -137,7 +139,7 @@ void main() {
       }
 
       await tester.pumpWidget(
-        SnapshotWrapper(
+        _Wrapper(
           child: TextField(
             controller: controller.textController,
             focusNode: controller.focusNode,
@@ -166,22 +168,16 @@ void main() {
 }
 
 extension _WidgetTester on WidgetTester {
-  Future<void> type(String text) async {
-    await enterText(find.byType(TextField), text);
-    await pump();
-  }
-
   Future<void> dismissKeyboard(AmountEditingController controller) async {
     controller.focusNode.unfocus();
     await pump();
   }
 }
 
-final class SnapshotWrapper extends StatelessWidget {
+final class _Wrapper extends StatelessWidget {
   final Widget child;
 
-  const SnapshotWrapper({
-    super.key,
+  const _Wrapper({
     required this.child,
   });
 
@@ -192,19 +188,7 @@ final class SnapshotWrapper extends StatelessWidget {
       home: Scaffold(
         body: AmountFormatSeparators(
           data: AmountFormatSeparatorsData.pl,
-          child: Directionality(
-            textDirection: TextDirection.ltr,
-            child: DefaultTextHeightBehavior(
-              textHeightBehavior: const TextHeightBehavior(),
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.all(16),
-                child: Center(
-                  child: child,
-                ),
-              ),
-            ),
-          ),
+          child: child,
         ),
       ),
     );

@@ -45,12 +45,8 @@ final class MoneyEditingController extends ChangeNotifier {
       return;
     }
 
-    if (newValue.currencyCode != _currencyCode) {
-      _currencyCode = newValue.currencyCode;
-      _amountController.value = newValue.amount;
-    }
-
-    notifyListeners();
+    _currencyCode = newValue.currencyCode;
+    _amountController.value = newValue.amount;
   }
 
   MoneyEditingController({
