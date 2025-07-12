@@ -49,6 +49,27 @@ void main() {
 
       await tester.snapshot();
     });
+
+    testWidgets('customised GBP', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
+            money: Money(
+              currencyCode: 'GBP',
+              amount: Decimal.parse('1234567.89'),
+            ),
+            primaryTextStyle: const TextStyle(fontFamily: 'Noto', fontSize: 25),
+            secondaryTextStyle: const TextStyle(fontFamily: 'Noto', fontSize: 20),
+            positiveColor: Colors.green,
+            negativeColor: Colors.orange,
+            secondaryPadding: const EdgeInsets.only(top: 5),
+          ),
+        ),
+      );
+
+      await tester.snapshot();
+    });
   });
 }
 
@@ -80,7 +101,7 @@ final class SnapshotWrapper extends StatelessWidget {
       data: const MoneyLabelDefaultsData(
         primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
         secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
-        positiveColor: Colors.yellow,
+        positiveColor: Colors.blue,
         negativeColor: Colors.red,
       ),
       child: Directionality(
