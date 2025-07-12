@@ -113,7 +113,7 @@ final class MoneyLabel extends StatelessWidget {
             if (animation == MoneyLabelAnimation.none)
               Text(
                 AmountFormatter.formattedMain(
-                  displayNegativeSign ? components.main.abs() : components.main,
+                  displayNegativeSign ? components.main : components.main.abs(),
                   effectiveSeparators.grouping,
                 ),
                 style: effectivePrimaryStyle,
@@ -124,7 +124,7 @@ final class MoneyLabel extends StatelessWidget {
                 curve: animation.curve,
                 duration: animation.duration,
                 negativeSignDuration: animation.duration,
-                value: displayNegativeSign ? components.main.abs() : components.main,
+                value: displayNegativeSign ? components.main : components.main.abs(),
                 thousandSeparator: effectiveSeparators.grouping,
               ),
             if (_shouldDisplayFractionalPart(components)) ...[

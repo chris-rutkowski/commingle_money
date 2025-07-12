@@ -195,6 +195,25 @@ void main() {
 
     await tester.snapshot();
   });
+
+  testWidgets('negative without sign SGD', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      SnapshotWrapper(
+        child: MoneyLabel(
+          separators: const AmountFormatSeparatorsData(),
+          displayNegativeSign: false,
+          fractionalMode: MoneyLabelFractionalMode.accurate,
+          money: Money(
+            currencyCode: CurrencyCodes.sgd,
+            amount: Decimal.parse('-126.1'),
+          ),
+          secondaryPadding: const EdgeInsets.only(top: 10),
+        ),
+      ),
+    );
+
+    await tester.snapshot();
+  });
 }
 
 extension _Snapshot on WidgetTester {

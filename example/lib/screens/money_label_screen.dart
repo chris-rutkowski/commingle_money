@@ -49,6 +49,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                 positiveColor: Colors.blue,
                 negativeColor: Colors.red,
                 zeroColor: Colors.grey,
+                primaryTextStyle: Theme.of(context).textTheme.headlineMedium,
                 secondaryPadding: const EdgeInsets.only(top: 10),
               ),
             ),
