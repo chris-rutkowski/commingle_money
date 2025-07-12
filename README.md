@@ -1,6 +1,6 @@
 # Commingle Money
 
-A Flutter package for working with monetary values, open sourced from the [Commingle](https://commingle.app) app. It includes global currency definitions, widgets for displaying amounts, and input controllers for smooth, user-friendly editing.
+A Flutter package for working with monetary values, open sourced from the [Commingle](https://commingle.app) app. It includes global currency definitions, widgets for displaying amounts, input controllers for smooth, user-friendly editing and other monetary utilities.
 
 ## Money Label
 
@@ -80,7 +80,38 @@ controller.addListener(() {
 });
 ```
 
-You can change the entire value or just a currency using `value` and `currencyCode` setters.
+You can also set the value programmatically using `value` setter or to just change a currency  using `currencyCode` setter.
+
+### Amount Editing Controller
+
+`AmountEditingController` is a lightweight alternative to `MoneyEditingController` that operates directly on `Decimal` values. It lets you control the desired precision without involving currency logic.
+
+## Money
+
+`Money` is a simple yet powerful value class that combines a `currencyCode` with a `Decimal` amount.
+
+```dart
+Money(
+  currencyCode: CurrencyCodes.usd, // or simply "USD"
+  amount: Decimal.parse("123.45"),
+);
+```
+
+It provides utility methods like:
+
+-  `rounded()`: 2.99 → 3 
+-  `roundedToCurrencyPrecision()`: 2.567 → 2.57.
+
+You can also use math operators directly: `+ – × ÷`. All operations return a new `Money` instance, rounded to the currency precision. You can combine `Money` values of the same currency with `int`, `double`, or `Decimal` values.
+
+
+```dart
+final usd3 = Money(currencyCode: "USD", amount: Decimal.fromInt(3))
+final usd4 = Money(currencyCode: "USD", amount: Decimal.fromInt(4))
+
+final total = usd3 + usd4 + 5; // = 12 USD
+```
+
 
 ## Improvements
 padding for money label
