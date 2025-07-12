@@ -16,10 +16,13 @@ void main() {
   });
 
   group('AmountEditingController', () {
-    testWidgets('flow', (WidgetTester tester) async {
+    testWidgets('standard', (WidgetTester tester) async {
       final controller = AmountEditingController(precision: 2, amount: Decimal.parse('3532.2312'));
 
       Decimal? listenerValue;
+      controller.addListener(() {
+        listenerValue = controller.value;
+      });
 
       void expectState({
         required String text,
@@ -36,10 +39,6 @@ void main() {
 
         listenerValue = null;
       }
-
-      controller.addListener(() {
-        listenerValue = controller.value;
-      });
 
       await tester.pumpWidget(
         SnapshotWrapper(
@@ -106,6 +105,61 @@ void main() {
       expectState(text: '2(5-1)*3×4/1.5÷3‒1', value: Decimal.parse('20.333'), quiet: false);
       await tester.dismissKeyboard(controller);
       expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true);
+
+      controller.dispose();
+    });
+
+    testWidgets('custom separators', (WidgetTester tester) async {
+      final controller = AmountEditingController(
+        separators: const AmountFormatSeparatorsData(grouping: 'g', decimal: 'd'),
+        precision: 2,
+        amount: Decimal.parse('3532.2312'),
+      );
+
+      Decimal? listenerValue;
+      controller.addListener(() {
+        listenerValue = controller.value;
+      });
+
+      void expectState({
+        required String text,
+        required Decimal? value,
+        required bool quiet,
+      }) {
+        expect(controller.textController.text, text);
+        expect(controller.value, value);
+        if (quiet) {
+          expect(listenerValue, isNull);
+        } else {
+          expect(listenerValue, value);
+        }
+
+        listenerValue = null;
+      }
+
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: TextField(
+            controller: controller.textController,
+            focusNode: controller.focusNode,
+            style: const TextStyle(
+              fontFamily: 'Noto',
+              fontSize: 24,
+            ),
+          ),
+        ),
+      );
+
+      // Initial state
+      expectState(text: '3g532d23', value: Decimal.parse('3532.23'), quiet: true);
+
+      // User modifies
+      await tester.type('1234d56');
+      expectState(text: '1234d56', value: Decimal.parse('1234.56'), quiet: false);
+      await tester.type('2g4g59g1gd12');
+      expectState(text: '2g4g59g1gd12', value: Decimal.parse('24591.12'), quiet: false);
+      await tester.dismissKeyboard(controller);
+      expectState(text: '24g591d12', value: Decimal.parse('24591.12'), quiet: true);
 
       controller.dispose();
     });

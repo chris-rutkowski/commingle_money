@@ -24,7 +24,6 @@ void main() {
               currencyCode: CurrencyCodes.usd,
               amount: Decimal.parse('1234.56'),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -40,7 +39,6 @@ void main() {
               currencyCode: CurrencyCodes.eur,
               amount: Decimal.parse('-6126.99'),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -79,7 +77,6 @@ void main() {
               currencyCode: CurrencyCodes.hkd,
               amount: Decimal.zero,
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -97,7 +94,6 @@ void main() {
               currencyCode: CurrencyCodes.pln,
               amount: Decimal.fromInt(123),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -115,7 +111,6 @@ void main() {
               currencyCode: CurrencyCodes.aud,
               amount: Decimal.parse('5623.5'),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -133,7 +128,6 @@ void main() {
               currencyCode: CurrencyCodes.cny,
               amount: Decimal.parse('72316.49'),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -151,7 +145,6 @@ void main() {
               currencyCode: CurrencyCodes.inr,
               amount: Decimal.parse('84321.6225'),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -169,7 +162,6 @@ void main() {
               currencyCode: CurrencyCodes.irr,
               amount: Decimal.parse('7281.1'),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -187,7 +179,6 @@ void main() {
               currencyCode: CurrencyCodes.zar,
               amount: Decimal.parse('241'),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -206,7 +197,6 @@ void main() {
               currencyCode: CurrencyCodes.sgd,
               amount: Decimal.parse('-126.1'),
             ),
-            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
@@ -249,6 +239,7 @@ final class SnapshotWrapper extends StatelessWidget {
           positiveColor: Colors.blue,
           negativeColor: Colors.red,
           zeroColor: Colors.grey,
+          secondaryPadding: EdgeInsets.only(top: 10),
         ),
         child: Directionality(
           textDirection: TextDirection.ltr,

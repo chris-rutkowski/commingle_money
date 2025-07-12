@@ -5,7 +5,6 @@ import 'money_label.dart';
 
 /// Provides subset of default values for [MoneyLabel] widgets below this widget in the widget tree.
 final class MoneyLabelDefaults extends InheritedWidget {
-
   /// The actual configuration.
   final MoneyLabelDefaultsData data;
 
@@ -56,5 +55,12 @@ final class MoneyLabelDefaultsData extends Equatable {
   });
 
   @override
-  List<Object?> get props => [primaryTextStyle];
+  List<Object?> get props => [
+    primaryTextStyle,
+    secondaryTextStyle,
+    positiveColor,
+    negativeColor,
+    zeroColor,
+    secondaryPadding,
+  ];
 }
