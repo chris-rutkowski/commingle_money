@@ -101,6 +101,12 @@ void main() {
       await tester.type('');
       expectState(text: '', value: null, quiet: false);
 
+      // User types formula
+      await tester.type('2(5-1)*3×4/1.5÷3‒1');
+      expectState(text: '2(5-1)*3×4/1.5÷3‒1', value: Decimal.parse('20.333'), quiet: false);
+      await tester.dismissKeyboard(controller);
+      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true);
+
       controller.dispose();
     });
   });

@@ -80,6 +80,7 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
                   const Text('Money label:'),
                   const SizedBox(width: 16.0),
                   MoneyLabel(
+                    primaryTextStyle: Theme.of(context).textTheme.headlineMedium,
                     money: controller.value ?? Money.zero(controller.currencyCode),
                     positiveColor: Colors.blue,
                     negativeColor: Colors.red,
