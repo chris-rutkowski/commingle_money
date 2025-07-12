@@ -21,7 +21,7 @@ void main() {
         SnapshotWrapper(
           child: MoneyLabel(
             money: Money(
-              currencyCode: 'USD',
+              currencyCode: CurrencyCodes.usd,
               amount: Decimal.parse('1234.56'),
             ),
             secondaryPadding: const EdgeInsets.only(top: 10),
@@ -37,7 +37,7 @@ void main() {
         SnapshotWrapper(
           child: MoneyLabel(
             money: Money(
-              currencyCode: 'EUR',
+              currencyCode: CurrencyCodes.eur,
               amount: Decimal.parse('-6126.99'),
             ),
             secondaryPadding: const EdgeInsets.only(top: 10),
@@ -52,9 +52,10 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
+            animation: const MoneyLabelAnimation(),
             separators: const AmountFormatSeparatorsData(),
             money: Money(
-              currencyCode: 'GBP',
+              currencyCode: CurrencyCodes.gbp,
               amount: Decimal.parse('1234567.89'),
             ),
             primaryTextStyle: const TextStyle(fontFamily: 'Noto', fontSize: 25),
@@ -76,8 +77,62 @@ void main() {
         child: MoneyLabel(
           separators: const AmountFormatSeparatorsData(),
           money: Money(
-            currencyCode: 'HKD',
+            currencyCode: CurrencyCodes.hkd,
             amount: Decimal.zero,
+          ),
+          secondaryPadding: const EdgeInsets.only(top: 10),
+        ),
+      ),
+    );
+
+    await tester.snapshot();
+  });
+
+  testWidgets('always decimal PLN', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      SnapshotWrapper(
+        child: MoneyLabel(
+          separators: const AmountFormatSeparatorsData(),
+          fractionalMode: MoneyLabelFractionalMode.always,
+          money: Money(
+            currencyCode: CurrencyCodes.pln,
+            amount: Decimal.fromInt(123),
+          ),
+          secondaryPadding: const EdgeInsets.only(top: 10),
+        ),
+      ),
+    );
+
+    await tester.snapshot();
+  });
+
+  testWidgets('round up AUD', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      SnapshotWrapper(
+        child: MoneyLabel(
+          separators: const AmountFormatSeparatorsData(),
+          fractionalMode: MoneyLabelFractionalMode.round,
+          money: Money(
+            currencyCode: CurrencyCodes.aud,
+            amount: Decimal.parse('5623.5'),
+          ),
+          secondaryPadding: const EdgeInsets.only(top: 10),
+        ),
+      ),
+    );
+
+    await tester.snapshot();
+  });
+
+  testWidgets('round down CNY', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      SnapshotWrapper(
+        child: MoneyLabel(
+          separators: const AmountFormatSeparatorsData(),
+          fractionalMode: MoneyLabelFractionalMode.round,
+          money: Money(
+            currencyCode: CurrencyCodes.cny,
+            amount: Decimal.parse('72316.49'),
           ),
           secondaryPadding: const EdgeInsets.only(top: 10),
         ),
@@ -120,7 +175,7 @@ final class SnapshotWrapper extends StatelessWidget {
           secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
           positiveColor: Colors.blue,
           negativeColor: Colors.red,
-          zeroColor: Colors.grey
+          zeroColor: Colors.grey,
         ),
         child: Directionality(
           textDirection: TextDirection.ltr,

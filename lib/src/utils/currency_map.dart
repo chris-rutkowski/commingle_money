@@ -52,8 +52,8 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇦🇷',
     englishCountryNames: {'Argentina'},
   ),
-  'AUD': const Currency(
-    code: 'AUD',
+  CurrencyCodes.aud: const Currency(
+    code: CurrencyCodes.aud,
     englishName: 'Australian Dollar',
     precision: 2,
     emojiFlag: '🇦🇺',
