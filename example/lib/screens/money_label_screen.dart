@@ -44,7 +44,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                 animation: animated ? const MoneyLabelAnimation() : null,
                 fractionalMode: fractionalMode,
                 displayCurrency: displayCurrency,
-                positiveColor: Colors.green,
+                positiveColor: Colors.blue,
                 negativeColor: Colors.red,
                 zeroColor: Colors.grey,
                 secondaryPadding: const EdgeInsets.only(top: 10),

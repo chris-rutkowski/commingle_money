@@ -5,9 +5,13 @@ import 'package:animated_flip_counter/animated_flip_counter.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
-import '../../../commingle_money.dart';
+import '../../amount_format_separators.dart';
+import '../../currency.dart';
+import '../../decimal_components.dart';
+import '../../money.dart';
 import '../../utils/amount_formatter.dart';
 import 'money_label_animation.dart';
+import 'money_label_fractional_mode.dart';
 
 // TODO: convert to stateless widget after tests
 
@@ -17,6 +21,7 @@ final class MoneyLabel extends StatefulWidget {
   // TODO: or listenable<Money> but not both
   final MoneyLabelAnimation? animation;
   final bool displayCurrency;
+  final bool displayNegativeSign;
   final AmountFormatSeparators separators;
   final TextStyle? primaryTextStyle;
   final TextStyle? secondaryTextStyle;
@@ -31,6 +36,7 @@ final class MoneyLabel extends StatefulWidget {
     this.fractionalMode = MoneyLabelFractionalMode.flexible,
     this.animation = const MoneyLabelAnimation(),
     this.displayCurrency = true,
+    this.displayNegativeSign = true,
     this.separators = const AmountFormatSeparators(),
     this.primaryTextStyle,
     this.secondaryTextStyle,
@@ -80,7 +86,10 @@ final class _MoneyLabelState extends State<MoneyLabel> {
               ),
             if (widget.animation == null)
               Text(
-                AmountFormatter.formattedMain(components.main, widget.separators.grouping),
+                AmountFormatter.formattedMain(
+                  widget.displayNegativeSign ? components.main.abs() : components.main,
+                  widget.separators.grouping,
+                ),
                 style: effectivePrimaryStyle,
               ),
             if (widget.animation != null)
@@ -89,7 +98,7 @@ final class _MoneyLabelState extends State<MoneyLabel> {
                 curve: widget.animation!.curve,
                 duration: widget.animation!.duration,
                 negativeSignDuration: widget.animation!.duration,
-                value: components.main,
+                value: widget.displayNegativeSign ? components.main.abs() : components.main,
                 thousandSeparator: widget.separators.grouping,
               ),
             if (shouldDisplayFractionalPart(components)) ...[
