@@ -16,14 +16,33 @@ void main() {
   });
 
   group('MoneyLabel', () {
-    testWidgets('positive_USD', (WidgetTester tester) async {
+    testWidgets('positive USD', (WidgetTester tester) async {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
+            positiveColor: Colors.yellow,
             separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'USD',
               amount: Decimal.parse('1234.56'),
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
+          ),
+        ),
+      );
+
+      await tester.snapshot();
+    });
+
+    testWidgets('negative EUR', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            negativeColor: Colors.red,
+            separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
+            money: Money(
+              currencyCode: 'EUR',
+              amount: Decimal.parse('-6126.99'),
             ),
             secondaryPadding: const EdgeInsets.only(top: 10),
           ),
