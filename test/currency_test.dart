@@ -14,6 +14,7 @@ void main() {
       final list = Currency.list();
       expect(list.first.code, CurrencyCodes.aed);
       expect(list.last.code, 'ZMW');
+      expect(list.length, 155);
     });
 
     test('equals', () {

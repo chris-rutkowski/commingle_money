@@ -112,6 +112,35 @@ final usd4 = Money(currencyCode: "USD", amount: Decimal.fromInt(4))
 final total = usd3 + usd4 + 5; // = 12 USD
 ```
 
+## Currency
+
+The library includes a comprehensive list of **155 worldwide currencies**, each with detailed metadata.
+
+```dart
+final usd = Currency.fromCode("USD");
+
+// Result:
+Currency(
+  code: 'USD',
+  englishName: 'United States Dollar',
+  precision: 2,
+  emojiFlag: '🇺🇸',
+  symbol: '$',
+  englishCountryNames: {
+    'United States',
+    'Ecuador',
+    'El Salvador',
+    'Panama',
+    …
+  },
+),
+```
+
+You can retrieve all currencies using: `Currency.list()`, or filter them as user types:
+
+```dart
+Currency.list((c) => c.englishName.contains(searchQuery))
+```
 
 ## Improvements
 padding for money label
