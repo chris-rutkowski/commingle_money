@@ -38,25 +38,49 @@ void main() {
         ),
       );
 
+      // Initial state
       await tester.snapshot('initial');
-
       expect(controller.value, Decimal.parse('3532.23'));
+      expect(controller.textController.text, '3,532.23');
+      expect(controllerListenerValue, isNull);
+
+      // User modifies
+      await tester.type('1234.56');
+      await tester.snapshot('1234.56 focused');
+      expect(controller.value, Decimal.parse('1234.56'));
+      expect(controllerListenerValue, Decimal.parse('1234.56'));
+      expect(controller.textController.text, '1234.56');
+
+      // Users dismisses keyboard - value should be formatted
+      controllerListenerValue = null;
+      await tester.dismissKeyboard(controller);
+      await tester.snapshot('1,234.56');
       expect(controllerListenerValue, isNull);
     });
   });
 }
 
-extension _Snapshot on WidgetTester {
+extension _WidgetTester on WidgetTester {
   Future<void> snapshot(String name) async {
     final sanitized = name
         .toLowerCase()
         .replaceAll(RegExp(r'\s+'), '_') // spaces → underscores
-        .replaceAll(RegExp(r'[^\w/]'), ''); // strip non-filename-safe chars
+        .replaceAll(RegExp(r'[^\w/.,]'), ''); // strip non-filename-safe chars
 
     await expectLater(
       find.byType(SnapshotWrapper),
       matchesGoldenFile('goldens/amount_editing_controller/$sanitized.png'),
     );
+  }
+
+  Future<void> type(String text) async {
+    await enterText(find.byType(TextField), text);
+    await pump();
+  }
+
+  Future<void> dismissKeyboard(AmountEditingController controller) async {
+    controller.focusNode.unfocus();
+    await pump();
   }
 }
 

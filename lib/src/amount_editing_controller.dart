@@ -79,9 +79,6 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   }
 
   void _onTextControllerChange() {
-    print('_onTextControllerChange');
-    // TODO: check how often this is called and if some logic is needed and if external controller get side effects
-
     if (textController.text.trim().isEmpty) {
       value = null;
       return;

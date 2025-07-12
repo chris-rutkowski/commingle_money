@@ -216,12 +216,12 @@ void main() {
   });
 }
 
-extension _Snapshot on WidgetTester {
+extension _WidgetTester on WidgetTester {
   Future<void> snapshot() async {
     final sanitized = testDescription
         .toLowerCase()
         .replaceAll(RegExp(r'\s+'), '_') // spaces → underscores
-        .replaceAll(RegExp(r'[^\w/]'), ''); // strip non-filename-safe chars
+        .replaceAll(RegExp(r'[^\w/.,]'), ''); // strip non-filename-safe chars
 
     await expectLater(
       find.byType(SnapshotWrapper),
