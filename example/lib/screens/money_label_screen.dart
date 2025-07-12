@@ -42,7 +42,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
             child: Center(
               child: MoneyLabel(
                 money: currentMoney,
-                animation: animated ? const MoneyLabelAnimation() : null,
+                animation: animated ? const MoneyLabelAnimation() : MoneyLabelAnimation.none,
                 fractionalMode: fractionalMode,
                 displayCurrency: displayCurrency,
                 displayNegativeSign: displayNegativeSign,

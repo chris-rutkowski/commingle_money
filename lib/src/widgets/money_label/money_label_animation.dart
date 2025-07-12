@@ -17,6 +17,12 @@ final class MoneyLabelAnimation extends Equatable {
     this.curve = Curves.easeOut,
   });
 
+  /// [MoneyLabelAnimation] that actually disables animation.
+  static const MoneyLabelAnimation none = MoneyLabelAnimation(
+    duration: Duration.zero,
+    curve: Curves.linear,
+  );
+
   @override
   List<Object?> get props => [duration, curve];
 }

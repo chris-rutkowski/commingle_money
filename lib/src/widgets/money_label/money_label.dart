@@ -1,4 +1,4 @@
-// TODO: to drop
+// TODO: to drop and anim
 // ignore_for_file: public_member_api_docs
 
 import 'package:animated_flip_counter/animated_flip_counter.dart';
@@ -17,8 +17,7 @@ import 'money_label_fractional_mode.dart';
 final class MoneyLabel extends StatelessWidget {
   final Money money;
   final MoneyLabelFractionalMode fractionalMode;
-  // TODO: or listenable<Money> but not both
-  final MoneyLabelAnimation? animation;
+  final MoneyLabelAnimation animation;
   final bool displayCurrency;
   final bool displayNegativeSign;
   final AmountFormatSeparators separators;
@@ -33,7 +32,7 @@ final class MoneyLabel extends StatelessWidget {
     super.key,
     required this.money,
     this.fractionalMode = MoneyLabelFractionalMode.flexible,
-    this.animation = const MoneyLabelAnimation(),
+    this.animation = MoneyLabelAnimation.none,
     this.displayCurrency = true,
     this.displayNegativeSign = true,
     this.separators = const AmountFormatSeparators(),
@@ -51,9 +50,7 @@ final class MoneyLabel extends StatelessWidget {
     final effectiveColor = resolveEffectiveColor(effectiveMoney);
 
     final effectivePrimaryStyle = resolveEffectivePrimaryStyle(context, effectiveColor);
-    final effectiveSecondaryStyle = (Theme.of(context).textTheme.bodyMedium ?? DefaultTextStyle.of(context).style)
-        .merge(secondaryTextStyle)
-        .copyWith(color: effectiveColor);
+    final effectiveSecondaryStyle = resolveEffectiveSecondaryStyle(context, effectiveColor);
     final effectiveSecondaryPadding =
         secondaryPadding ?? approximateSecondaryBottomPadding(effectivePrimaryStyle, effectiveSecondaryStyle);
 
@@ -76,7 +73,7 @@ final class MoneyLabel extends StatelessWidget {
                   style: effectiveSecondaryStyle,
                 ),
               ),
-            if (animation == null)
+            if (animation == MoneyLabelAnimation.none)
               Text(
                 AmountFormatter.formattedMain(
                   displayNegativeSign ? components.main.abs() : components.main,
@@ -84,12 +81,12 @@ final class MoneyLabel extends StatelessWidget {
                 ),
                 style: effectivePrimaryStyle,
               ),
-            if (animation != null)
+            if (animation != MoneyLabelAnimation.none)
               AnimatedFlipCounter(
                 textStyle: effectivePrimaryStyle,
-                curve: animation!.curve,
-                duration: animation!.duration,
-                negativeSignDuration: animation!.duration,
+                curve: animation.curve,
+                duration: animation.duration,
+                negativeSignDuration: animation.duration,
                 value: displayNegativeSign ? components.main.abs() : components.main,
                 thousandSeparator: separators.grouping,
               ),
@@ -103,7 +100,7 @@ final class MoneyLabel extends StatelessWidget {
               ),
               Padding(
                 padding: effectiveSecondaryPadding,
-                child: animation == null
+                child: animation == MoneyLabelAnimation.none
                     ? Text(
                         (components.fractional.toString()).padLeft(resolveFractionalDigits(effectiveMoney), '0'),
                         style: effectiveSecondaryStyle,
@@ -111,8 +108,8 @@ final class MoneyLabel extends StatelessWidget {
                     : AnimatedFlipCounter(
                         wholeDigits: resolveFractionalDigits(effectiveMoney),
                         textStyle: effectiveSecondaryStyle,
-                        curve: animation!.curve,
-                        duration: animation!.duration,
+                        curve: animation.curve,
+                        duration: animation.duration,
                         value: components.fractional,
                       ),
               ),
@@ -146,6 +143,15 @@ final class MoneyLabel extends StatelessWidget {
         DefaultTextStyle.of(context).style;
 
     return base.merge(primaryTextStyle).copyWith(color: color);
+  }
+
+  TextStyle resolveEffectiveSecondaryStyle(BuildContext context, Color? color) {
+    final base =
+        MoneyLabelDefaults.maybeOf(context)?.secondaryTextStyle ??
+        Theme.of(context).textTheme.bodyMedium ??
+        DefaultTextStyle.of(context).style;
+
+    return base.merge(secondaryTextStyle).copyWith(color: color);
   }
 
   Color? resolveEffectiveColor(Money money) {
