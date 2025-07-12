@@ -8,7 +8,7 @@ import 'utils/evaluate_math_text.dart';
 part 'utils/format_decimal.dart';
 part 'utils/unformat.dart';
 
-/// Controller for amount text field with formatting and parsing capability
+/// Controller for plain amount text field with formatting and parsing capability
 final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Separators for parsing and formatting the text field set during initialization.
   final AmountFormatSeparatorsData separators;

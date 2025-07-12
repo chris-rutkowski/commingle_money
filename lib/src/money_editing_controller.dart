@@ -7,6 +7,7 @@ import 'currency.dart';
 import 'currency_code.dart';
 import 'money.dart';
 
+/// Controller for [Money] text field with formatting and parsing capability
 final class MoneyEditingController extends ChangeNotifier {
   /// Focus Node that should be given to the text field
   FocusNode get focusNode => _amountController.focusNode;
@@ -29,6 +30,7 @@ final class MoneyEditingController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// The current value of the controller as a [Money] object.
   Money? get value {
     final amount = _amountController.value;
     if (amount == null) return null;
@@ -39,6 +41,7 @@ final class MoneyEditingController extends ChangeNotifier {
     );
   }
 
+  /// Programmatically sets the value of the controller.
   set value(Money? newValue) {
     if (newValue == null) {
       _amountController.value = null;
@@ -49,6 +52,7 @@ final class MoneyEditingController extends ChangeNotifier {
     _amountController.value = newValue.amount;
   }
 
+  /// Creates an [MoneyEditingController] instance.
   MoneyEditingController({
     required CurrencyCode currencyCode,
     Decimal? amount,
