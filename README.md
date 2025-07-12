@@ -56,7 +56,7 @@ You can wrap your app with the `MoneyLabelDefaults` inherited widget to provide 
 `MoneyEditingController` is a powerful controller you can assign to any `TextField` to handle monetary input with precision, formatting, and validation. It supports:
 
 - Simple input
-- Formula input - user can type `2+3(4-2)+5×1.5`
+- Formula input - user can type `2 + 3(4 - 2) ÷ 5 × 1.5`
 - Automatic rounding and formatting when unfocused
 
 ```dart
@@ -173,6 +173,10 @@ This library wouldn’t be possible without the excellent work of the Flutter co
 
 While not part of the core library, I recommend using [locale_plus](https://pub.dev/packages/locale_plus) like demonstrated in Example app.
 
-## Improvements
-padding for money label
+# 🤝 Contributing
 
+Contributions are very welcome! If you spot a bug, want to improve something, or add a feature, feel free to fork the repository and raise a pull request.
+
+## 📄 Copyright and License
+
+**Commingle Money** is maintained by Chris Rutkowski as part of the [Commingle](https://commingle.app) app, and open-sourced under the MIT License.
