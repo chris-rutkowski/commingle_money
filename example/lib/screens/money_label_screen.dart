@@ -56,7 +56,6 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
           ),
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(16),
               children: [
                 SwitchListTile(
                   title: const Text('Animated'),
@@ -95,23 +94,26 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                   value: decimalSlider,
                   onChanged: (x) => setState(() => decimalSlider = x),
                 ),
-                DropdownButtonFormField<MoneyLabelFractionalMode>(
-                  value: fractionalMode,
-                  decoration: const InputDecoration(
-                    labelText: 'Fractional mode',
-                    border: OutlineInputBorder(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: DropdownButtonFormField<MoneyLabelFractionalMode>(
+                    value: fractionalMode,
+                    decoration: const InputDecoration(
+                      labelText: 'Fractional mode',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: MoneyLabelFractionalMode.values.map((mode) {
+                      return DropdownMenuItem(
+                        value: mode,
+                        child: Text(mode.name),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => fractionalMode = value);
+                      }
+                    },
                   ),
-                  items: MoneyLabelFractionalMode.values.map((mode) {
-                    return DropdownMenuItem(
-                      value: mode,
-                      child: Text(mode.name),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    if (value != null) {
-                      setState(() => fractionalMode = value);
-                    }
-                  },
                 ),
               ],
             ),
