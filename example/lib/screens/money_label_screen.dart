@@ -10,6 +10,7 @@ final class MoneyLabelScreen extends StatefulWidget {
 }
 
 final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
+  var separatorsType = _SeparatorsType.fromLocalePlus;
   var fractionalMode = MoneyLabelFractionalMode.flexible;
   var displayCurrency = true;
   var displayNegativeSign = true;
@@ -41,6 +42,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
             padding: const EdgeInsets.all(32),
             child: Center(
               child: MoneyLabel(
+                separators: separatorsType.resolve(context),
                 money: currentMoney,
                 animation: animated ? const MoneyLabelAnimation() : MoneyLabelAnimation.none,
                 fractionalMode: fractionalMode,
@@ -78,22 +80,24 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                   onChanged: (value) => setState(() => isNegative = value),
                 ),
 
-                SliderTile(
+                _SliderTile(
                   title: 'Amount ${highSlider}__.__',
                   value: highSlider,
                   onChanged: (x) => setState(() => highSlider = x),
                 ),
 
-                SliderTile(
+                _SliderTile(
                   title: 'Amount __$lowSlider.__',
                   value: lowSlider,
                   onChanged: (x) => setState(() => lowSlider = x),
                 ),
-                SliderTile(
+                _SliderTile(
                   title: 'Amount ____.${decimalSlider}',
                   value: decimalSlider,
                   onChanged: (x) => setState(() => decimalSlider = x),
                 ),
+                const SizedBox(height: 16),
+
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: DropdownButtonFormField<MoneyLabelFractionalMode>(
@@ -115,6 +119,28 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                     },
                   ),
                 ),
+                const SizedBox(height: 24),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: DropdownButtonFormField<_SeparatorsType>(
+                    value: separatorsType,
+                    decoration: const InputDecoration(
+                      labelText: 'Separators',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: _SeparatorsType.values.map((mode) {
+                      return DropdownMenuItem(
+                        value: mode,
+                        child: Text(mode.name),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        setState(() => separatorsType = value);
+                      }
+                    },
+                  ),
+                ),
               ],
             ),
           ),
@@ -124,13 +150,38 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
   }
 }
 
-class SliderTile extends StatelessWidget {
+enum _SeparatorsType {
+  fromLocalePlus,
+  standard,
+  polish,
+  verbose,
+}
+
+extension _SeparatorsTypeResolver on _SeparatorsType {
+  AmountFormatSeparatorsData? resolve(BuildContext context) {
+    switch (this) {
+      case _SeparatorsType.fromLocalePlus:
+        // [AmountFormatSeparators] InheritedWidget will be used created in `main.dart`
+        return null;
+
+      case _SeparatorsType.polish:
+        return AmountFormatSeparatorsData.pl;
+
+      case _SeparatorsType.verbose:
+        return const AmountFormatSeparatorsData(grouping: 'g', decimal: 'd');
+
+      case _SeparatorsType.standard:
+        return const AmountFormatSeparatorsData();
+    }
+  }
+}
+
+final class _SliderTile extends StatelessWidget {
   final String title;
   final int value;
   final ValueChanged<int> onChanged;
 
-  const SliderTile({
-    super.key,
+  const _SliderTile({
     required this.title,
     required this.value,
     required this.onChanged,
