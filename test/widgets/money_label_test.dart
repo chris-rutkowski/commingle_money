@@ -72,7 +72,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(),
             money: Money(
               currencyCode: CurrencyCodes.hkd,
               amount: Decimal.zero,
@@ -88,7 +87,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(),
             fractionalMode: MoneyLabelFractionalMode.always,
             money: Money(
               currencyCode: CurrencyCodes.pln,
@@ -105,7 +103,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(),
             fractionalMode: MoneyLabelFractionalMode.round,
             money: Money(
               currencyCode: CurrencyCodes.aud,
@@ -122,7 +119,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(),
             fractionalMode: MoneyLabelFractionalMode.round,
             money: Money(
               currencyCode: CurrencyCodes.cny,
@@ -139,7 +135,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(),
             fractionalMode: MoneyLabelFractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.inr,
@@ -156,7 +151,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(),
             fractionalMode: MoneyLabelFractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.irr,
@@ -173,7 +167,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(),
             fractionalMode: MoneyLabelFractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.zar,
@@ -190,7 +183,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparatorsData(),
             displayNegativeSign: false,
             fractionalMode: MoneyLabelFractionalMode.accurate,
             money: Money(
@@ -208,6 +200,8 @@ void main() {
 
 extension _WidgetTester on WidgetTester {
   Future<void> snapshot() async {
+    await binding.setSurfaceSize(const Size(300, 100));
+
     final sanitized = testDescription
         .toLowerCase()
         .replaceAll(RegExp(r'\s+'), '_') // spaces → underscores
