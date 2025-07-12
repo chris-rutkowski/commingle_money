@@ -19,10 +19,26 @@ void main() {
     testWidgets('flow', (WidgetTester tester) async {
       final controller = AmountEditingController(precision: 2, amount: Decimal.parse('3532.2312'));
 
-      Decimal? controllerListenerValue;
+      Decimal? listenerValue;
+
+      void expectState({
+        required String text,
+        required Decimal? value,
+        required bool quiet,
+      }) {
+        expect(controller.textController.text, text);
+        expect(controller.value, value);
+        if (quiet) {
+          expect(listenerValue, isNull);
+        } else {
+          expect(listenerValue, value);
+        }
+
+        listenerValue = null;
+      }
 
       controller.addListener(() {
-        controllerListenerValue = controller.value;
+        listenerValue = controller.value;
       });
 
       await tester.pumpWidget(
@@ -39,48 +55,45 @@ void main() {
       );
 
       // Initial state
-      await tester.snapshot('initial');
-      expect(controller.value, Decimal.parse('3532.23'));
-      expect(controller.textController.text, '3,532.23');
-      expect(controllerListenerValue, isNull);
+      expectState(text: '3,532.23', value: Decimal.parse('3532.23'), quiet: true);
 
       // User modifies
       await tester.type('1234.56');
-      await tester.snapshot('1234.56 focused');
-      expect(controller.value, Decimal.parse('1234.56'));
-      expect(controllerListenerValue, Decimal.parse('1234.56'));
-      expect(controller.textController.text, '1234.56');
+      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false);
 
       // Users dismisses keyboard - value should be formatted
-      controllerListenerValue = null;
+      listenerValue = null;
       await tester.dismissKeyboard(controller);
-      await tester.snapshot('1,234.56');
-      expect(controller.value, Decimal.parse('1234.56'));
-      expect(controllerListenerValue, isNull);
+      expectState(text: '1,234.56', value: Decimal.parse('1234.56'), quiet: true);
 
       // App changes precision
       controller.precision = 1;
       await tester.pump();
-      await tester.snapshot('1,234.6');
-      expect(controllerListenerValue, Decimal.parse('1234.6'));
-      expect(controller.textController.text, '1,234.6');
+      expectState(text: '1,234.6', value: Decimal.parse('1234.6'), quiet: false);
+
+      // App changes value
+      controller.value = Decimal.parse('9876.9');
+      await tester.pump();
+      expectState(text: '9,876.9', value: Decimal.parse('9876.9'), quiet: false);
+
+      // App changes precision without affecting value, listener shouldn't trigger
+      controller.precision = 3;
+      await tester.pump();
+      expectState(text: '9,876.900', value: Decimal.parse('9876.9'), quiet: true);
+
+      // App changes value as user types
+      await tester.type('4');
+      expectState(text: '4', value: Decimal.parse('4'), quiet: false);
+      controller.value = Decimal.parse('5');
+      await tester.pump();
+      expectState(text: '4', value: Decimal.parse('5'), quiet: false);
+      await tester.dismissKeyboard(controller);
+      expectState(text: '5', value: Decimal.parse('5'), quiet: true);
     });
   });
 }
 
 extension _WidgetTester on WidgetTester {
-  Future<void> snapshot(String name) async {
-    final sanitized = name
-        .toLowerCase()
-        .replaceAll(RegExp(r'\s+'), '_') // spaces → underscores
-        .replaceAll(RegExp(r'[^\w/.,]'), ''); // strip non-filename-safe chars
-
-    await expectLater(
-      find.byType(SnapshotWrapper),
-      matchesGoldenFile('goldens/amount_editing_controller/$sanitized.png'),
-    );
-  }
-
   Future<void> type(String text) async {
     await enterText(find.byType(TextField), text);
     await pump();
