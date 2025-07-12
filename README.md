@@ -179,7 +179,7 @@ While not part of the core library, I recommend using [locale_plus](https://pub.
 
 Contributions are very welcome! If you spot a bug, want to improve something, or add a feature, feel free to fork the repository and raise a pull request.
 
-## Trivia
+## 🎯 Trivia
 
 - Tests: code coverage: 96%
 - [pub.dev](https://pub.dev/packages/commingle_money)
