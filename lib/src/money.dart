@@ -74,4 +74,65 @@ final class Money extends Equatable {
       amount: amount.round(scale: precision),
     );
   }
+
+  /// Returns sum of this [Money] and [other].
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  Money operator +(dynamic other) {
+    return Money(
+      currencyCode: currencyCode,
+      amount: amount + _getDecimal(other, currencyCode),
+    ).roundedToCurrencyPrecision();
+  }
+
+  /// Returns difference of this [Money] and [other].
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  Money operator -(dynamic other) {
+    return Money(
+      currencyCode: currencyCode,
+      amount: amount - _getDecimal(other, currencyCode),
+    ).roundedToCurrencyPrecision();
+  }
+
+  /// Returns product of this [Money] and [other].
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  Money operator *(dynamic other) {
+    return Money(
+      currencyCode: currencyCode,
+      amount: amount * _getDecimal(other, currencyCode),
+    ).roundedToCurrencyPrecision();
+  }
+
+  /// Returns quotient of this [Money] and [other].
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  Money operator /(dynamic other) {
+    final decimalDivisor = _getDecimal(other, currencyCode);
+
+    if (decimalDivisor == Decimal.zero) {
+      throw ArgumentError('Division by zero is not allowed');
+    }
+
+    final precision = Currency.getPrecision(currencyCode);
+
+    return Money(
+      currencyCode: currencyCode,
+      amount: (amount / decimalDivisor).toDecimal(scaleOnInfinitePrecision: precision),
+    ).roundedToCurrencyPrecision();
+  }
+}
+
+Decimal _getDecimal(dynamic value, CurrencyCode currencyCode) {
+  if (value is Decimal) {
+    return value;
+  } else if (value is int) {
+    return Decimal.fromInt(value);
+  } else if (value is double) {
+    return DecimalUtils.fromDouble(value);
+  } else if (value is Money) {
+    if (value.currencyCode != currencyCode) {
+      throw ArgumentError('Currency mismatch: expected $currencyCode, got ${value.currencyCode}');
+    }
+    return value.amount;
+  } else {
+    throw ArgumentError('Invalid type for conversion to Decimal: `$value` of type ${value.runtimeType}');
+  }
 }
