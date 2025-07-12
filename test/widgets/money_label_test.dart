@@ -16,27 +16,37 @@ void main() {
   });
 
   group('MoneyLabel', () {
-    testWidgets('renders simple Text widget', (WidgetTester tester) async {
+    testWidgets('positive_USD', (WidgetTester tester) async {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
+            separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'USD',
               amount: Decimal.parse('1234.56'),
             ),
-            primaryTextStyle: const TextStyle(fontFamily: 'Noto', fontSize: 30),
-            secondaryTextStyle: const TextStyle(fontFamily: 'Noto', fontSize: 15),
             secondaryPadding: const EdgeInsets.only(top: 10),
           ),
         ),
       );
 
-      await expectLater(
-        find.byType(SnapshotWrapper),
-        matchesGoldenFile('goldens/new.png'),
-      );
+      await tester.snapshot();
     });
   });
+}
+
+extension _Snapshot on WidgetTester {
+  Future<void> snapshot() async {
+    final sanitized = testDescription
+        .toLowerCase()
+        .replaceAll(RegExp(r'\s+'), '_') // spaces → underscores
+        .replaceAll(RegExp(r'[^\w/]'), ''); // strip non-filename-safe chars
+
+    await expectLater(
+      find.byType(SnapshotWrapper),
+      matchesGoldenFile('goldens/money_label/$sanitized.png'),
+    );
+  }
 }
 
 final class SnapshotWrapper extends StatelessWidget {
@@ -49,12 +59,15 @@ final class SnapshotWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Directionality(
-      textDirection: TextDirection.ltr,
-      child: DefaultTextHeightBehavior(
-        textHeightBehavior: const TextHeightBehavior(),
-        child: DefaultTextStyle(
-          style: const TextStyle(fontFamily: 'Noto', fontSize: 16),
+    return MoneyLabelDefaults(
+      data: const MoneyLabelDefaultsData(
+        primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
+        secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
+      ),
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: DefaultTextHeightBehavior(
+          textHeightBehavior: const TextHeightBehavior(),
           child: Container(
             color: Colors.white,
             padding: const EdgeInsets.all(16),
