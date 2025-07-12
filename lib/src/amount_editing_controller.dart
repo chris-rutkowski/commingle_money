@@ -11,7 +11,7 @@ part 'utils/unformat.dart';
 /// Controller for amount text field with formatting and parsing capability
 final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Separators for parsing and formatting the text field set during initialization.
-  final AmountFormatSeparators separators;
+  final AmountFormatSeparatorsData separators;
 
   /// Focus Node that should be given to the text field
   final focusNode = FocusNode();
@@ -53,7 +53,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   }
 
   /// Creates an [AmountEditingController] with the given [amount] and [precision].
-  AmountEditingController({this.separators = const AmountFormatSeparators(), Decimal? amount, int? precision})
+  AmountEditingController({this.separators = const AmountFormatSeparatorsData(), Decimal? amount, int? precision})
     : _precision = precision,
       super(amount?.roundOptional(scale: precision)) {
     focusNode.addListener(_onFocusNodeChange);

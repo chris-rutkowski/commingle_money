@@ -3,7 +3,7 @@ part of '../amount_editing_controller.dart';
 String _formatDecimal(
   Decimal value, {
   int? precision,
-  required AmountFormatSeparators separators,
+  required AmountFormatSeparatorsData separators,
 }) {
   // rounds the value if `precision` is provided, otherwise uses the value as is
   final roundedValue = precision != null ? value.round(scale: precision) : value;

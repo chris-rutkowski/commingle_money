@@ -20,7 +20,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
+            separators: const AmountFormatSeparatorsData(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'USD',
               amount: Decimal.parse('1234.56'),
@@ -37,7 +37,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
+            separators: const AmountFormatSeparatorsData(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'EUR',
               amount: Decimal.parse('-6126.99'),
@@ -54,7 +54,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
+            separators: const AmountFormatSeparatorsData(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'GBP',
               amount: Decimal.parse('1234567.89'),

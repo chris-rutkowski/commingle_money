@@ -2,7 +2,7 @@ part of '../amount_editing_controller.dart';
 
 String _unformat(
   String formatted, {
-  required AmountFormatSeparators separators,
+  required AmountFormatSeparatorsData separators,
 }) {
   const machineDecimalPoint = '.';
 

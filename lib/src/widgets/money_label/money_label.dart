@@ -31,7 +31,7 @@ final class MoneyLabel extends StatelessWidget {
 
   /// Controls the decimal and grouping separators for the presentation.
   /// Defaults to `,` for grouping/thousands separator and `.` for decimal separator.
-  final AmountFormatSeparators separators;
+  final AmountFormatSeparatorsData separators;
 
   /// Text style used for the main amount text.
   /// Can be provided here or via [MoneyLabelDefaults].
@@ -69,7 +69,7 @@ final class MoneyLabel extends StatelessWidget {
     this.animation = MoneyLabelAnimation.none,
     this.displayCurrency = true,
     this.displayNegativeSign = true,
-    this.separators = const AmountFormatSeparators(),
+    this.separators = const AmountFormatSeparatorsData(),
     this.primaryTextStyle,
     this.secondaryTextStyle,
     this.positiveColor,

@@ -56,7 +56,7 @@ final class MoneyEditingController extends ChangeNotifier {
   MoneyEditingController({
     required CurrencyCode currencyCode,
     Decimal? amount,
-    AmountFormatSeparators separators = const AmountFormatSeparators(),
+    AmountFormatSeparatorsData separators = const AmountFormatSeparatorsData(),
   }) : _currencyCode = currencyCode,
        _amountController = AmountEditingController(
          amount: amount,

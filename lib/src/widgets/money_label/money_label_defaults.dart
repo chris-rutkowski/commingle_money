@@ -6,7 +6,7 @@ import 'money_label.dart';
 /// Provides subset of default values for [MoneyLabel] widgets below this widget in the widget tree.
 final class MoneyLabelDefaults extends InheritedWidget {
 
-  /// The default configuration data to be used by descendant [MoneyLabel] widgets.
+  /// The actual configuration.
   final MoneyLabelDefaultsData data;
 
   /// Creates a [MoneyLabelDefaults] object.
