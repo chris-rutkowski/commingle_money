@@ -44,12 +44,18 @@ final class MoneyLabel extends StatelessWidget {
   final TextStyle? secondaryTextStyle;
 
   /// Colour to use when the amount is positive.
+  /// Can be provided here or via [MoneyLabelDefaults].
+  /// Alternatively will use [Colors.green].
   final Color? positiveColor;
 
   /// Colour to use when the amount is positive.
+  /// Can be provided here or via [MoneyLabelDefaults].
+  /// Alternatively will use [Colors.red].
   final Color? negativeColor;
 
   /// Colour to use when the amount is zero.
+  /// Can be provided here or via [MoneyLabelDefaults].
+  /// Alternatively will use [Colors.grey].
   final Color? zeroColor;
 
   /// Check README.
@@ -164,7 +170,7 @@ final class MoneyLabel extends StatelessWidget {
     );
   }
 
-  TextStyle _resolveEffectivePrimaryStyle(BuildContext context, Color? color) {
+  TextStyle _resolveEffectivePrimaryStyle(BuildContext context, Color color) {
     final base =
         MoneyLabelDefaults.maybeOf(context)?.primaryTextStyle ??
         Theme.of(context).textTheme.bodyLarge ??
@@ -173,7 +179,7 @@ final class MoneyLabel extends StatelessWidget {
     return base.merge(primaryTextStyle).copyWith(color: color);
   }
 
-  TextStyle _resolveEffectiveSecondaryStyle(BuildContext context, Color? color) {
+  TextStyle _resolveEffectiveSecondaryStyle(BuildContext context, Color color) {
     final base =
         MoneyLabelDefaults.maybeOf(context)?.secondaryTextStyle ??
         Theme.of(context).textTheme.bodyMedium ??
@@ -182,15 +188,15 @@ final class MoneyLabel extends StatelessWidget {
     return base.merge(secondaryTextStyle).copyWith(color: color);
   }
 
-  Color? _resolveEffectiveColor(BuildContext context, Money money) {
+  Color _resolveEffectiveColor(BuildContext context, Money money) {
     final defaults = MoneyLabelDefaults.maybeOf(context);
 
     if (money.amount > Decimal.zero) {
-      return positiveColor ?? defaults?.positiveColor;
+      return positiveColor ?? defaults?.positiveColor ?? Colors.green;
     } else if (money.amount < Decimal.zero) {
-      return negativeColor ?? defaults?.negativeColor;
+      return negativeColor ?? defaults?.negativeColor ?? Colors.red;
     } else {
-      return zeroColor ?? defaults?.zeroColor;
+      return zeroColor ?? defaults?.zeroColor ?? Colors.grey;
     }
   }
 
