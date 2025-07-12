@@ -37,6 +37,7 @@ final class MyApp extends StatelessWidget {
     return AmountFormatSeparators(
       data: separators,
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
         home: const MenuScreen(),
