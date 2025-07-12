@@ -8,6 +8,7 @@ void main() {
       final components = DecimalComponents.fromDecimal(Decimal.parse('42'));
       expect(components.main, 42);
       expect(components.fractional, 0);
+      expect(components.toString(), 'DecimalComponents: { main: 42, fractional: 0 }');
     });
 
     test('parses decimal with two digits', () {
