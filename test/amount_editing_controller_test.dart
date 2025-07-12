@@ -55,7 +55,15 @@ void main() {
       controllerListenerValue = null;
       await tester.dismissKeyboard(controller);
       await tester.snapshot('1,234.56');
+      expect(controller.value, Decimal.parse('1234.56'));
       expect(controllerListenerValue, isNull);
+
+      // App changes precision
+      controller.precision = 1;
+      await tester.pump();
+      await tester.snapshot('1,234.6');
+      expect(controllerListenerValue, Decimal.parse('1234.6'));
+      expect(controller.textController.text, '1,234.6');
     });
   });
 }
