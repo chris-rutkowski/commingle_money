@@ -88,8 +88,11 @@ final class MoneyLabel extends StatelessWidget {
 
     final effectivePrimaryStyle = _resolveEffectivePrimaryStyle(context, effectiveColor);
     final effectiveSecondaryStyle = _resolveEffectiveSecondaryStyle(context, effectiveColor);
-    final effectiveSecondaryPadding =
-        secondaryPadding ?? _approximateSecondaryBottomPadding(effectivePrimaryStyle, effectiveSecondaryStyle);
+    final effectiveSecondaryPadding = _resolveEffectiveSecondaryPadding(
+      context,
+      effectivePrimaryStyle,
+      effectiveSecondaryStyle,
+    );
 
     final currency = Currency.fromCode(effectiveMoney.currencyCode);
     final components = fractionalMode == MoneyLabelFractionalMode.accurate
@@ -157,22 +160,6 @@ final class MoneyLabel extends StatelessWidget {
     );
   }
 
-  // Wish I could find an easy way to automatically calculate the baseline between two text styles.
-  // I tried using alphabetic baselines as well as TextPainter.
-  // There were always edge cases especially when MoneyLabel changes are animated.
-  EdgeInsets _approximateSecondaryBottomPadding(TextStyle primaryTextStyle, TextStyle secondaryTextStyle) {
-    final primaryFontSize = primaryTextStyle.fontSize;
-    final secondaryFontSize = secondaryTextStyle.fontSize;
-
-    if (primaryFontSize == null || secondaryFontSize == null) {
-      return EdgeInsets.zero;
-    }
-
-    return EdgeInsets.only(
-      top: (primaryFontSize - secondaryFontSize),
-    );
-  }
-
   TextStyle _resolveEffectivePrimaryStyle(BuildContext context, Color color) {
     final base =
         MoneyLabelDefaults.maybeOf(context)?.primaryTextStyle ??
@@ -222,6 +209,32 @@ final class MoneyLabel extends StatelessWidget {
       case MoneyLabelFractionalMode.accurate:
         return money;
     }
+  }
+
+  EdgeInsets _resolveEffectiveSecondaryPadding(
+    BuildContext context,
+    TextStyle primaryTextStyle,
+    TextStyle secondaryTextStyle,
+  ) {
+    final defaultValue = secondaryPadding ?? MoneyLabelDefaults.maybeOf(context)?.secondaryPadding;
+
+    if (defaultValue != null) {
+      return defaultValue;
+    }
+
+    // Wish I could find an easy way to automatically calculate the baseline between two text styles.
+    // I tried using alphabetic baselines as well as TextPainter.
+    // There were always edge cases especially when MoneyLabel changes are animated.
+    final primaryFontSize = primaryTextStyle.fontSize;
+    final secondaryFontSize = secondaryTextStyle.fontSize;
+
+    if (primaryFontSize == null || secondaryFontSize == null) {
+      return EdgeInsets.zero;
+    }
+
+    return EdgeInsets.only(
+      top: (primaryFontSize - secondaryFontSize),
+    );
   }
 
   bool _shouldDisplayFractionalPart(DecimalComponents components) {
