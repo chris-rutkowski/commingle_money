@@ -2,7 +2,14 @@
 
 A Flutter package for working with monetary values, open sourced from the [Commingle](https://commingle.app) app. It includes global currency definitions, widgets for displaying amounts, input controllers for smooth, user-friendly editing and other monetary utilities.
 
-## Money Label
+## Check out Example app
+
+Clone the repository and check out the Example app to interact with 
+
+<img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/example_app.webp" width="830" height="434" title="MoneyLabel demo"/>
+
+
+## 🏷️ Money Label
 
 <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/money_label.gif" width="144" height="55" title="MoneyLabel demo"/>
 
@@ -43,7 +50,7 @@ MoneyLabel(
 
 You can wrap your app with the `MoneyLabelDefaults` inherited widget to provide default styles, colors, and behavior for all `MoneyLabel` instances.
 
-## Money Editing Controller
+## 💳 Money Editing Controller
 
 <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/money_editing_controller.gif" width="203" height="122" title="MoneyEditingController demo"/>
 
@@ -82,11 +89,11 @@ controller.addListener(() {
 
 You can also set the value programmatically using `value` setter or to just change a currency  using `currencyCode` setter.
 
-### Amount Editing Controller
+### 🔢 Amount Editing Controller
 
 `AmountEditingController` is a lightweight alternative to `MoneyEditingController` that operates directly on `Decimal` values. It lets you control the desired precision without involving currency logic.
 
-## Money
+## 💵 Money
 
 `Money` is a simple yet powerful value class that combines a `currencyCode` with a `Decimal` amount.
 
@@ -112,7 +119,7 @@ final usd4 = Money(currencyCode: "USD", amount: Decimal.fromInt(4))
 final total = usd3 + usd4 + 5; // = 12 USD
 ```
 
-## Currency
+## 🌍 Currency
 
 The library includes a comprehensive list of **155 worldwide currencies**, each with detailed metadata.
 
@@ -141,6 +148,16 @@ You can retrieve all currencies using: `Currency.list()`, or filter them as user
 ```dart
 Currency.list((c) => c.englishName.contains(searchQuery))
 ```
+
+## 🧮 Decimal Utilities
+
+`DecimalUtils` is an extension on `Decimal` that provides helpful utilities for rounding, scaling, and working with numeric data in a finance-friendly way.
+
+- `round2()` rounds the decimal to two decimal places (unless `scale` is provided).
+- `upperBound` and `lowerBound` help round values to chart-friendly boundaries,  
+  e.g. `1234.56` → `1300` (upper), `1200` (lower).
+- utility functions like `min`, `max`, and `sum`
+- converters `Decimal` → `int` as well as `double` → `Decimal`
 
 ## Improvements
 padding for money label
