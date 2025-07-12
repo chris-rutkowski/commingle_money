@@ -34,9 +34,13 @@ final class MoneyLabel extends StatelessWidget {
   final AmountFormatSeparators separators;
 
   /// Text style used for the main amount text.
+  /// Can be provided here or via [MoneyLabelDefaults].
+  /// Alternatively will use the theme's `bodyLarge`.
   final TextStyle? primaryTextStyle;
 
   /// Text style used for secondary elements such as currency or decimals.
+  /// Can be provided here or via [MoneyLabelDefaults].
+  /// Alternatively will use the theme's `bodyMedium`.
   final TextStyle? secondaryTextStyle;
 
   /// Colour to use when the amount is positive.
@@ -163,7 +167,7 @@ final class MoneyLabel extends StatelessWidget {
   TextStyle _resolveEffectivePrimaryStyle(BuildContext context, Color? color) {
     final base =
         MoneyLabelDefaults.maybeOf(context)?.primaryTextStyle ??
-        Theme.of(context).textTheme.headlineMedium ??
+        Theme.of(context).textTheme.bodyLarge ??
         DefaultTextStyle.of(context).style;
 
     return base.merge(primaryTextStyle).copyWith(color: color);
