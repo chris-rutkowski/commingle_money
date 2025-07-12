@@ -69,150 +69,150 @@ void main() {
 
       await tester.snapshot();
     });
-  });
 
-  testWidgets('zero HKD', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      SnapshotWrapper(
-        child: MoneyLabel(
-          separators: const AmountFormatSeparatorsData(),
-          money: Money(
-            currencyCode: CurrencyCodes.hkd,
-            amount: Decimal.zero,
+    testWidgets('zero HKD', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparatorsData(),
+            money: Money(
+              currencyCode: CurrencyCodes.hkd,
+              amount: Decimal.zero,
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
-          secondaryPadding: const EdgeInsets.only(top: 10),
         ),
-      ),
-    );
+      );
 
-    await tester.snapshot();
-  });
+      await tester.snapshot();
+    });
 
-  testWidgets('always decimal PLN', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      SnapshotWrapper(
-        child: MoneyLabel(
-          separators: const AmountFormatSeparatorsData(),
-          fractionalMode: MoneyLabelFractionalMode.always,
-          money: Money(
-            currencyCode: CurrencyCodes.pln,
-            amount: Decimal.fromInt(123),
+    testWidgets('always decimal PLN', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparatorsData(),
+            fractionalMode: MoneyLabelFractionalMode.always,
+            money: Money(
+              currencyCode: CurrencyCodes.pln,
+              amount: Decimal.fromInt(123),
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
-          secondaryPadding: const EdgeInsets.only(top: 10),
         ),
-      ),
-    );
+      );
 
-    await tester.snapshot();
-  });
+      await tester.snapshot();
+    });
 
-  testWidgets('round up AUD', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      SnapshotWrapper(
-        child: MoneyLabel(
-          separators: const AmountFormatSeparatorsData(),
-          fractionalMode: MoneyLabelFractionalMode.round,
-          money: Money(
-            currencyCode: CurrencyCodes.aud,
-            amount: Decimal.parse('5623.5'),
+    testWidgets('round up AUD', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparatorsData(),
+            fractionalMode: MoneyLabelFractionalMode.round,
+            money: Money(
+              currencyCode: CurrencyCodes.aud,
+              amount: Decimal.parse('5623.5'),
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
-          secondaryPadding: const EdgeInsets.only(top: 10),
         ),
-      ),
-    );
+      );
 
-    await tester.snapshot();
-  });
+      await tester.snapshot();
+    });
 
-  testWidgets('round down CNY', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      SnapshotWrapper(
-        child: MoneyLabel(
-          separators: const AmountFormatSeparatorsData(),
-          fractionalMode: MoneyLabelFractionalMode.round,
-          money: Money(
-            currencyCode: CurrencyCodes.cny,
-            amount: Decimal.parse('72316.49'),
+    testWidgets('round down CNY', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparatorsData(),
+            fractionalMode: MoneyLabelFractionalMode.round,
+            money: Money(
+              currencyCode: CurrencyCodes.cny,
+              amount: Decimal.parse('72316.49'),
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
-          secondaryPadding: const EdgeInsets.only(top: 10),
         ),
-      ),
-    );
+      );
 
-    await tester.snapshot();
-  });
+      await tester.snapshot();
+    });
 
-  testWidgets('accurate 4 digits INR', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      SnapshotWrapper(
-        child: MoneyLabel(
-          separators: const AmountFormatSeparatorsData(),
-          fractionalMode: MoneyLabelFractionalMode.accurate,
-          money: Money(
-            currencyCode: CurrencyCodes.inr,
-            amount: Decimal.parse('84321.6225'),
+    testWidgets('accurate 4 digits INR', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparatorsData(),
+            fractionalMode: MoneyLabelFractionalMode.accurate,
+            money: Money(
+              currencyCode: CurrencyCodes.inr,
+              amount: Decimal.parse('84321.6225'),
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
-          secondaryPadding: const EdgeInsets.only(top: 10),
         ),
-      ),
-    );
+      );
 
-    await tester.snapshot();
-  });
+      await tester.snapshot();
+    });
 
-  testWidgets('accurate 1 digits IRR', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      SnapshotWrapper(
-        child: MoneyLabel(
-          separators: const AmountFormatSeparatorsData(),
-          fractionalMode: MoneyLabelFractionalMode.accurate,
-          money: Money(
-            currencyCode: CurrencyCodes.irr,
-            amount: Decimal.parse('7281.1'),
+    testWidgets('accurate 1 digits IRR', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparatorsData(),
+            fractionalMode: MoneyLabelFractionalMode.accurate,
+            money: Money(
+              currencyCode: CurrencyCodes.irr,
+              amount: Decimal.parse('7281.1'),
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
-          secondaryPadding: const EdgeInsets.only(top: 10),
         ),
-      ),
-    );
+      );
 
-    await tester.snapshot();
-  });
+      await tester.snapshot();
+    });
 
-   testWidgets('accurate 0 digits ZAR', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      SnapshotWrapper(
-        child: MoneyLabel(
-          separators: const AmountFormatSeparatorsData(),
-          fractionalMode: MoneyLabelFractionalMode.accurate,
-          money: Money(
-            currencyCode: CurrencyCodes.zar,
-            amount: Decimal.parse('241'),
+    testWidgets('accurate 0 digits ZAR', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparatorsData(),
+            fractionalMode: MoneyLabelFractionalMode.accurate,
+            money: Money(
+              currencyCode: CurrencyCodes.zar,
+              amount: Decimal.parse('241'),
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
-          secondaryPadding: const EdgeInsets.only(top: 10),
         ),
-      ),
-    );
+      );
 
-    await tester.snapshot();
-  });
+      await tester.snapshot();
+    });
 
-  testWidgets('negative without sign SGD', (WidgetTester tester) async {
-    await tester.pumpWidget(
-      SnapshotWrapper(
-        child: MoneyLabel(
-          separators: const AmountFormatSeparatorsData(),
-          displayNegativeSign: false,
-          fractionalMode: MoneyLabelFractionalMode.accurate,
-          money: Money(
-            currencyCode: CurrencyCodes.sgd,
-            amount: Decimal.parse('-126.1'),
+    testWidgets('negative without sign SGD', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            separators: const AmountFormatSeparatorsData(),
+            displayNegativeSign: false,
+            fractionalMode: MoneyLabelFractionalMode.accurate,
+            money: Money(
+              currencyCode: CurrencyCodes.sgd,
+              amount: Decimal.parse('-126.1'),
+            ),
+            secondaryPadding: const EdgeInsets.only(top: 10),
           ),
-          secondaryPadding: const EdgeInsets.only(top: 10),
         ),
-      ),
-    );
+      );
 
-    await tester.snapshot();
+      await tester.snapshot();
+    });
   });
 }
 
