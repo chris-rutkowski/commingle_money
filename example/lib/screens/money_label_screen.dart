@@ -12,6 +12,7 @@ final class MoneyLabelScreen extends StatefulWidget {
 final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
   var fractionalMode = MoneyLabelFractionalMode.flexible;
   var displayCurrency = true;
+  var displayNegativeSign = true;
   var animated = true;
   var isNegative = false;
   var highSlider = 12;
@@ -44,6 +45,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                 animation: animated ? const MoneyLabelAnimation() : null,
                 fractionalMode: fractionalMode,
                 displayCurrency: displayCurrency,
+                displayNegativeSign: displayNegativeSign,
                 positiveColor: Colors.blue,
                 negativeColor: Colors.red,
                 zeroColor: Colors.grey,
@@ -64,6 +66,11 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                   title: const Text('Display currency'),
                   value: displayCurrency,
                   onChanged: (value) => setState(() => displayCurrency = value),
+                ),
+                SwitchListTile(
+                  title: const Text('Display negative sign'),
+                  value: displayNegativeSign,
+                  onChanged: (value) => setState(() => displayNegativeSign = value),
                 ),
                 SwitchListTile(
                   title: const Text('Negative value'),
