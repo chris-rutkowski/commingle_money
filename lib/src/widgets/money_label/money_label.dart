@@ -71,7 +71,7 @@ final class MoneyLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveMoney = _resolveEffectiveMoney(money);
-    final effectiveColor = _resolveEffectiveColor(effectiveMoney);
+    final effectiveColor = _resolveEffectiveColor(context, effectiveMoney);
 
     final effectivePrimaryStyle = _resolveEffectivePrimaryStyle(context, effectiveColor);
     final effectiveSecondaryStyle = _resolveEffectiveSecondaryStyle(context, effectiveColor);
@@ -178,13 +178,15 @@ final class MoneyLabel extends StatelessWidget {
     return base.merge(secondaryTextStyle).copyWith(color: color);
   }
 
-  Color? _resolveEffectiveColor(Money money) {
+  Color? _resolveEffectiveColor(BuildContext context, Money money) {
+    final defaults = MoneyLabelDefaults.maybeOf(context);
+
     if (money.amount > Decimal.zero) {
-      return positiveColor;
+      return positiveColor ?? defaults?.positiveColor;
     } else if (money.amount < Decimal.zero) {
-      return negativeColor;
+      return negativeColor ?? defaults?.negativeColor;
     } else {
-      return zeroColor;
+      return zeroColor ?? defaults?.zeroColor;
     }
   }
 

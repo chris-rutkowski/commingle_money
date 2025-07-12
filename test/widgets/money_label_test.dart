@@ -20,7 +20,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            positiveColor: Colors.yellow,
             separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'USD',
@@ -38,7 +37,6 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            negativeColor: Colors.red,
             separators: const AmountFormatSeparators(grouping: 'K', decimal: 'D'),
             money: Money(
               currencyCode: 'EUR',
@@ -82,6 +80,8 @@ final class SnapshotWrapper extends StatelessWidget {
       data: const MoneyLabelDefaultsData(
         primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
         secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
+        positiveColor: Colors.yellow,
+        negativeColor: Colors.red,
       ),
       child: Directionality(
         textDirection: TextDirection.ltr,
