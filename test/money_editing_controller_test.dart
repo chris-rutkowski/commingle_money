@@ -15,11 +15,11 @@ void main() {
     await fontLoader.load();
   });
 
-  group('AmountEditingController', () {
+  group('MoneyEditingController', () {
     testWidgets('standard', (WidgetTester tester) async {
-      final controller = AmountEditingController(precision: 2, amount: Decimal.parse('3532.2312'));
+      final controller = MoneyEditingController(currencyCode: CurrencyCodes.usd, amount: Decimal.parse('1234.56'));
 
-      Decimal? listenerValue;
+      Money? listenerValue;
       controller.addListener(() {
         listenerValue = controller.value;
       });
@@ -27,14 +27,23 @@ void main() {
       void expectState({
         required String text,
         required Decimal? value,
+        CurrencyCode? currency,
         required bool quiet,
       }) {
         expect(controller.textController.text, text);
-        expect(controller.value, value);
+
+        final Money? moneyValue;
+        if (value == null) {
+          moneyValue = null;
+        } else {
+          moneyValue = Money(amount: value, currencyCode: currency ?? CurrencyCodes.usd);
+        }
+
+        expect(controller.value, moneyValue);
         if (quiet) {
           expect(listenerValue, isNull);
         } else {
-          expect(listenerValue, value);
+          expect(listenerValue, moneyValue);
         }
 
         listenerValue = null;
@@ -54,35 +63,32 @@ void main() {
       );
 
       // Initial state
-      expectState(text: '3,532.23', value: Decimal.parse('3532.23'), quiet: true);
+      expectState(text: '1,234.56', value: Decimal.parse('1234.56'), quiet: true);
+      expect(controller.currencyCode, CurrencyCodes.usd);
 
       // User modifies
-      await tester.type('1234.56');
-      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false);
+      await tester.type('6543.21');
+      expectState(text: '6543.21', value: Decimal.parse('6543.21'), quiet: false);
 
       // Users dismisses keyboard - value should be formatted
       await tester.dismissKeyboard(controller);
-      expectState(text: '1,234.56', value: Decimal.parse('1234.56'), quiet: true);
+      expectState(text: '6,543.21', value: Decimal.parse('6543.21'), quiet: true);
 
-      // App changes precision
-      controller.precision = 1;
+      // App changes currency
+      controller.currencyCode = CurrencyCodes.bhd;
       await tester.pump();
-      expectState(text: '1,234.6', value: Decimal.parse('1234.6'), quiet: false);
-
-      // App changes value
-      controller.value = Decimal.parse('9876.9');
+      expectState(text: '6,543.210', value: Decimal.parse('6543.21'), currency: CurrencyCodes.bhd, quiet: false);
+      controller.currencyCode = CurrencyCodes.sgd;
       await tester.pump();
-      expectState(text: '9,876.9', value: Decimal.parse('9876.9'), quiet: false);
-
-      // App changes precision without affecting value, listener shouldn't trigger
-      controller.precision = 3;
+      expectState(text: '6,543.2', value: Decimal.parse('6543.2'), currency: CurrencyCodes.sgd, quiet: false);
+      controller.currencyCode = CurrencyCodes.usd;
       await tester.pump();
-      expectState(text: '9,876.900', value: Decimal.parse('9876.9'), quiet: true);
+      expectState(text: '6,543.20', value: Decimal.parse('6543.2'), quiet: false);
 
       // App changes value as user types
       await tester.type('4');
       expectState(text: '4', value: Decimal.parse('4'), quiet: false);
-      controller.value = Decimal.parse('5');
+      controller.value = Money(amount: Decimal.parse('5'), currencyCode: CurrencyCodes.usd);
       await tester.pump();
       expectState(text: '4', value: Decimal.parse('5'), quiet: false);
       await tester.dismissKeyboard(controller);
@@ -101,64 +107,9 @@ void main() {
 
       // User types formula
       await tester.type('2(5-1)*3×4/1.5÷3‒1');
-      expectState(text: '2(5-1)*3×4/1.5÷3‒1', value: Decimal.parse('20.333'), quiet: false);
+      expectState(text: '2(5-1)*3×4/1.5÷3‒1', value: Decimal.parse('20.33'), quiet: false);
       await tester.dismissKeyboard(controller);
-      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true);
-
-      controller.dispose();
-    });
-
-    testWidgets('custom separators', (WidgetTester tester) async {
-      final controller = AmountEditingController(
-        separators: const AmountFormatSeparatorsData(grouping: 'g', decimal: 'd'),
-        precision: 2,
-        amount: Decimal.parse('3532.2312'),
-      );
-
-      Decimal? listenerValue;
-      controller.addListener(() {
-        listenerValue = controller.value;
-      });
-
-      void expectState({
-        required String text,
-        required Decimal? value,
-        required bool quiet,
-      }) {
-        expect(controller.textController.text, text);
-        expect(controller.value, value);
-        if (quiet) {
-          expect(listenerValue, isNull);
-        } else {
-          expect(listenerValue, value);
-        }
-
-        listenerValue = null;
-      }
-
-      await tester.pumpWidget(
-        SnapshotWrapper(
-          child: TextField(
-            controller: controller.textController,
-            focusNode: controller.focusNode,
-            style: const TextStyle(
-              fontFamily: 'Noto',
-              fontSize: 24,
-            ),
-          ),
-        ),
-      );
-
-      // Initial state
-      expectState(text: '3g532d23', value: Decimal.parse('3532.23'), quiet: true);
-
-      // User modifies
-      await tester.type('1234d56');
-      expectState(text: '1234d56', value: Decimal.parse('1234.56'), quiet: false);
-      await tester.type('2g4g59g1gd12');
-      expectState(text: '2g4g59g1gd12', value: Decimal.parse('24591.12'), quiet: false);
-      await tester.dismissKeyboard(controller);
-      expectState(text: '24g591d12', value: Decimal.parse('24591.12'), quiet: true);
+      expectState(text: '20.33', value: Decimal.parse('20.33'), quiet: true);
 
       controller.dispose();
     });
@@ -171,7 +122,7 @@ extension _WidgetTester on WidgetTester {
     await pump();
   }
 
-  Future<void> dismissKeyboard(AmountEditingController controller) async {
+  Future<void> dismissKeyboard(MoneyEditingController controller) async {
     controller.focusNode.unfocus();
     await pump();
   }
