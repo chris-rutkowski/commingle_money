@@ -11,20 +11,47 @@ import 'money_label_animation.dart';
 import 'money_label_defaults.dart';
 import 'money_label_fractional_mode.dart';
 
+/// A customisable and optionally animated widget for displaying monetary values.
 final class MoneyLabel extends StatelessWidget {
+  /// [Money] value to display.
   final Money money;
+
+  /// Controls how fractional digits are rendered.
+  /// See [MoneyLabelFractionalMode] for details. Defaults to [MoneyLabelFractionalMode.flexible].
   final MoneyLabelFractionalMode fractionalMode;
+
+  /// Controls the animation of the [money] updates, by default animation is disabled.
   final MoneyLabelAnimation animation;
+
+  /// Whether to show the currency symbol or code, defaults to `true`.
   final bool displayCurrency;
+
+  /// Whether to display a negative sign for negative amounts, defaults to `true`.
   final bool displayNegativeSign;
+
+  /// Controls the decimal and grouping separators for the presentation.
+  /// Defaults to `,` for grouping/thousands separator and `.` for decimal separator.
   final AmountFormatSeparators separators;
+
+  /// Text style used for the main amount text.
   final TextStyle? primaryTextStyle;
+
+  /// Text style used for secondary elements such as currency or decimals.
   final TextStyle? secondaryTextStyle;
+
+  /// Colour to use when the amount is positive.
   final Color? positiveColor;
+
+  /// Colour to use when the amount is positive.
   final Color? negativeColor;
+
+  /// Colour to use when the amount is zero.
   final Color? zeroColor;
+
+  /// Check README.
   final EdgeInsets? secondaryPadding;
 
+  /// Creates a [MoneyLabel] widget.
   const MoneyLabel({
     super.key,
     required this.money,
