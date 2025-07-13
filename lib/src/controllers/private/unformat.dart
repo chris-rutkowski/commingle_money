@@ -1,6 +1,8 @@
-part of '../controllers/amount_editing_controller.dart';
+// ignore_for_file: public_member_api_docs
 
-String _unformat(
+import '../../amount_format_separators.dart';
+
+String unformat(
   String formatted, {
   required AmountFormatSeparatorsData separators,
 }) {

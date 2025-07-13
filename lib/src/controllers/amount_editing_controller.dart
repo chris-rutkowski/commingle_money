@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 
 import '../amount_format_separators.dart';
 import '../utils/decimal_utils_internal.dart';
-import '../utils/evaluate_math_text.dart';
 import 'amount_editing_state.dart';
 import 'private/amount_editing_state_private.dart';
+import 'private/evaluate_math_text.dart';
+import 'private/unformat.dart';
 
 part '../utils/format_decimal.dart';
-part '../utils/unformat.dart';
 
 /// Controller for plain amount text field with formatting and parsing capability
 final class AmountEditingController extends ValueNotifier<Decimal?> {
@@ -104,7 +104,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
       return;
     }
 
-    final unformatted = _unformat(textController.text, separators: separators);
+    final unformatted = unformat(textController.text, separators: separators);
     final evaluated = evaluateMathText(unformatted)?.roundOptional(scale: precision);
 
     if (evaluated != null) {

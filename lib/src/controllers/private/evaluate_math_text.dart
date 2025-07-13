@@ -3,7 +3,7 @@
 import 'package:decimal/decimal.dart';
 import 'package:expressions/expressions.dart';
 
-import 'decimal_utils.dart';
+import '../../utils/decimal_utils.dart';
 
 Decimal? evaluateMathText(String text) {
   const plusSign = '+'; // standard plus sign
