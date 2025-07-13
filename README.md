@@ -100,6 +100,8 @@ controller.addListener(() {
 
 `AmountEditingController` is a lightweight alternative to `MoneyEditingController` that operates directly on `Decimal` values. It lets you control the desired precision without involving currency logic.
 
+💡 `MoneyEditingController` is built on top of `AmountEditingController`.
+
 ## 💵 Money
 
 `Money` is a simple yet powerful value class that combines a `currencyCode` with a `Decimal` amount.
@@ -120,10 +122,10 @@ You can also use math operators directly: `+ – × ÷`. All operations return a
 
 
 ```dart
-final usd3 = Money(currencyCode: "USD", amount: Decimal.fromInt(3))
-final usd4 = Money(currencyCode: "USD", amount: Decimal.fromInt(4))
+final usd1 = Money(currencyCode: "USD", amount: Decimal.fromInt(1))
+final usd2 = Money(currencyCode: "USD", amount: Decimal.fromInt(2))
 
-final total = usd3 + usd4 + 5; // = 12 USD
+final total = usd1 + usd2 * 3 - 1 / 2; // = 6.5 USD
 ```
 
 ## 🌍 Currency
@@ -136,10 +138,10 @@ final usd = Currency.fromCode("USD");
 // Result:
 Currency(
   code: 'USD',
-  englishName: 'United States Dollar',
   precision: 2,
   emojiFlag: '🇺🇸',
   symbol: '$',
+  englishName: 'United States Dollar',
   englishCountryNames: {
     'United States',
     'Ecuador',
@@ -172,9 +174,9 @@ You can also use constants like `CurrencyCodes.chf` for quick access to a curate
 
 Aligning `MoneyLabel` precisely to the baseline can be tricky. By design, the widget displays the currency symbol and decimal part using a smaller font than the main number.
 
-I experimented with multiple approaches - `CrossAxisAlignment.baseline`, `RichText` and even low-level `TextPainter` font metrics. None produced fully reliable results across fonts, especially with Odometer animation.
+I experimented with multiple approaches - `CrossAxisAlignment.baseline`, `RichText` and even low-level `TextPainter` font metrics. None produced fully reliable results across fonts settings, especially with the Odometer animation enabled.
 
-As a workaround, the widget exposes `secondaryPadding` property that lets you manually tweak the vertical alignment of secondary elements. While not ideal, this gives you full control to fine-tune the appearance for your chosen font and style.
+As a workaround, the widget exposes `secondaryPadding` property that lets you manually tweak the top/bottom alignment of secondary elements. While not ideal, this gives you full control to fine-tune the appearance for your chosen font and style.
 
 ## 🙌 Acknowledgements
 
