@@ -2,9 +2,9 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../amount_format_separators.dart';
-import '../utils/decimal_utils_internal.dart';
 import 'amount_editing_state.dart';
 import 'private/amount_editing_state_private.dart';
+import 'private/decimal_utils_private.dart';
 import 'private/evaluate_math_text.dart';
 import 'private/format_decimal.dart';
 import 'private/unformat.dart';

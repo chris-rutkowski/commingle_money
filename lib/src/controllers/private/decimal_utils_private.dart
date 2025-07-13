@@ -2,7 +2,7 @@
 
 import 'package:decimal/decimal.dart';
 
-extension DecimalUtilsInternal on Decimal {
+extension DecimalUtilsPrivate on Decimal {
   Decimal roundOptional({int? scale}) {
     if (scale == null) {
       return this;
