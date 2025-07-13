@@ -108,22 +108,22 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇧🇭',
     englishCountryNames: {'Bahrain'},
   ),
-  'BIF': const Currency(
-    code: 'BIF',
+  CurrencyCodes.bif: const Currency(
+    code: CurrencyCodes.bif,
     englishName: 'Burundian Franc',
     precision: 2,
     emojiFlag: '🇧🇮',
     englishCountryNames: {'Burundi'},
   ),
-  'BMD': const Currency(
-    code: 'BMD',
+  CurrencyCodes.bmd: const Currency(
+    code: CurrencyCodes.bmd,
     englishName: 'Bermudian Dollar',
     precision: 2,
     emojiFlag: '🇧🇲',
     englishCountryNames: {'Bermuda'},
   ),
-  'BND': const Currency(
-    code: 'BND',
+  CurrencyCodes.bnd: const Currency(
+    code: CurrencyCodes.bnd,
     englishName: 'Brunei Dollar',
     precision: 1,
     emojiFlag: '🇧🇳',

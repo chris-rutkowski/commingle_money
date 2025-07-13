@@ -136,8 +136,6 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
               ],
             ),
           ),
-
-          // TODO: observe changes delivered by controller
         ],
       ),
     );

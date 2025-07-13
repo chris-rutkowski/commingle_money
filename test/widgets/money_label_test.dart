@@ -195,6 +195,57 @@ void main() {
 
       await tester.snapshot();
     });
+
+    testWidgets('compact 99.0 BIF', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            displayNegativeSign: false,
+            fractionalMode: MoneyLabelFractionalMode.compact,
+            money: Money(
+              currencyCode: CurrencyCodes.bif,
+              amount: Decimal.parse('99'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.snapshot();
+    });
+
+    testWidgets('compact 99.99 BMD', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            displayNegativeSign: false,
+            fractionalMode: MoneyLabelFractionalMode.compact,
+            money: Money(
+              currencyCode: CurrencyCodes.bmd,
+              amount: Decimal.parse('99.99'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.snapshot();
+    });
+
+    testWidgets('compact 100.59 BND', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          child: MoneyLabel(
+            displayNegativeSign: false,
+            fractionalMode: MoneyLabelFractionalMode.compact,
+            money: Money(
+              currencyCode: CurrencyCodes.bnd,
+              amount: Decimal.parse('100.59'),
+            ),
+          ),
+        ),
+      );
+
+      await tester.snapshot();
+    });
   });
 }
 

@@ -108,8 +108,6 @@ final class _AmountEditingControllerScreenState extends State<AmountEditingContr
               ],
             ),
           ),
-
-          // TODO: observe changes delivered by controller
         ],
       ),
     );

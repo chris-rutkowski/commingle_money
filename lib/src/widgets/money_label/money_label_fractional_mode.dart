@@ -18,6 +18,13 @@ enum MoneyLabelFractionalMode {
   /// - `12.50` → `12.50`
   always,
 
+  /// Displays the fractional part when the amount is less than 100, otherwise rounds.
+  /// For example:
+  /// - `99.54` → `99.54`
+  /// - `99.00` → `99`
+  /// - `103.69` → `104`
+  compact,
+
   /// Rounds the amount to the nearest whole number and displays it without decimals.
   ///
   /// For example:

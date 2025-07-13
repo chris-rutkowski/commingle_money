@@ -12,6 +12,15 @@ abstract final class CurrencyCodes {
   /// BHD - Bahraini Dinar
   static const CurrencyCode bhd = 'BHD';
 
+  /// BIF - Burundian Franc
+  static const CurrencyCode bif = 'BIF';
+
+  /// BMD - Bermudian Dollar
+  static const CurrencyCode bmd = 'BMD';
+
+  /// BND - Brunei Dollar
+  static const CurrencyCode bnd = 'BND';
+
   /// CAD - Canadian Dollar
   static const CurrencyCode cad = 'CAD';
 

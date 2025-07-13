@@ -26,6 +26,9 @@ final class MoneyLabelDefaults extends InheritedWidget {
 
 /// Holds the default values used by [MoneyLabel] widgets.
 final class MoneyLabelDefaultsData extends Equatable {
+  /// Whether to display a negative sign for negative amounts.
+  final bool? displayNegativeSign;
+
   /// Text style used for the main amount text.
   final TextStyle? primaryTextStyle;
 
@@ -46,6 +49,7 @@ final class MoneyLabelDefaultsData extends Equatable {
 
   /// Creates a [MoneyLabelDefaultsData] object.
   const MoneyLabelDefaultsData({
+    this.displayNegativeSign,
     this.primaryTextStyle,
     this.secondaryTextStyle,
     this.positiveColor,

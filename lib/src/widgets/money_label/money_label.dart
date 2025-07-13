@@ -27,7 +27,7 @@ final class MoneyLabel extends StatelessWidget {
   final bool displayCurrency;
 
   /// Whether to display a negative sign for negative amounts, defaults to `true`.
-  final bool displayNegativeSign;
+  final bool? displayNegativeSign;
 
   /// Controls the grouping (thousands) and decimal separators used for formatting the amount.
   /// If not provided, the widget will attempt to read values from the [AmountFormatSeparators]
@@ -70,7 +70,7 @@ final class MoneyLabel extends StatelessWidget {
     this.fractionalMode = MoneyLabelFractionalMode.flexible,
     this.animation = MoneyLabelAnimation.none,
     this.displayCurrency = true,
-    this.displayNegativeSign = true,
+    this.displayNegativeSign,
     this.separators,
     this.primaryTextStyle,
     this.secondaryTextStyle,
@@ -82,6 +82,7 @@ final class MoneyLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveDisplayNegativeSign = _resolveEffectiveDisplayNegativeSign(context);
     final effectiveSeparators = _resolveEffectiveSeparators(context);
     final effectiveMoney = _resolveEffectiveMoney(money);
     final effectiveColor = _resolveEffectiveColor(context, effectiveMoney);
@@ -116,7 +117,7 @@ final class MoneyLabel extends StatelessWidget {
             if (animation == MoneyLabelAnimation.none)
               Text(
                 AmountFormatter.formattedMain(
-                  displayNegativeSign ? components.main : components.main.abs(),
+                  effectiveDisplayNegativeSign ? components.main : components.main.abs(),
                   effectiveSeparators.grouping,
                 ),
                 style: effectivePrimaryStyle,
@@ -127,7 +128,7 @@ final class MoneyLabel extends StatelessWidget {
                 curve: animation.curve,
                 duration: animation.duration,
                 negativeSignDuration: animation.duration,
-                value: displayNegativeSign ? components.main : components.main.abs(),
+                value: effectiveDisplayNegativeSign ? components.main : components.main.abs(),
                 thousandSeparator: effectiveSeparators.grouping,
               ),
             if (_shouldDisplayFractionalPart(components)) ...[
@@ -198,12 +199,18 @@ final class MoneyLabel extends StatelessWidget {
     return separators ?? AmountFormatSeparators.maybeOf(context) ?? const AmountFormatSeparatorsData();
   }
 
+  bool _resolveEffectiveDisplayNegativeSign(BuildContext context) {
+    return displayNegativeSign ?? MoneyLabelDefaults.maybeOf(context)?.displayNegativeSign ?? true;
+  }
+
   Money _resolveEffectiveMoney(Money money) {
     switch (fractionalMode) {
       case MoneyLabelFractionalMode.flexible:
         return money.roundedToCurrencyPrecision();
       case MoneyLabelFractionalMode.always:
         return money.roundedToCurrencyPrecision();
+      case MoneyLabelFractionalMode.compact:
+        return money.amount.abs() < Decimal.fromInt(100) ? money.roundedToCurrencyPrecision() : money.rounded();
       case MoneyLabelFractionalMode.round:
         return money.rounded();
       case MoneyLabelFractionalMode.accurate:
@@ -238,13 +245,13 @@ final class MoneyLabel extends StatelessWidget {
   bool _shouldDisplayFractionalPart(DecimalComponents components) {
     switch (fractionalMode) {
       case MoneyLabelFractionalMode.flexible:
+      case MoneyLabelFractionalMode.accurate:
+      case MoneyLabelFractionalMode.compact:
         return components.fractional != 0;
       case MoneyLabelFractionalMode.always:
         return true;
       case MoneyLabelFractionalMode.round:
         return false;
-      case MoneyLabelFractionalMode.accurate:
-        return components.fractional != 0;
     }
   }
 }
