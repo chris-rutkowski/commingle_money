@@ -1,6 +1,10 @@
-part of '../controllers/amount_editing_controller.dart';
+// ignore_for_file: public_member_api_docs
 
-String _formatDecimal(
+import 'package:decimal/decimal.dart';
+
+import '../../amount_format_separators.dart';
+
+String formatDecimal(
   Decimal value, {
   int? precision,
   required AmountFormatSeparatorsData separators,

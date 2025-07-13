@@ -6,9 +6,8 @@ import '../utils/decimal_utils_internal.dart';
 import 'amount_editing_state.dart';
 import 'private/amount_editing_state_private.dart';
 import 'private/evaluate_math_text.dart';
+import 'private/format_decimal.dart';
 import 'private/unformat.dart';
-
-part '../utils/format_decimal.dart';
 
 /// Controller for plain amount text field with formatting and parsing capability
 final class AmountEditingController extends ValueNotifier<Decimal?> {
@@ -91,7 +90,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
       // if user is typing, we don't want to format the text
     } else {
       if (value != null) {
-        textController.text = _formatDecimal(value!, separators: separators, precision: precision);
+        textController.text = formatDecimal(value!, separators: separators, precision: precision);
       } else {
         textController.text = '';
       }
