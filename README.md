@@ -87,6 +87,15 @@ controller.addListener(() {
 
 You can also set the value programmatically using `value` setter or to just change a currency  using `currencyCode` setter.
 
+You can listen as the user types, e.g., to highlight the field in red or disable the save button based on the overall state:
+
+```dart
+controller.addListener(() {
+  final state = controller.state;
+  // handle: AmountEditingState.value, .empty, .zero, or .error
+});
+```
+
 ### 🔢 Amount Editing Controller
 
 `AmountEditingController` is a lightweight alternative to `MoneyEditingController` that operates directly on `Decimal` values. It lets you control the desired precision without involving currency logic.
@@ -181,10 +190,11 @@ Contributions are very welcome! If you spot a bug, want to improve something, or
 
 ## 🎯 Trivia
 
-- Tests: code coverage: 96%
-- [pub.dev](https://pub.dev/packages/commingle_money)
-- [GitHub](https://github.com/chris-rutkowski/commingle_money)
-- [Commingle](https://commingle.app)
+- ✅ Tests coverage: 98%
+- 📦 [Commingle Money on pub.dev](https://pub.dev/packages/commingle_money)
+- 🛠 [Commingle Money on GitHub](https://github.com/chris-rutkowski/commingle_money)
+- 📱 [Commingle App](https://commingle.app)
+- 🧑‍💻 [My Linked In](https://www.linkedin.com/in/chris-rutkowski/)
 
 ## 📄 Copyright and License
 
