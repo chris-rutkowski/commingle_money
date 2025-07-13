@@ -61,8 +61,8 @@ You can wrap your app with the `MoneyLabelDefaults` inherited widget to provide 
 
 ```dart
 final controller = MoneyEditingController(
-  currencyCode: CurrencyCodes.usd, // or "USD"
-  amount: Decimal.parse("123.45"),
+  currencyCode: CurrencyCodes.usd, // or 'USD'
+  amount: Decimal.parse('123.45'),
   separators: AmountFormatSeparatorsData(
     grouping: 
     decimal: 
@@ -108,8 +108,8 @@ controller.addListener(() {
 
 ```dart
 Money(
-  currencyCode: CurrencyCodes.usd, // or simply "USD"
-  amount: Decimal.parse("123.45"),
+  currencyCode: CurrencyCodes.usd, // or simply 'USD'
+  amount: Decimal.parse('123.45'),
 );
 ```
 
@@ -122,8 +122,8 @@ You can also use math operators directly: `+ – × ÷`. All operations return a
 
 
 ```dart
-final usd1 = Money(currencyCode: "USD", amount: Decimal.fromInt(1))
-final usd2 = Money(currencyCode: "USD", amount: Decimal.fromInt(2))
+final usd1 = Money(currencyCode: 'USD', amount: Decimal.fromInt(1))
+final usd2 = Money(currencyCode: 'USD', amount: Decimal.fromInt(2))
 
 final total = usd1 + usd2 * 3 - 1 / 2; // = 6.5 USD
 ```
@@ -133,7 +133,7 @@ final total = usd1 + usd2 * 3 - 1 / 2; // = 6.5 USD
 The library includes a comprehensive list of **155 worldwide currencies**, each with detailed metadata.
 
 ```dart
-final usd = Currency.fromCode("USD");
+final usd = Currency.fromCode('USD');
 
 // Result:
 Currency(
