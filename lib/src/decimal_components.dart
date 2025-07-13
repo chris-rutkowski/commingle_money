@@ -1,6 +1,6 @@
 import 'package:decimal/decimal.dart';
 
-import 'utils/decimal_utils.dart';
+import 'decimal_utils.dart';
 
 /// A simple structure that represents a [Decimal] value as integer (`main`)
 /// and fractional (`fractional`) components.
