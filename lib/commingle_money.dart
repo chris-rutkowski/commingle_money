@@ -1,10 +1,10 @@
-export 'src/amount_editing_controller.dart';
 export 'src/amount_format_separators.dart';
+export 'src/controllers/amount_editing_controller.dart';
+export 'src/controllers/money_editing_controller.dart';
 export 'src/currency.dart';
 export 'src/currency_code.dart';
 export 'src/decimal_components.dart';
 export 'src/money.dart';
-export 'src/money_editing_controller.dart';
 export 'src/utils/decimal_utils.dart';
 export 'src/widgets/money_label/money_label.dart';
 export 'src/widgets/money_label/money_label_animation.dart';

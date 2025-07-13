@@ -1,4 +1,4 @@
-part of '../amount_editing_controller.dart';
+part of '../controllers/amount_editing_controller.dart';
 
 String _formatDecimal(
   Decimal value, {

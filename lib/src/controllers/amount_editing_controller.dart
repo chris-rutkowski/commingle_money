@@ -1,12 +1,12 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
-import 'amount_format_separators.dart';
-import 'utils/decimal_utils_internal.dart';
-import 'utils/evaluate_math_text.dart';
+import '../amount_format_separators.dart';
+import '../utils/decimal_utils_internal.dart';
+import '../utils/evaluate_math_text.dart';
 
-part 'utils/format_decimal.dart';
-part 'utils/unformat.dart';
+part '../utils/format_decimal.dart';
+part '../utils/unformat.dart';
 
 /// Overview of semantic state of an [AmountEditingController]'s input.
 enum AmountEditingState {

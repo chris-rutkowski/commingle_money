@@ -1,11 +1,11 @@
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
+import '../amount_format_separators.dart';
+import '../currency.dart';
+import '../currency_code.dart';
+import '../money.dart';
 import 'amount_editing_controller.dart';
-import 'amount_format_separators.dart';
-import 'currency.dart';
-import 'currency_code.dart';
-import 'money.dart';
 
 /// Controller for [Money] text field with formatting and parsing capability
 final class MoneyEditingController extends ChangeNotifier {
