@@ -57,16 +57,16 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
             ),
           ),
           ListTile(
-            title: const Text('Money Controller Value'),
+            title: const Text('Money Controller Value & State'),
             subtitle: ListenableBuilder(
-              listenable: controller,
-              builder: (context, _) {
+              listenable: Listenable.merge([controller, controller.state]),
+              builder: (context, child) {
                 final value = controller.value;
 
                 if (value == null) {
-                  return Text('null (currency: ${controller.currencyCode})');
+                  return Text('null (currency: ${controller.currencyCode}) | ${controller.state.value.name}');
                 } else {
-                  return Text(controller.value.toString());
+                  return Text('${controller.value.toString()} | ${controller.state.value.name}');
                 }
               },
             ),

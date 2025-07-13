@@ -57,11 +57,11 @@ final class _AmountEditingControllerScreenState extends State<AmountEditingContr
             ),
           ),
           ListTile(
-            title: const Text('Amount Controller Value'),
-            subtitle: ValueListenableBuilder(
-              valueListenable: controller,
-              builder: (context, value, child) {
-                return Text(value.toString());
+            title: const Text('Amount Controller Value & State'),
+            subtitle: ListenableBuilder(
+              listenable: Listenable.merge([controller, controller.state]),
+              builder: (context, child) {
+                return Text('${controller.value.toString()} | ${controller.state.value.name}');
               },
             ),
           ),

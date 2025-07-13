@@ -15,6 +15,9 @@ final class MoneyEditingController extends ChangeNotifier {
   /// Text Editing Controller that should be given to the text field
   TextEditingController get textController => _amountController.textController;
 
+  /// A notifier that reflects the current semantic state of the user's input.
+  ValueNotifier<AmountEditingState> get state => _amountController.state;
+
   final AmountEditingController _amountController;
 
   CurrencyCode _currencyCode;

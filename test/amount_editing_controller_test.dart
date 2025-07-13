@@ -30,16 +30,19 @@ void main() {
         required String text,
         required Decimal? value,
         required bool quiet,
+        required AmountEditingState state,
       }) {
         expect(controller.textController.text, text);
+
         expect(controller.value, value);
         if (quiet) {
           expect(listenerValue, isNull);
         } else {
           expect(listenerValue, value);
         }
-
         listenerValue = null;
+
+        expect(controller.state.value, state);
       }
 
       await tester.pumpWidget(
@@ -56,56 +59,92 @@ void main() {
       );
 
       // Initial state
-      expectState(text: '3,532.23', value: Decimal.parse('3532.23'), quiet: true);
+      expectState(text: '3,532.23', value: Decimal.parse('3532.23'), quiet: true, state: AmountEditingState.value);
 
       // User modifies
       await tester.type('1234.56');
-      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false);
+      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false, state: AmountEditingState.value);
 
       // Users dismisses keyboard - value should be formatted
       await tester.dismissKeyboard(controller);
-      expectState(text: '1,234.56', value: Decimal.parse('1234.56'), quiet: true);
+      expectState(text: '1,234.56', value: Decimal.parse('1234.56'), quiet: true, state: AmountEditingState.value);
 
       // App changes precision
       controller.precision = 1;
       await tester.pump();
-      expectState(text: '1,234.6', value: Decimal.parse('1234.6'), quiet: false);
+      expectState(text: '1,234.6', value: Decimal.parse('1234.6'), quiet: false, state: AmountEditingState.value);
 
       // App changes value
       controller.value = Decimal.parse('9876.9');
       await tester.pump();
-      expectState(text: '9,876.9', value: Decimal.parse('9876.9'), quiet: false);
+      expectState(text: '9,876.9', value: Decimal.parse('9876.9'), quiet: false, state: AmountEditingState.value);
 
       // App changes precision without affecting value, listener shouldn't trigger
       controller.precision = 3;
       await tester.pump();
-      expectState(text: '9,876.900', value: Decimal.parse('9876.9'), quiet: true);
+      expectState(text: '9,876.900', value: Decimal.parse('9876.9'), quiet: true, state: AmountEditingState.value);
 
       // App changes value as user types
       await tester.type('4');
-      expectState(text: '4', value: Decimal.parse('4'), quiet: false);
+      expectState(text: '4', value: Decimal.parse('4'), quiet: false, state: AmountEditingState.value);
       controller.value = Decimal.parse('5');
       await tester.pump();
-      expectState(text: '4', value: Decimal.parse('5'), quiet: false);
+      expectState(text: '4', value: Decimal.parse('5'), quiet: false, state: AmountEditingState.value);
       await tester.dismissKeyboard(controller);
-      expectState(text: '5', value: Decimal.parse('5'), quiet: true);
+      expectState(text: '5', value: Decimal.parse('5'), quiet: true, state: AmountEditingState.value);
 
       // App erases value
       controller.value = null;
       await tester.pump();
-      expectState(text: '', value: null, quiet: false);
+      expectState(text: '', value: null, quiet: false, state: AmountEditingState.empty);
 
       // User erases value
       await tester.type('1234.56');
-      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false);
+      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false, state: AmountEditingState.value);
       await tester.type('');
-      expectState(text: '', value: null, quiet: false);
+      expectState(text: '', value: null, quiet: false, state: AmountEditingState.empty);
 
       // User types formula
       await tester.type('2(5-1)*3×4/1.5÷3‒1');
-      expectState(text: '2(5-1)*3×4/1.5÷3‒1', value: Decimal.parse('20.333'), quiet: false);
+      expectState(
+        text: '2(5-1)*3×4/1.5÷3‒1',
+        value: Decimal.parse('20.333'),
+        quiet: false,
+        state: AmountEditingState.value,
+      );
       await tester.dismissKeyboard(controller);
-      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true);
+      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
+
+      // User divides by zero
+      await tester.type('2/0');
+      expectState(
+        text: '2/0',
+        value: Decimal.parse('20.333'), // previous legal value
+        quiet: true,
+        state: AmountEditingState.error,
+      );
+      await tester.dismissKeyboard(controller);
+      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
+
+      // User enters invalid formula
+      await tester.type('2)');
+      expectState(
+        text: '2)',
+        value: Decimal.parse('20.333'), // previous legal value
+        quiet: true,
+        state: AmountEditingState.error,
+      );
+      await tester.dismissKeyboard(controller);
+      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
+
+      // User types zero
+      await tester.type('0');
+      expectState(
+        text: '0',
+        value: Decimal.zero,
+        quiet: false,
+        state: AmountEditingState.zero,
+      );
 
       controller.dispose();
     });

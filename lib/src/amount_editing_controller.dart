@@ -8,6 +8,31 @@ import 'utils/evaluate_math_text.dart';
 part 'utils/format_decimal.dart';
 part 'utils/unformat.dart';
 
+/// Overview of semantic state of an [AmountEditingController]'s input.
+enum AmountEditingState {
+  /// Field has a non-zero, non-empty value.
+  value,
+
+  /// Field is empty.
+  empty,
+
+  /// Field has a zero value.
+  zero,
+
+  /// Field has an error, usually due to math evaluation error.
+  error,
+}
+
+extension _AmountEditingState on AmountEditingState {
+  static AmountEditingState fromValue(Decimal? value) {
+    if (value == null) return AmountEditingState.empty;
+
+    if (value == Decimal.zero) return AmountEditingState.zero;
+
+    return AmountEditingState.value;
+  }
+}
+
 /// Controller for plain amount text field with formatting and parsing capability
 final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Separators for parsing and formatting the text field set during initialization.
@@ -18,6 +43,9 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
 
   /// Text Editing Controller that should be given to the text field
   final textController = TextEditingController();
+
+  /// A notifier that reflects the current semantic state of the user's input.
+  final ValueNotifier<AmountEditingState> state;
 
   int? _precision;
 
@@ -46,6 +74,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     final rounded = newValue?.roundOptional(scale: precision);
 
     super.value = rounded;
+    state.value = _AmountEditingState.fromValue(rounded);
 
     if (!focusNode.hasFocus) {
       _format();
@@ -54,7 +83,8 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
 
   /// Creates an [AmountEditingController] with the given [amount] and [precision].
   AmountEditingController({this.separators = const AmountFormatSeparatorsData(), Decimal? amount, int? precision})
-    : _precision = precision,
+    : state = ValueNotifier(_AmountEditingState.fromValue(amount)),
+      _precision = precision,
       super(amount?.roundOptional(scale: precision)) {
     focusNode.addListener(_onFocusNodeChange);
 
@@ -100,8 +130,11 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     final unformatted = _unformat(textController.text, separators: separators);
     final evaluated = evaluateMathText(unformatted)?.roundOptional(scale: precision);
 
-    if (evaluated != null && evaluated != value) {
+    if (evaluated != null) {
       value = evaluated;
+      state.value = _AmountEditingState.fromValue(evaluated);
+    } else {
+      state.value = AmountEditingState.error;
     }
   }
 
@@ -109,6 +142,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   void dispose() {
     focusNode.dispose();
     textController.dispose();
+    state.dispose();
     super.dispose();
   }
 }

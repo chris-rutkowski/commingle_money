@@ -18,6 +18,7 @@ Decimal? evaluateMathText(String text) {
     RegExp.escape(divisionSign),
     RegExp.escape('*'),
     RegExp.escape('-'),
+    RegExp.escape('/'),
   ];
 
   final processed = text
