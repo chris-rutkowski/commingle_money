@@ -4,24 +4,10 @@ import 'package:flutter/material.dart';
 import '../amount_format_separators.dart';
 import '../utils/decimal_utils_internal.dart';
 import '../utils/evaluate_math_text.dart';
+import 'amount_editing_state.dart';
 
 part '../utils/format_decimal.dart';
 part '../utils/unformat.dart';
-
-/// Overview of semantic state of an [AmountEditingController]'s input.
-enum AmountEditingState {
-  /// Field has a non-zero, non-empty value.
-  value,
-
-  /// Field is empty.
-  empty,
-
-  /// Field has a zero value.
-  zero,
-
-  /// Field has an error, usually due to math evaluation error.
-  error,
-}
 
 extension _AmountEditingState on AmountEditingState {
   static AmountEditingState fromValue(Decimal? value) {
