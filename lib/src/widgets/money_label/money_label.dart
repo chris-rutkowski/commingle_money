@@ -6,7 +6,7 @@ import '../../amount_format_separators.dart';
 import '../../currency.dart';
 import '../../decimal_components.dart';
 import '../../money.dart';
-import '../../utils/amount_formatter.dart';
+import '../../private/amount_formatter.dart';
 import 'money_label_animation.dart';
 import 'money_label_defaults.dart';
 import 'money_label_fractional_mode.dart';

@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 
 import 'currency_code.dart';
 
-part 'utils/currency_map.dart';
+part 'private/currency_map.dart';
 
 /// Represents a currency, including formatting rules and display metadata.
 final class Currency extends Equatable {
