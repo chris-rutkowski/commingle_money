@@ -196,7 +196,7 @@ final class MoneyLabel extends StatelessWidget {
   }
 
   AmountFormatSeparatorsData _resolveEffectiveSeparators(BuildContext context) {
-    return separators ?? AmountFormatSeparators.maybeOf(context) ?? const AmountFormatSeparatorsData();
+    return separators ?? AmountFormatSeparators.of(context);
   }
 
   bool _resolveEffectiveDisplayNegativeSign(BuildContext context) {

@@ -61,6 +61,8 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   }
 
   /// Creates an [AmountEditingController] with the given [amount] and [precision].
+  /// If you have [AmountFormatSeparators] inherited widget in the widget tree you can set the preferred value
+  /// of [separators] using `AmountFormatSeparators.read(context)`.
   AmountEditingController({this.separators = const AmountFormatSeparatorsData(), Decimal? amount, int? precision})
     : state = ValueNotifier(AmountEditingStatePrivate.fromValue(amount)),
       _precision = precision,
@@ -69,19 +71,6 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
 
     _format();
     textController.addListener(_onTextControllerChange);
-  }
-
-  /// Creates an [AmountEditingController] using separators from the [AmountFormatSeparators] inherited widget, if available.
-  factory AmountEditingController.context({
-    required BuildContext context,
-    Decimal? amount,
-    int? precision,
-  }) {
-    return AmountEditingController(
-      separators: AmountFormatSeparators.maybeOf(context) ?? const AmountFormatSeparatorsData(),
-      amount: amount,
-      precision: precision,
-    );
   }
 
   void _onFocusNodeChange() {

@@ -66,6 +66,8 @@ final class MoneyEditingController extends ChangeNotifier {
   }
 
   /// Creates an [MoneyEditingController] instance.
+  /// If you have [AmountFormatSeparators] inherited widget in the widget tree you can set the preferred value
+  /// of [separators] using `AmountFormatSeparators.read(context)`.
   MoneyEditingController({
     required CurrencyCode currencyCode,
     Decimal? amount,
@@ -77,19 +79,6 @@ final class MoneyEditingController extends ChangeNotifier {
          separators: separators,
        ) {
     _amountController.addListener(_onAmountChanged);
-  }
-
-  /// Creates a [MoneyEditingController] using separators from the [AmountFormatSeparators] inherited widget, if available.
-  factory MoneyEditingController.context({
-    required BuildContext context,
-    required CurrencyCode currencyCode,
-    Decimal? amount,
-  }) {
-    return MoneyEditingController(
-      currencyCode: currencyCode,
-      amount: amount,
-      separators: AmountFormatSeparators.maybeOf(context) ?? const AmountFormatSeparatorsData(),
-    );
   }
 
   void _onAmountChanged() {

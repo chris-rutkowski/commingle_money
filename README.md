@@ -192,7 +192,7 @@ Contributions are very welcome! If you spot a bug, want to improve something, or
 
 ## 🎯 Trivia
 
-- ✅ Tests coverage: 98%
+- ✅ Tests coverage: >95%
 - 📦 [Commingle Money on pub.dev](https://pub.dev/packages/commingle_money)
 - 🛠 [Commingle Money on GitHub](https://github.com/chris-rutkowski/commingle_money)
 - 📱 [Commingle App](https://commingle.app)

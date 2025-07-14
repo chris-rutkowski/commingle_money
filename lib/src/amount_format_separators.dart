@@ -16,9 +16,19 @@ final class AmountFormatSeparators extends InheritedWidget {
     required super.child,
   });
 
-  /// Returns the nearest [AmountFormatSeparatorsData] from the widget tree, or `null` if none found.
-  static AmountFormatSeparatorsData? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AmountFormatSeparators>()?.data;
+  /// Returns the [AmountFormatSeparatorsData] from the nearest [AmountFormatSeparators] in the widget tree,
+  /// or default [AmountFormatSeparatorsData] if none found.
+  /// Safe to use in [State.build] or [State.didChangeDependencies], but not in [State.initState].
+  static AmountFormatSeparatorsData of(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<AmountFormatSeparators>()?.data ??
+        const AmountFormatSeparatorsData();
+  }
+
+  /// Reads (once) the [AmountFormatSeparatorsData] from the nearest [AmountFormatSeparators] in the widget tree,
+  /// or default [AmountFormatSeparatorsData] if none found.
+  /// Safe to use in [State.initState].
+  static AmountFormatSeparatorsData read(BuildContext context) {
+    return context.getInheritedWidgetOfExactType<AmountFormatSeparators>()?.data ?? const AmountFormatSeparatorsData();
   }
 
   @override

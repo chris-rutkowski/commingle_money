@@ -205,27 +205,6 @@ void main() {
 
       controller.dispose();
     });
-
-    testWidgets('separators from context', (tester) async {
-      const separators = AmountFormatSeparatorsData(grouping: 'a', decimal: 'b');
-
-      late AmountEditingController controller;
-
-      await tester.pumpWidget(
-        AmountFormatSeparators(
-          data: separators,
-          child: Builder(
-            builder: (context) {
-              controller = AmountEditingController.context(context: context);
-              return const Placeholder();
-            },
-          ),
-        ),
-      );
-
-      expect(controller.separators.grouping, 'a');
-      expect(controller.separators.decimal, 'b');
-    });
   });
 }
 
