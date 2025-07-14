@@ -28,6 +28,9 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Precision used in formatting and parsing the amount.
   int? get precision => _precision;
 
+  /// Current value or [Decimal.zero] if `null`.
+  Decimal get valueOrZero => value ?? Decimal.zero;
+
   /// Sets the precision for the amount and recalculates the value if necessary.
   set precision(int? newPrecision) {
     if (_precision == newPrecision) return;

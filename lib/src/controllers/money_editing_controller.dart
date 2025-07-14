@@ -22,6 +22,12 @@ final class MoneyEditingController extends ChangeNotifier {
   /// A notifier that reflects the current semantic state of the user's input.
   ValueNotifier<AmountEditingState> get state => _amountController.state;
 
+  /// Current value or [Money.zero] if `null`.
+  Money get valueOrZero => Money(
+    currencyCode: _currencyCode,
+    amount: _amountController.valueOrZero,
+  );
+
   final AmountEditingController _amountController;
 
   CurrencyCode _currencyCode;

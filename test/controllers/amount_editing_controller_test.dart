@@ -35,6 +35,8 @@ void main() {
         expect(controller.textController.text, text);
 
         expect(controller.value, value);
+        expect(controller.valueOrZero, value ?? Decimal.zero);
+
         if (quiet) {
           expect(listenerValue, isNull);
         } else {

@@ -43,6 +43,7 @@ void main() {
         }
 
         expect(controller.value, moneyValue);
+        expect(controller.valueOrZero, moneyValue ?? Money.zero(CurrencyCodes.usd));
 
         if (quiet) {
           expect(listenerValue, isNull);
