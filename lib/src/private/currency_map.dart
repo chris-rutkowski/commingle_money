@@ -129,15 +129,15 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇧🇳',
     englishCountryNames: {'Brunei', 'Singapore'},
   ),
-  'BOB': const Currency(
-    code: 'BOB',
+  CurrencyCodes.bob: const Currency(
+    code: CurrencyCodes.bob,
     englishName: 'Bolivian Boliviano',
     precision: 2,
     emojiFlag: '🇧🇴',
     englishCountryNames: {'Bolivia'},
   ),
-  'BRL': const Currency(
-    code: 'BRL',
+  CurrencyCodes.brl: const Currency(
+    code: CurrencyCodes.brl,
     englishName: 'Brazilian Real',
     precision: 2,
     emojiFlag: '🇧🇷',

@@ -21,6 +21,12 @@ abstract final class CurrencyCodes {
   /// BND - Brunei Dollar
   static const CurrencyCode bnd = 'BND';
 
+  /// BOB - Bolivian Boliviano
+  static const CurrencyCode bob = 'BOB';
+
+  /// BRL - Brazilian Real
+  static const CurrencyCode brl = 'BRL';
+
   /// CAD - Canadian Dollar
   static const CurrencyCode cad = 'CAD';
 

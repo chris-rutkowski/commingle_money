@@ -246,6 +246,35 @@ void main() {
 
       await tester.snapshot();
     });
+
+    testWidgets('theme BOB', (WidgetTester tester) async {
+      await tester.pumpWidget(
+        SnapshotWrapper(
+          applyDefaults: false,
+          child: Builder(
+            builder: (context) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  textTheme: const TextTheme(
+                    bodyLarge: TextStyle(fontFamily: 'Noto', fontSize: 20),
+                    bodyMedium: TextStyle(fontFamily: 'Noto', fontSize: 15),
+                  ),
+                ),
+                child: MoneyLabel(
+                  money: Money(
+                    currencyCode: CurrencyCodes.bob,
+                    amount: Decimal.parse('6432.52'),
+                  ),
+                  secondaryPadding: const EdgeInsets.only(top: 5),
+                ),
+              );
+            },
+          ),
+        ),
+      );
+
+      await tester.snapshot();
+    });
   });
 }
 
@@ -267,39 +296,45 @@ extension _WidgetTester on WidgetTester {
 
 final class SnapshotWrapper extends StatelessWidget {
   final Widget child;
+  final bool applyDefaults;
 
   const SnapshotWrapper({
     super.key,
     required this.child,
+    this.applyDefaults = true,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AmountFormatSeparators(
-      data: AmountFormatSeparatorsData.pl,
-      child: MoneyLabelDefaults(
-        data: const MoneyLabelDefaultsData(
-          primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
-          secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
-          positiveColor: Colors.blue,
-          negativeColor: Colors.red,
-          zeroColor: Colors.grey,
-          secondaryPadding: EdgeInsets.only(top: 10),
-        ),
-        child: Directionality(
-          textDirection: TextDirection.ltr,
-          child: DefaultTextHeightBehavior(
-            textHeightBehavior: const TextHeightBehavior(),
-            child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.all(16),
-              child: Center(
-                child: child,
-              ),
-            ),
+    final innerChild = Directionality(
+      textDirection: TextDirection.ltr,
+      child: DefaultTextHeightBehavior(
+        textHeightBehavior: const TextHeightBehavior(),
+        child: Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(16),
+          child: Center(
+            child: child,
           ),
         ),
       ),
+    );
+
+    return AmountFormatSeparators(
+      data: AmountFormatSeparatorsData.pl,
+      child: applyDefaults
+          ? MoneyLabelDefaults(
+              data: const MoneyLabelDefaultsData(
+                primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
+                secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
+                positiveColor: Colors.blue,
+                negativeColor: Colors.red,
+                zeroColor: Colors.grey,
+                secondaryPadding: EdgeInsets.only(top: 10),
+              ),
+              child: innerChild,
+            )
+          : innerChild,
     );
   }
 }
