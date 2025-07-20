@@ -10,8 +10,11 @@ import 'amount_editing_state.dart';
 
 /// Controller for [Money] text field with formatting and parsing capability
 final class MoneyEditingController extends ChangeNotifier {
-  /// Separators for parsing and formatting the text field set during initialization.
+  /// Separators for parsing and formatting the text field
   AmountFormatSeparatorsData get separators => _amountController.separators;
+
+  /// Sets the separators for parsing and formatting the text field.
+  set separators(AmountFormatSeparatorsData newSeparators) => _amountController.separators = newSeparators;
 
   /// Focus Node that should be given to the text field
   FocusNode get focusNode => _amountController.focusNode;

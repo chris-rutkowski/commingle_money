@@ -1,31 +1,32 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import 'money_label.dart';
+import 'money_formatter.dart';
+import 'widgets/money_label/money_label.dart';
 
-/// Provides subset of default values for [MoneyLabel] widgets below this widget in the widget tree.
-final class MoneyLabelDefaults extends InheritedWidget {
+/// Provides subset of default values for [MoneyLabel] and [MoneyFormatter] below this widget in the widget tree.
+final class MoneyPresentationDefaults extends InheritedWidget {
   /// The actual configuration.
-  final MoneyLabelDefaultsData data;
+  final MoneyPresentationDefaultsData data;
 
-  /// Creates a [MoneyLabelDefaults] object.
-  const MoneyLabelDefaults({
+  /// Creates a [MoneyPresentationDefaults] object.
+  const MoneyPresentationDefaults({
     super.key,
     required this.data,
     required super.child,
   });
 
-  /// Returns the nearest [MoneyLabelDefaultsData] from the widget tree, or `null` if none found.
-  static MoneyLabelDefaultsData? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<MoneyLabelDefaults>()?.data;
+  /// Returns the nearest [MoneyPresentationDefaultsData] from the widget tree, or `null` if none found.
+  static MoneyPresentationDefaultsData? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<MoneyPresentationDefaults>()?.data;
   }
 
   @override
-  bool updateShouldNotify(MoneyLabelDefaults oldWidget) => data != oldWidget.data;
+  bool updateShouldNotify(MoneyPresentationDefaults oldWidget) => data != oldWidget.data;
 }
 
 /// Holds the default values used by [MoneyLabel] widgets.
-final class MoneyLabelDefaultsData extends Equatable {
+final class MoneyPresentationDefaultsData extends Equatable {
   /// Whether to display a negative sign for negative amounts.
   final bool? displayNegativeSign;
 
@@ -44,18 +45,19 @@ final class MoneyLabelDefaultsData extends Equatable {
   /// Colour to use when the amount is zero.
   final Color? zeroColor;
 
-  /// Check README - Known limitations.
-  final EdgeInsets? secondaryPadding;
+  /// Text to display next to currency when the amount is zero.
+  /// e.g. Ø will be displayed as USD Ø
+  final String? zeroText;
 
-  /// Creates a [MoneyLabelDefaultsData] object.
-  const MoneyLabelDefaultsData({
+  /// Creates a [MoneyPresentationDefaultsData] object.
+  const MoneyPresentationDefaultsData({
     this.displayNegativeSign,
     this.primaryTextStyle,
     this.secondaryTextStyle,
     this.positiveColor,
     this.negativeColor,
     this.zeroColor,
-    this.secondaryPadding,
+    this.zeroText,
   });
 
   @override
@@ -65,6 +67,6 @@ final class MoneyLabelDefaultsData extends Equatable {
     positiveColor,
     negativeColor,
     zeroColor,
-    secondaryPadding,
+    zeroText,
   ];
 }

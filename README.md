@@ -117,6 +117,7 @@ It provides utility methods like:
 
 -  `rounded()`: 2.99 → 3 
 -  `roundedToCurrencyPrecision()`: 2.567 → 2.57.
+-  `abs()`
 
 You can also use math operators directly: `+ – × ÷`. All operations return a new `Money` instance, rounded to the currency precision. You can combine `Money` values of the same currency with `int`, `double`, or `Decimal` values.
 
@@ -169,14 +170,6 @@ You can also use constants like `CurrencyCodes.chf` for quick access to a curate
   e.g. `1234.56` → `1300` (upper), `1200` (lower).
 - utility functions like `min`, `max`, and `sum`
 - converters `Decimal` → `int` as well as `double` → `Decimal`
-
-## ⚠️ Known Issues
-
-Aligning `MoneyLabel` precisely to the baseline can be tricky. By design, the widget displays the currency symbol and decimal part using a smaller font than the main number.
-
-I experimented with multiple approaches - `CrossAxisAlignment.baseline`, `RichText` and even low-level `TextPainter` font metrics. None produced fully reliable results across fonts settings, especially with the Odometer animation enabled.
-
-As a workaround, the widget exposes `secondaryPadding` property that lets you manually tweak the top/bottom alignment of secondary elements. While not ideal, this gives you full control to fine-tune the appearance for your chosen font and style.
 
 ## 🙌 Acknowledgements
 

@@ -170,6 +170,19 @@ void main() {
         state: AmountEditingState.zero,
       );
 
+      // Changing separators
+      await tester.type('1234.56');
+      await tester.dismissKeyboard(controller);
+      expect(controller.separators, const AmountFormatSeparatorsData());
+      controller.separators = AmountFormatSeparatorsData.pl;
+      await tester.pump();
+      expectState(
+        text: '1 234,56',
+        value: Decimal.parse('1234.56'),
+        quiet: false,
+        state: AmountEditingState.value,
+      );
+
       controller.dispose();
     });
   });

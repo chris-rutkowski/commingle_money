@@ -11,8 +11,17 @@ import 'private/unformat.dart';
 
 /// Controller for plain amount text field with formatting and parsing capability
 final class AmountEditingController extends ValueNotifier<Decimal?> {
-  /// Separators for parsing and formatting the text field set during initialization.
-  final AmountFormatSeparatorsData separators;
+  AmountFormatSeparatorsData _separators;
+
+  /// Separators for parsing and formatting the text field
+  AmountFormatSeparatorsData get separators => _separators;
+
+  /// Sets the separators for parsing and formatting the text field.
+  set separators(AmountFormatSeparatorsData newSeparators) {
+    if (_separators == newSeparators) return;
+    _separators = newSeparators;
+    _format();
+  }
 
   /// Focus Node that should be given to the text field
   final focusNode = FocusNode();
@@ -28,9 +37,6 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Precision used in formatting and parsing the amount.
   int? get precision => _precision;
 
-  /// Current value or [Decimal.zero] if `null`.
-  Decimal get valueOrZero => value ?? Decimal.zero;
-
   /// Sets the precision for the amount and recalculates the value if necessary.
   set precision(int? newPrecision) {
     if (_precision == newPrecision) return;
@@ -45,6 +51,9 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
 
     value = rounded;
   }
+
+  /// Current value or [Decimal.zero] if `null`.
+  Decimal get valueOrZero => value ?? Decimal.zero;
 
   @override
   set value(Decimal? newValue) {
@@ -63,13 +72,16 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// Creates an [AmountEditingController] with the given [amount] and [precision].
   /// If you have [AmountFormatSeparators] inherited widget in the widget tree you can set the preferred value
   /// of [separators] using `AmountFormatSeparators.read(context)`.
-  AmountEditingController({this.separators = const AmountFormatSeparatorsData(), Decimal? amount, int? precision})
-    : state = ValueNotifier(AmountEditingStatePrivate.fromValue(amount)),
-      _precision = precision,
-      super(amount?.roundOptional(scale: precision)) {
-    focusNode.addListener(_onFocusNodeChange);
-
+  AmountEditingController({
+    AmountFormatSeparatorsData separators = const AmountFormatSeparatorsData(),
+    Decimal? amount,
+    int? precision,
+  }) : state = ValueNotifier(AmountEditingStatePrivate.fromValue(amount)),
+       _separators = separators,
+       _precision = precision,
+       super(amount?.roundOptional(scale: precision)) {
     _format();
+    focusNode.addListener(_onFocusNodeChange);
     textController.addListener(_onTextControllerChange);
   }
 

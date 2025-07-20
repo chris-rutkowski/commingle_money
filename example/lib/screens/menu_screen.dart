@@ -29,6 +29,7 @@ final class MenuScreen extends StatelessWidget {
           ),
           ListTile(
             title: const Text('MoneyLabel widget'),
+            subtitle: const Text('and MoneyFormatter'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const MoneyLabelScreen()));
             },

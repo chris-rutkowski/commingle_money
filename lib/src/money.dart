@@ -3,7 +3,6 @@ import 'package:equatable/equatable.dart';
 
 import 'currency.dart';
 import 'currency_code.dart';
-import 'decimal_components.dart';
 import 'decimal_utils.dart';
 
 /// A value object that represents a monetary amount in a specific currency.
@@ -22,8 +21,20 @@ final class Money extends Equatable {
 
   /// Creates a [Money] instance with the given [currencyCode] and `0` [amount].
   static Money zero(CurrencyCode currencyCode) => Money(
-    amount: Decimal.zero,
     currencyCode: currencyCode,
+    amount: Decimal.zero,
+  );
+
+  /// Creates a [Money] instance with the given [amount] in USD.
+  static Money usd(Decimal amount) => Money(
+    currencyCode: CurrencyCodes.usd,
+    amount: amount,
+  );
+
+  /// Creates a [Money] instance with the given [amount] in EUR.
+  static Money eur(Decimal amount) => Money(
+    currencyCode: CurrencyCodes.eur,
+    amount: amount,
   );
 
   @override
@@ -45,23 +56,19 @@ final class Money extends Equatable {
     );
   }
 
-  /// Returns the [DecimalComponents] of this [Money] instance.
-  DecimalComponents get components {
-    final main = amount.truncate();
-
-    final precision = Currency.getPrecision(currencyCode);
-
-    return DecimalComponents(
-      main: main.toInt(),
-      fractional: (amount - main).shift(precision).abs().toInt(),
-    );
-  }
-
   /// Returns a new [Money] instance with the amount rounded to the nearest whole number.
   Money rounded() {
     return Money(
       currencyCode: currencyCode,
       amount: amount.round(),
+    );
+  }
+
+  /// Returns a new [Money] instance with the absolute value of the amount.
+  Money abs() {
+    return Money(
+      currencyCode: currencyCode,
+      amount: amount.abs(),
     );
   }
 

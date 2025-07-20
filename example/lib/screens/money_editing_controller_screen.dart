@@ -4,6 +4,8 @@ import 'package:commingle_money/commingle_money.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/separators_type.dart';
+
 final class MoneyEditingControllerScreen extends StatefulWidget {
   const MoneyEditingControllerScreen({super.key});
 
@@ -12,11 +14,16 @@ final class MoneyEditingControllerScreen extends StatefulWidget {
 }
 
 final class _MoneyEditingControllerScreenState extends State<MoneyEditingControllerScreen> {
+  var separatorsType = SeparatorsType.fromLocalePlus;
+
   final controller = MoneyEditingController(currencyCode: CurrencyCodes.usd, amount: Decimal.parse('15.99'));
 
   @override
   void initState() {
     super.initState();
+
+    controller.separators = separatorsType.resolve(context);
+
     controller.addListener(() {
       debugPrint('Controller value changed: ${controller.value}');
 
@@ -80,31 +87,22 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
                   const Text('Money label:'),
                   const SizedBox(width: 16.0),
                   MoneyLabel(
+                    separators: separatorsType.resolve(context),
                     primaryTextStyle: Theme.of(context).textTheme.headlineMedium,
                     money: controller.value ?? Money.zero(controller.currencyCode),
                     positiveColor: Colors.blue,
                     negativeColor: Colors.red,
                     zeroColor: Colors.grey,
-                    secondaryPadding: const EdgeInsets.only(top: 10),
                   ),
                 ],
               );
             },
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 16.0, top: 16),
-            child: Text('Interact:'),
-          ),
+
           ListTile(
             title: const Text('Dismiss keyboard'),
             onTap: () {
               FocusScope.of(context).unfocus();
-            },
-          ),
-          ListTile(
-            title: const Text('Set value: USD 25.15'),
-            onTap: () {
-              controller.value = Money(currencyCode: CurrencyCodes.usd, amount: Decimal.parse('25.15'));
             },
           ),
           ListTile(
@@ -114,26 +112,52 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
             },
           ),
           ListTile(
-            title: const Text('Set currency'),
-            subtitle: Wrap(
-              children: [
-                TextButton(
-                  onPressed: () => controller.currencyCode = CurrencyCodes.usd,
-                  child: const Text('USD: 2'),
-                ),
-                TextButton(
-                  onPressed: () => controller.currencyCode = CurrencyCodes.bhd,
-                  child: const Text('BHD: 3'),
-                ),
-                TextButton(
-                  onPressed: () => controller.currencyCode = CurrencyCodes.sgd,
-                  child: const Text('SGD: 1'),
-                ),
-                TextButton(
-                  onPressed: () => controller.currencyCode = CurrencyCodes.irr,
-                  child: const Text('IRR: 0'),
-                ),
-              ],
+            title: const Text('Set value: 25.15'),
+            onTap: () {
+              controller.value = Money(currencyCode: controller.currencyCode, amount: Decimal.parse('25.15'));
+            },
+          ),
+          ListTile(
+            title: const Text('Set value: 123456.789'),
+            onTap: () {
+              controller.value = Money(currencyCode: controller.currencyCode, amount: Decimal.parse('123456.789'));
+            },
+          ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: DropdownButtonFormField<CurrencyCode>(
+              value: controller.currencyCode,
+              decoration: const InputDecoration(
+                labelText: 'Currency (each has different precision)',
+              ),
+              items: [
+                CurrencyCodes.usd,
+                CurrencyCodes.bhd,
+                CurrencyCodes.sgd,
+                CurrencyCodes.irr,
+              ].map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+              onChanged: (value) {
+                if (value == null) return;
+                controller.currencyCode = value;
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: DropdownButtonFormField<SeparatorsType>(
+              value: separatorsType,
+              decoration: const InputDecoration(
+                labelText: 'Separators',
+              ),
+              items: SeparatorsType.values.map((e) => DropdownMenuItem(value: e, child: Text(e.name))).toList(),
+              onChanged: (value) {
+                if (value == null) return;
+                setState(() => separatorsType = value);
+                controller.separators = value.resolve(context);
+              },
             ),
           ),
         ],

@@ -1,8 +1,8 @@
-import 'money_label.dart';
+import 'money_formatter.dart';
+import 'widgets/money_label/money_label.dart';
 
-/// Defines how the fractional part (decimals) value should be displayed within [MoneyLabel]
-/// in a UI label or text widget.
-enum MoneyLabelFractionalMode {
+/// Defines how the fractional part (decimals) value should be displayed within [MoneyLabel] widget or [MoneyFormatter].
+enum FractionalMode {
   /// Displays the fractional part only if it's non-zero.
   ///
   /// For example:

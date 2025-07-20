@@ -60,7 +60,6 @@ void main() {
             secondaryTextStyle: const TextStyle(fontFamily: 'Noto', fontSize: 20),
             positiveColor: Colors.green,
             negativeColor: Colors.orange,
-            secondaryPadding: const EdgeInsets.only(top: 5),
           ),
         ),
       );
@@ -87,7 +86,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            fractionalMode: MoneyLabelFractionalMode.always,
+            fractionalMode: FractionalMode.always,
             money: Money(
               currencyCode: CurrencyCodes.pln,
               amount: Decimal.fromInt(123),
@@ -103,7 +102,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            fractionalMode: MoneyLabelFractionalMode.round,
+            fractionalMode: FractionalMode.round,
             money: Money(
               currencyCode: CurrencyCodes.aud,
               amount: Decimal.parse('5623.5'),
@@ -119,7 +118,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            fractionalMode: MoneyLabelFractionalMode.round,
+            fractionalMode: FractionalMode.round,
             money: Money(
               currencyCode: CurrencyCodes.cny,
               amount: Decimal.parse('72316.49'),
@@ -135,7 +134,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            fractionalMode: MoneyLabelFractionalMode.accurate,
+            fractionalMode: FractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.inr,
               amount: Decimal.parse('84321.6225'),
@@ -151,7 +150,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            fractionalMode: MoneyLabelFractionalMode.accurate,
+            fractionalMode: FractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.irr,
               amount: Decimal.parse('7281.1'),
@@ -167,7 +166,7 @@ void main() {
       await tester.pumpWidget(
         SnapshotWrapper(
           child: MoneyLabel(
-            fractionalMode: MoneyLabelFractionalMode.accurate,
+            fractionalMode: FractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.zar,
               amount: Decimal.parse('241'),
@@ -184,7 +183,7 @@ void main() {
         SnapshotWrapper(
           child: MoneyLabel(
             displayNegativeSign: false,
-            fractionalMode: MoneyLabelFractionalMode.accurate,
+            fractionalMode: FractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.sgd,
               amount: Decimal.parse('-126.1'),
@@ -201,7 +200,7 @@ void main() {
         SnapshotWrapper(
           child: MoneyLabel(
             displayNegativeSign: false,
-            fractionalMode: MoneyLabelFractionalMode.compact,
+            fractionalMode: FractionalMode.compact,
             money: Money(
               currencyCode: CurrencyCodes.bif,
               amount: Decimal.parse('99'),
@@ -218,7 +217,7 @@ void main() {
         SnapshotWrapper(
           child: MoneyLabel(
             displayNegativeSign: false,
-            fractionalMode: MoneyLabelFractionalMode.compact,
+            fractionalMode: FractionalMode.compact,
             money: Money(
               currencyCode: CurrencyCodes.bmd,
               amount: Decimal.parse('99.99'),
@@ -235,7 +234,7 @@ void main() {
         SnapshotWrapper(
           child: MoneyLabel(
             displayNegativeSign: false,
-            fractionalMode: MoneyLabelFractionalMode.compact,
+            fractionalMode: FractionalMode.compact,
             money: Money(
               currencyCode: CurrencyCodes.bnd,
               amount: Decimal.parse('100.59'),
@@ -265,7 +264,6 @@ void main() {
                     currencyCode: CurrencyCodes.bob,
                     amount: Decimal.parse('6432.52'),
                   ),
-                  secondaryPadding: const EdgeInsets.only(top: 5),
                 ),
               );
             },
@@ -281,6 +279,7 @@ void main() {
 extension _WidgetTester on WidgetTester {
   Future<void> snapshot() async {
     await binding.setSurfaceSize(const Size(300, 100));
+    await pump();
 
     final sanitized = testDescription
         .toLowerCase()
@@ -323,14 +322,13 @@ final class SnapshotWrapper extends StatelessWidget {
     return AmountFormatSeparators(
       data: AmountFormatSeparatorsData.pl,
       child: applyDefaults
-          ? MoneyLabelDefaults(
-              data: const MoneyLabelDefaultsData(
+          ? MoneyPresentationDefaults(
+              data: const MoneyPresentationDefaultsData(
                 primaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 30, color: Colors.black),
                 secondaryTextStyle: TextStyle(fontFamily: 'Noto', fontSize: 15, color: Colors.black),
                 positiveColor: Colors.blue,
                 negativeColor: Colors.red,
                 zeroColor: Colors.grey,
-                secondaryPadding: EdgeInsets.only(top: 10),
               ),
               child: innerChild,
             )

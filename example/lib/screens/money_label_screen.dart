@@ -2,6 +2,8 @@ import 'package:commingle_money/commingle_money.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/separators_type.dart';
+
 final class MoneyLabelScreen extends StatefulWidget {
   const MoneyLabelScreen({super.key});
 
@@ -10,21 +12,23 @@ final class MoneyLabelScreen extends StatefulWidget {
 }
 
 final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
-  var separatorsType = _SeparatorsType.fromLocalePlus;
-  var fractionalMode = MoneyLabelFractionalMode.flexible;
+  var separatorsType = SeparatorsType.fromLocalePlus;
+  var fractionalMode = FractionalMode.flexible;
   CurrencyCode currency = CurrencyCodes.usd;
   var displayCurrency = true;
   var displayNegativeSign = true;
   var animated = true;
   var isNegative = false;
   var highSlider = 12;
-  var lowSlider = 34;
-  var decimalSlider = 56;
+  var mediumSlider = 34;
+  var lowSlider = 56;
+  var decimalHighSlider = 78;
+  var decimalLowSlider = 0;
 
-  Money get currentMoney {
-    final whole = highSlider * 100 + lowSlider;
-    final fractional = Decimal.fromInt(decimalSlider).shift(-2);
-    final total = Decimal.fromInt(whole) + fractional;
+  Money get money {
+    final whole = Decimal.fromInt(highSlider * 10000 + mediumSlider * 100 + lowSlider);
+    final fractional = Decimal.fromInt(decimalHighSlider).shift(-2) + Decimal.fromInt(decimalLowSlider).shift(-4);
+    final total = whole + fractional;
 
     return Money(
       amount: isNegative ? -total : total,
@@ -34,26 +38,50 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final formatter = MoneyFormatter(
+      fractionalMode: fractionalMode,
+      displayCurrency: displayCurrency,
+      displayNegativeSign: displayNegativeSign,
+      separators: separatorsType.resolve(context),
+      zeroText: 'Ø',
+    );
     return Scaffold(
-      appBar: AppBar(title: const Text('MoneyLabel')),
+      appBar: AppBar(
+        title: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('MoneyLabel'),
+            Text(
+              'and MoneyFormatter',
+              style: Theme.of(context).textTheme.labelSmall,
+            ),
+          ],
+        ),
+      ),
       body: Column(
         children: [
           Container(
             color: const Color(0xFFEEEEEE),
             padding: const EdgeInsets.all(32),
             child: Center(
-              child: MoneyLabel(
-                separators: separatorsType.resolve(context),
-                money: currentMoney,
-                animation: animated ? const MoneyLabelAnimation() : MoneyLabelAnimation.none,
-                fractionalMode: fractionalMode,
-                displayCurrency: displayCurrency,
-                displayNegativeSign: displayNegativeSign,
-                positiveColor: Colors.blue,
-                negativeColor: Colors.red,
-                zeroColor: Colors.grey,
-                primaryTextStyle: Theme.of(context).textTheme.headlineMedium,
-                secondaryPadding: const EdgeInsets.only(top: 10),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  MoneyLabel(
+                    separators: separatorsType.resolve(context),
+                    money: money,
+                    animation: animated ? const MoneyLabelAnimation() : MoneyLabelAnimation.none,
+                    fractionalMode: fractionalMode,
+                    displayCurrency: displayCurrency,
+                    displayNegativeSign: displayNegativeSign,
+                    positiveColor: Colors.blue,
+                    negativeColor: Colors.red,
+                    zeroColor: Colors.grey,
+                    primaryTextStyle: Theme.of(context).textTheme.headlineMedium,
+                    zeroText: 'Ø',
+                  ),
+                  Text(formatter.format(money)),
+                ],
               ),
             ),
           ),
@@ -82,20 +110,30 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                 ),
 
                 _SliderTile(
-                  title: 'Amount ${highSlider}__.__',
+                  title: 'Amount ${highSlider.toString().padLeft(2, '0')}____.____',
                   value: highSlider,
                   onChanged: (x) => setState(() => highSlider = x),
                 ),
+                _SliderTile(
+                  title: 'Amount __${mediumSlider.toString().padLeft(2, '0')}__.____',
+                  value: mediumSlider,
+                  onChanged: (x) => setState(() => mediumSlider = x),
+                ),
 
                 _SliderTile(
-                  title: 'Amount __$lowSlider.__',
+                  title: 'Amount ____${lowSlider.toString().padLeft(2, '0')}.____',
                   value: lowSlider,
                   onChanged: (x) => setState(() => lowSlider = x),
                 ),
                 _SliderTile(
-                  title: 'Amount ____.${decimalSlider}',
-                  value: decimalSlider,
-                  onChanged: (x) => setState(() => decimalSlider = x),
+                  title: 'Amount ______.${decimalHighSlider.toString().padLeft(2, '0')}__',
+                  value: decimalHighSlider,
+                  onChanged: (x) => setState(() => decimalHighSlider = x),
+                ),
+                _SliderTile(
+                  title: 'Amount ______.__${decimalLowSlider.toString().padLeft(2, '0')}',
+                  value: decimalLowSlider,
+                  onChanged: (x) => setState(() => decimalLowSlider = x),
                 ),
 
                 const SizedBox(height: 16),
@@ -106,14 +144,12 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                     value: currency,
                     decoration: const InputDecoration(
                       labelText: 'Currency',
-                      border: OutlineInputBorder(),
                     ),
-                    items: [CurrencyCodes.usd, CurrencyCodes.bhd, CurrencyCodes.sgd, CurrencyCodes.irr].map((e) {
-                      return DropdownMenuItem(
-                        value: e,
-                        child: Text(e),
-                      );
-                    }).toList(),
+                    items: [CurrencyCodes.usd, CurrencyCodes.bhd, CurrencyCodes.sgd, CurrencyCodes.irr]
+                        .map(
+                          (e) => DropdownMenuItem(value: e, child: Text(e)),
+                        )
+                        .toList(),
                     onChanged: (value) {
                       if (value != null) {
                         setState(() => currency = value);
@@ -121,22 +157,19 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 24),
-
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: DropdownButtonFormField<MoneyLabelFractionalMode>(
+                  child: DropdownButtonFormField<FractionalMode>(
                     value: fractionalMode,
                     decoration: const InputDecoration(
                       labelText: 'Fractional mode',
-                      border: OutlineInputBorder(),
                     ),
-                    items: MoneyLabelFractionalMode.values.map((e) {
-                      return DropdownMenuItem(
-                        value: e,
-                        child: Text(e.name),
-                      );
-                    }).toList(),
+                    items: FractionalMode.values
+                        .map(
+                          (e) => DropdownMenuItem(value: e, child: Text(e.name)),
+                        )
+                        .toList(),
                     onChanged: (value) {
                       if (value != null) {
                         setState(() => fractionalMode = value);
@@ -144,25 +177,22 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: DropdownButtonFormField<_SeparatorsType>(
+                  child: DropdownButtonFormField<SeparatorsType>(
                     value: separatorsType,
                     decoration: const InputDecoration(
                       labelText: 'Separators',
-                      border: OutlineInputBorder(),
                     ),
-                    items: _SeparatorsType.values.map((e) {
-                      return DropdownMenuItem(
-                        value: e,
-                        child: Text(e.name),
-                      );
-                    }).toList(),
+                    items: SeparatorsType.values
+                        .map(
+                          (e) => DropdownMenuItem(value: e, child: Text(e.name)),
+                        )
+                        .toList(),
                     onChanged: (value) {
-                      if (value != null) {
-                        setState(() => separatorsType = value);
-                      }
+                      if (value == null) return;
+                      setState(() => separatorsType = value);
                     },
                   ),
                 ),
@@ -172,32 +202,6 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
         ],
       ),
     );
-  }
-}
-
-enum _SeparatorsType {
-  fromLocalePlus,
-  standard,
-  polish,
-  verbose,
-}
-
-extension _SeparatorsTypeResolver on _SeparatorsType {
-  AmountFormatSeparatorsData? resolve(BuildContext context) {
-    switch (this) {
-      case _SeparatorsType.fromLocalePlus:
-        // [AmountFormatSeparators] InheritedWidget will be used created in `main.dart`
-        return null;
-
-      case _SeparatorsType.polish:
-        return AmountFormatSeparatorsData.pl;
-
-      case _SeparatorsType.verbose:
-        return const AmountFormatSeparatorsData(grouping: 'g', decimal: 'd');
-
-      case _SeparatorsType.standard:
-        return const AmountFormatSeparatorsData();
-    }
   }
 }
 

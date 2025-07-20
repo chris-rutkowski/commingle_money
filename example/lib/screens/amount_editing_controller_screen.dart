@@ -4,6 +4,8 @@ import 'package:commingle_money/commingle_money.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
+import '../utils/separators_type.dart';
+
 final class AmountEditingControllerScreen extends StatefulWidget {
   const AmountEditingControllerScreen({super.key});
 
@@ -12,11 +14,16 @@ final class AmountEditingControllerScreen extends StatefulWidget {
 }
 
 final class _AmountEditingControllerScreenState extends State<AmountEditingControllerScreen> {
+  var separatorsType = SeparatorsType.standard;
+
   final controller = AmountEditingController(precision: 2, amount: Decimal.parse('3532.2312'));
 
   @override
   void initState() {
     super.initState();
+
+    controller.separators = separatorsType.resolve(context);
+
     controller.addListener(() {
       debugPrint('Controller value changed: ${controller.value}');
 
@@ -65,14 +72,17 @@ final class _AmountEditingControllerScreenState extends State<AmountEditingContr
               },
             ),
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 16.0, top: 16),
-            child: Text('Interact:'),
-          ),
+
           ListTile(
             title: const Text('Dismiss keyboard'),
             onTap: () {
               FocusScope.of(context).unfocus();
+            },
+          ),
+          ListTile(
+            title: const Text('Set value: null'),
+            onTap: () {
+              controller.value = null;
             },
           ),
           ListTile(
@@ -81,31 +91,35 @@ final class _AmountEditingControllerScreenState extends State<AmountEditingContr
               controller.value = Decimal.parse('12345.6789');
             },
           ),
-          ListTile(
-            title: const Text('Set precision digits'),
-            subtitle: Wrap(
-              children: [
-                TextButton(
-                  onPressed: () => controller.precision = null,
-                  child: const Text('null'),
-                ),
-                TextButton(
-                  onPressed: () => controller.precision = 1,
-                  child: const Text('1'),
-                ),
-                TextButton(
-                  onPressed: () => controller.precision = 2,
-                  child: const Text('2'),
-                ),
-                TextButton(
-                  onPressed: () => controller.precision = 3,
-                  child: const Text('3'),
-                ),
-                TextButton(
-                  onPressed: () => controller.precision = 8,
-                  child: const Text('8'),
-                ),
-              ],
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: DropdownButtonFormField<int?>(
+              value: controller.precision,
+              decoration: const InputDecoration(
+                labelText: 'Precision digits',
+              ),
+              items: [null, 1, 2, 3, 8].map((e) => DropdownMenuItem(value: e, child: Text('$e'))).toList(),
+              onChanged: (value) {
+                controller.precision = value;
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: DropdownButtonFormField<SeparatorsType>(
+              value: separatorsType,
+              decoration: const InputDecoration(
+                labelText: 'Separators',
+              ),
+              items: SeparatorsType.values.map((e) => DropdownMenuItem(value: e, child: Text(e.name))).toList(),
+              onChanged: (value) {
+                if (value == null) return;
+                setState(() => separatorsType = value);
+                controller.separators = value.resolve(context);
+              },
             ),
           ),
         ],
