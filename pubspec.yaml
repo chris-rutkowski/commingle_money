@@ -5,14 +5,14 @@ homepage: https://commingle.app
 repository: https://github.com/chris-rutkowski/commingle_money
 
 environment:
-  sdk: ^3.8.0
+  sdk: ^3.10.7
   flutter: ">=1.17.0"
 
 dependencies:
   animated_flip_counter: ^0.3.4
   decimal: ^3.2.4
-  equatable: ^2.0.7
-  expressions: ^0.2.5+2
+  equatable: ^2.0.8
+  expressions: ^0.2.5+3
   flutter:
     sdk: flutter
 
