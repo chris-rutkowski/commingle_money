@@ -57,6 +57,17 @@ void main() {
       expect(controller.operator, isNull);
       expect(controller.value.toString(), '15');
     });
+
+    test('pending operator can be cleared explicitly', () {
+      final controller = AnimatedMoneyFieldController()..replaceEditingText('5');
+
+      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      controller.clearPendingOperator();
+
+      expect(controller.operator, isNull);
+      expect(controller.leftInput, '5');
+      expect(controller.rawEditingText, '5');
+    });
   });
 
   group('AnimatedMoneyField widget', () {
@@ -96,10 +107,62 @@ void main() {
       await tester.pump();
       await tester.pump(const Duration(milliseconds: 250));
 
-      expect(find.text('USD '), findsOneWidget);
-      expect(find.text('12'), findsOneWidget);
-      expect(find.text('.'), findsOneWidget);
-      expect(find.text('00'), findsOneWidget);
+      expect(find.text('USD '), findsAtLeastNWidgets(1));
+      expect(find.text('12'), findsAtLeastNWidgets(1));
+      expect(find.text('.'), findsAtLeastNWidgets(1));
+      expect(find.text('00'), findsAtLeastNWidgets(1));
+      expect(find.byType(FittedBox), findsOneWidget);
+    });
+
+    testWidgets('backspace removes pending operator and unfocus evaluates expression', (tester) async {
+      final focusNode = FocusNode();
+      final controller = AnimatedMoneyFieldController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: AnimatedMoneyField(
+                focusNode: focusNode,
+                controller: controller,
+                contentAnimationDuration: const Duration(milliseconds: 50),
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(AnimatedMoneyField));
+      await tester.pump();
+
+      await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '5');
+      await tester.pump();
+
+      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      await tester.pump();
+
+      final hiddenBeforeBackspace = tester.widget<TextField>(
+        find.byKey(const Key('animated-money-field-hidden-input')),
+      );
+      expect(hiddenBeforeBackspace.controller!.selection.isCollapsed, isFalse);
+
+      await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '');
+      await tester.pump();
+
+      expect(controller.operator, isNull);
+      expect(find.text('USD '), findsAtLeastNWidgets(1));
+
+      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      await tester.pump();
+      await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '2');
+      await tester.pump();
+
+      focusNode.unfocus();
+      await tester.pump();
+
+      expect(controller.operator, isNull);
+      expect(controller.value.toString(), '7');
+      expect(find.text('USD '), findsAtLeastNWidgets(1));
     });
   });
 }

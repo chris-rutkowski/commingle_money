@@ -58,6 +58,8 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                   child: AnimatedMoneyField(
                     controller: controller,
                     focusNode: focusNode,
+                    cursorBlinkDuration: const Duration(milliseconds: 900),
+                    contentAnimationDuration: const Duration(milliseconds: 900),
                     style: textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600),
                     secondaryStyle: textTheme.titleLarge,
                   ),

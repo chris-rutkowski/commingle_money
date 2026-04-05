@@ -55,6 +55,8 @@ final class AnimatedMoneyFieldController extends ChangeNotifier {
   /// Raw text of the right operand.
   String get rightInput => _rightInput;
 
+  bool get hasPendingOperatorWithoutRightOperand => _operator != null && _rightInput.isEmpty;
+
   bool get _isEditingRightOperand => _operator != null;
 
   String get _activeInput => _isEditingRightOperand ? _rightInput : _leftInput;
@@ -91,6 +93,13 @@ final class AnimatedMoneyFieldController extends ChangeNotifier {
     }
 
     _operator = newOperator;
+    notifyListeners();
+  }
+
+  /// Removes the pending operator if there is no second operand yet.
+  void clearPendingOperator() {
+    if (!hasPendingOperatorWithoutRightOperand) return;
+    _operator = null;
     notifyListeners();
   }
 
@@ -218,6 +227,12 @@ final class AnimatedMoneyField extends StatefulWidget {
   /// Optional color for placeholder parts such as `0` and trailing decimal zeroes.
   final Color? placeholderColor;
 
+  /// Duration of the cursor blinking cycle.
+  final Duration cursorBlinkDuration;
+
+  /// Duration used for visible field transitions.
+  final Duration contentAnimationDuration;
+
   const AnimatedMoneyField({
     super.key,
     this.currency = 'USD',
@@ -227,6 +242,8 @@ final class AnimatedMoneyField extends StatefulWidget {
     this.style,
     this.secondaryStyle,
     this.placeholderColor,
+    this.cursorBlinkDuration = const Duration(milliseconds: 700),
+    this.contentAnimationDuration = const Duration(milliseconds: 550),
   });
 
   @override
@@ -238,6 +255,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
   late final AnimationController _cursorController;
 
   AnimatedMoneyFieldController? _internalController;
+  static const _pendingOperatorBackspaceSentinel = '0';
 
   AnimatedMoneyFieldController get _controller => widget.controller ?? _internalController!;
 
@@ -257,7 +275,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
     _hiddenTextController = TextEditingController(text: _controller.rawEditingText);
     _cursorController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 700),
+      duration: widget.cursorBlinkDuration,
     );
 
     _controller.addListener(_onControllerChange);
@@ -271,6 +289,10 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
   @override
   void didUpdateWidget(covariant AnimatedMoneyField oldWidget) {
     super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.cursorBlinkDuration != widget.cursorBlinkDuration) {
+      _cursorController.duration = widget.cursorBlinkDuration;
+    }
 
     if (oldWidget.controller != widget.controller) {
       oldWidget.controller?.removeListener(_onControllerChange);
@@ -312,15 +334,20 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
   }
 
   void _syncHiddenText() {
-    final text = _controller.rawEditingText;
+    final text = _controller.hasPendingOperatorWithoutRightOperand
+        ? _pendingOperatorBackspaceSentinel
+        : _controller.rawEditingText;
+    final selection = _controller.hasPendingOperatorWithoutRightOperand
+        ? const TextSelection(baseOffset: 0, extentOffset: 1)
+        : TextSelection.collapsed(offset: text.length);
 
-    if (_hiddenTextController.text == text && _hiddenTextController.selection.baseOffset == text.length) {
+    if (_hiddenTextController.text == text && _hiddenTextController.selection == selection) {
       return;
     }
 
     _hiddenTextController.value = TextEditingValue(
       text: text,
-      selection: TextSelection.collapsed(offset: text.length),
+      selection: selection,
     );
   }
 
@@ -328,6 +355,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
     if (widget.focusNode.hasFocus) {
       _cursorController.repeat(reverse: true);
     } else {
+      _controller.evaluate();
       _cursorController.stop();
       _cursorController.value = 1;
     }
@@ -336,6 +364,11 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
   }
 
   void _onHiddenTextChanged(String value) {
+    if (_controller.hasPendingOperatorWithoutRightOperand && value.isEmpty) {
+      _controller.clearPendingOperator();
+      return;
+    }
+
     _controller.replaceEditingText(value);
   }
 
@@ -365,44 +398,52 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: widget.focusNode.requestFocus,
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Center(
-            child: AnimatedSize(
-              duration: const Duration(milliseconds: 220),
-              curve: Curves.easeOutCubic,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: chunks,
-              ),
-            ),
-          ),
-          Positioned(
-            child: Opacity(
-              opacity: 0,
-              child: SizedBox(
-                width: 1,
-                height: 1,
-                child: TextField(
-                  key: const Key('animated-money-field-hidden-input'),
-                  controller: _hiddenTextController,
-                  focusNode: widget.focusNode,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  textInputAction: TextInputAction.done,
-                  enableInteractiveSelection: false,
-                  showCursor: false,
-                  decoration: const InputDecoration(border: InputBorder.none, isCollapsed: true),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
-                  ],
-                  onChanged: _onHiddenTextChanged,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                width: constraints.maxWidth,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: AnimatedSize(
+                    duration: widget.contentAnimationDuration,
+                    curve: Curves.easeOutCubic,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: chunks,
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-        ],
+              Positioned(
+                child: Opacity(
+                  opacity: 0,
+                  child: SizedBox(
+                    width: 1,
+                    height: 1,
+                    child: TextField(
+                      key: const Key('animated-money-field-hidden-input'),
+                      controller: _hiddenTextController,
+                      focusNode: widget.focusNode,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      textInputAction: TextInputAction.done,
+                      enableInteractiveSelection: false,
+                      showCursor: false,
+                      decoration: const InputDecoration(border: InputBorder.none, isCollapsed: true),
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                      ],
+                      onChanged: _onHiddenTextChanged,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
@@ -445,6 +486,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
           id: id,
           text: text,
           style: style,
+          duration: widget.contentAnimationDuration,
         ),
       );
     }
@@ -513,35 +555,54 @@ final class _AnimatedMoneyChunk extends StatelessWidget {
   final String id;
   final String text;
   final TextStyle style;
+  final Duration duration;
 
   const _AnimatedMoneyChunk({
     required this.id,
     required this.text,
     required this.style,
+    required this.duration,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 220),
-      switchInCurve: Curves.easeOutCubic,
-      switchOutCurve: Curves.easeInCubic,
-      transitionBuilder: (child, animation) {
-        final fade = CurvedAnimation(parent: animation, curve: Curves.easeOut);
-        final scale = Tween<double>(begin: 0.86, end: 1).animate(fade);
+    return AnimatedSize(
+      duration: duration,
+      curve: Curves.easeOutCubic,
+      child: AnimatedSwitcher(
+        duration: duration,
+        switchInCurve: Curves.easeOutCubic,
+        switchOutCurve: Curves.easeInCubic,
+        layoutBuilder: (currentChild, previousChildren) {
+          return Stack(
+            alignment: Alignment.center,
+            clipBehavior: Clip.none,
+            children: [
+              ...previousChildren,
+              ...?switch (currentChild) {
+                null => null,
+                final child => [child],
+              },
+            ],
+          );
+        },
+        transitionBuilder: (child, animation) {
+          final fade = CurvedAnimation(parent: animation, curve: Curves.easeOut);
+          final scale = Tween<double>(begin: 0.86, end: 1).animate(fade);
 
-        return FadeTransition(
-          opacity: fade,
-          child: ScaleTransition(
-            scale: scale,
-            child: child,
-          ),
-        );
-      },
-      child: Text(
-        text,
-        key: ValueKey('$id:$text:${style.color}:${style.fontSize}'),
-        style: style,
+          return FadeTransition(
+            opacity: fade,
+            child: ScaleTransition(
+              scale: scale,
+              child: child,
+            ),
+          );
+        },
+        child: Text(
+          text,
+          key: ValueKey('$id:$text:${style.color}:${style.fontSize}'),
+          style: style,
+        ),
       ),
     );
   }
