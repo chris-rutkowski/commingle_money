@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'amount_editing_controller_screen.dart';
+import 'animated_money_field_screen.dart';
 import 'money_editing_controller_screen.dart';
 import 'money_label_screen.dart';
 
@@ -32,6 +33,12 @@ final class MenuScreen extends StatelessWidget {
             subtitle: const Text('and MoneyFormatter'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const MoneyLabelScreen()));
+            },
+          ),
+          ListTile(
+            title: const Text('Animated Money Field'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const AnimatedMoneyFieldScreen()));
             },
           ),
         ],
