@@ -144,45 +144,10 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
     final effectiveSeparators = _resolveEffectiveSeparators(context);
 
-    // addPendingDigitsAnimated();
-    // addPendingGroupingSeparatorAnimated(needed: desiredGroupingIndexes.length, separator: effectiveSeparators.grouping);
-    // removeExcessGroupingSeparatorsAnimated(needed: desiredGroupingIndexes.length);
-    // rearrangeGroupingSeparators(indexes: desiredGroupingIndexes);
-    // manageFractional(separator: effectiveSeparators.decimal);
-
     addPendingDigits(animated: false);
     addPendingGroupingSeparator(animated: false, separator: effectiveSeparators.grouping);
     rearrangeGroupingSeparators(separator: effectiveSeparators.grouping);
     manageFractional(animated: false, separator: effectiveSeparators.decimal);
-
-    // final initialCharacters = widget.money.amount.abs().toString().split('');
-    // final effectiveSeparators = _resolveEffectiveSeparators(context);
-
-    // for (final character in initialCharacters) {
-    //   final animationController = AnimationController(vsync: this, duration: widget.animationDuration, value: 1);
-    //   characters.add(
-    //     AnimatedCharacter(
-    //       role: .digit,
-    //       character: character,
-    //       animationController: animationController,
-    //     ),
-    //   );
-    // }
-
-    // final components = DecimalComponents.fromMoney(widget.money);
-
-    // final formatted = AmountFormatter.formattedMain(components.main, effectiveSeparators.grouping);
-    // final desiredGroupingIndexes = formatted.split('').allIndexesOf(effectiveSeparators.grouping);
-    // for (var i = 0; i < desiredGroupingIndexes.length; i++) {
-    //   characters.insert(
-    //     desiredGroupingIndexes[i],
-    //     AnimatedCharacter(
-    //       role: .groupingSeparator,
-    //       character: effectiveSeparators.grouping,
-    //       animationController: AnimationController(vsync: this, duration: widget.animationDuration, value: 1),
-    //     ),
-    //   );
-    // }
   }
 
   void retireCharacter(AnimatedCharacter character) {
