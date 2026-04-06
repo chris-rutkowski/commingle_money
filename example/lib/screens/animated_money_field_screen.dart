@@ -55,7 +55,9 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
               mainAxisSize: MainAxisSize.min,
               children: [
                 AnimatedMoneyLabel(
-                  money: Money(amount: Decimal.parse('1232455'), currencyCode: CurrencyCodes.usd),
+                  money: Money(amount: Decimal.parse('25320'), currencyCode: CurrencyCodes.usd),
+                  // money: Money(amount: Decimal.parse('2539.2'), currencyCode: CurrencyCodes.usd),
+                  forceFractional: true,
                 ),
                 ConstrainedBox(
                   constraints: const BoxConstraints(minHeight: 72),

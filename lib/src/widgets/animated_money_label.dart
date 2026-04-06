@@ -11,6 +11,7 @@ final class AnimatedMoneyLabel extends StatefulWidget {
   final Duration animationDuration;
   final Curve curve;
   final AmountFormatSeparatorsData? separators;
+  final bool forceFractional;
 
   const AnimatedMoneyLabel({
     super.key,
@@ -18,6 +19,7 @@ final class AnimatedMoneyLabel extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
     this.separators,
+    this.forceFractional = false,
   });
 
   @override
@@ -66,8 +68,22 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
           child: ListenableBuilder(
             listenable: character.animationController,
             builder: (context, child) {
+              final scale = character.animationController.isForwardOrCompleted
+                  ? Tween(
+                          begin: 0.75,
+                          end: 1.0,
+                        )
+                        .animate(
+                          CurvedAnimation(
+                            parent: character.animationController,
+                            curve: Curves.easeOutBack,
+                          ),
+                        )
+                        .value
+                  : character.animationController.value;
+
               return Transform.scale(
-                scale: character.animationController.value,
+                scale: scale,
 
                 // scale: bounce.value,
                 child: Opacity(
@@ -153,37 +169,64 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
   }
 
   @override
+  void dispose() {
+    // TODO: check if animation was still runing and we do double dispose or something
+    for (final character in characters) {
+      character.animationController.dispose();
+    }
+
+    for (final character in retiredCharacters) {
+      character.animationController.dispose();
+    }
+
+    super.dispose();
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final initialCharacters = widget.money.amount.abs().toString().split('');
     final effectiveSeparators = _resolveEffectiveSeparators(context);
 
-    for (final character in initialCharacters) {
-      final animationController = AnimationController(vsync: this, duration: widget.animationDuration, value: 1);
-      characters.add(
-        AnimatedCharacter(
-          role: .digit,
-          character: character,
-          animationController: animationController,
-        ),
-      );
-    }
+    // addPendingDigitsAnimated();
+    // addPendingGroupingSeparatorAnimated(needed: desiredGroupingIndexes.length, separator: effectiveSeparators.grouping);
+    // removeExcessGroupingSeparatorsAnimated(needed: desiredGroupingIndexes.length);
+    // rearrangeGroupingSeparators(indexes: desiredGroupingIndexes);
+    // manageFractional(separator: effectiveSeparators.decimal);
 
-    final components = DecimalComponents.fromMoney(widget.money);
+    addPendingDigits(animated: false);
+    addPendingGroupingSeparator(animated: false, separator: effectiveSeparators.grouping);
+    rearrangeGroupingSeparators(separator: effectiveSeparators.grouping);
+    manageFractional(animated: false, separator: effectiveSeparators.decimal);
 
-    final formatted = AmountFormatter.formattedMain(components.main, effectiveSeparators.grouping);
-    final desiredGroupingIndexes = formatted.split('').allIndexesOf(effectiveSeparators.grouping);
-    for (var i = 0; i < desiredGroupingIndexes.length; i++) {
-      characters.insert(
-        desiredGroupingIndexes[i],
-        AnimatedCharacter(
-          role: .groupingSeparator,
-          character: effectiveSeparators.grouping,
-          animationController: AnimationController(vsync: this, duration: widget.animationDuration, value: 1),
-        ),
-      );
-    }
+    // final initialCharacters = widget.money.amount.abs().toString().split('');
+    // final effectiveSeparators = _resolveEffectiveSeparators(context);
+
+    // for (final character in initialCharacters) {
+    //   final animationController = AnimationController(vsync: this, duration: widget.animationDuration, value: 1);
+    //   characters.add(
+    //     AnimatedCharacter(
+    //       role: .digit,
+    //       character: character,
+    //       animationController: animationController,
+    //     ),
+    //   );
+    // }
+
+    // final components = DecimalComponents.fromMoney(widget.money);
+
+    // final formatted = AmountFormatter.formattedMain(components.main, effectiveSeparators.grouping);
+    // final desiredGroupingIndexes = formatted.split('').allIndexesOf(effectiveSeparators.grouping);
+    // for (var i = 0; i < desiredGroupingIndexes.length; i++) {
+    //   characters.insert(
+    //     desiredGroupingIndexes[i],
+    //     AnimatedCharacter(
+    //       role: .groupingSeparator,
+    //       character: effectiveSeparators.grouping,
+    //       animationController: AnimationController(vsync: this, duration: widget.animationDuration, value: 1),
+    //     ),
+    //   );
+    // }
   }
 
   void retireCharacter(AnimatedCharacter character) {
@@ -201,12 +244,6 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
     super.didUpdateWidget(oldWidget);
     final effectiveSeparators = _resolveEffectiveSeparators(context);
 
-    if (oldWidget.money == widget.money) {
-      print('not animating due to same money');
-      // no need to do anything with tokens
-      return;
-    }
-
     // if (oldWidget.money.currencyCode != widget.money.currencyCode) {
     //   print('not animating due to different currency code');
     //   // recreate tokens
@@ -217,47 +254,15 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
     // if ((oldCharacters.length - newCharacters.length).abs() == 1) {
 
-    final oldCharacters = oldWidget.money.amount.abs().toString().split('');
-    final newCharacters = widget.money.amount.abs().toString().split('');
-    final newComponents = DecimalComponents.fromMoney(widget.money);
-    final newFormatted = AmountFormatter.formattedMain(newComponents.main, effectiveSeparators.grouping);
-    final desiredGroupingIndexes = newFormatted.split('').allIndexesOf(effectiveSeparators.grouping);
+    // final newCharacters = widget.money.amount.abs().toString().split('');
 
-    // adding digits
-    if (newCharacters.length > oldCharacters.length) {
-      for (var i = oldCharacters.length; i < newCharacters.length; i++) {
-        characters.add(
-          AnimatedCharacter(
-            role: .digit,
-            character: newCharacters[i],
-            animationController: AnimationController(vsync: this, duration: widget.animationDuration)..forward(),
-          ),
-        );
-      }
-    }
-
-    // removing excess digits
-    final digitsCharactersIndexes = characters.allIndexesWhere((e) => e.role == .digit);
-    final charactersToRetire = digitsCharactersIndexes
-        .sublist(newCharacters.length)
-        .map((index) => characters[index])
-        .toList(growable: false);
-
-    for (final character in charactersToRetire) {
-      retireCharacter(character);
-    }
-
-    // updating existing digits
-    for (var i = 0; i < newCharacters.length; i++) {
-      final index = digitsCharactersIndexes[i];
-      if (characters[index].character != newCharacters[i]) {
-        characters[index].character = newCharacters[i];
-      }
-    }
-
-    addPendingGroupingSeparatorAnimated(needed: desiredGroupingIndexes.length, separator: effectiveSeparators.grouping);
-    removeExcessGroupingSeparatorsAnimated(needed: desiredGroupingIndexes.length);
-    rearrangeGroupingSeparators(indexes: desiredGroupingIndexes);
+    addPendingDigits();
+    removeExcessDigits();
+    updateExistingDigits();
+    addPendingGroupingSeparator(separator: effectiveSeparators.grouping);
+    removeExcessGroupingSeparatorsAnimated(separator: effectiveSeparators.grouping);
+    rearrangeGroupingSeparators(separator: effectiveSeparators.grouping);
+    manageFractional(separator: effectiveSeparators.decimal);
 
     // TODO adjusting decimal separators
 
@@ -272,8 +277,58 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
     return widget.separators ?? AmountFormatSeparators.of(context);
   }
 
+  void addPendingDigits({bool animated = true}) {
+    final components = DecimalComponents.fromMoney(widget.money);
+    final rawCharacters = components.main.toString().split('');
+
+    final digitsCharactersLength = characters.where((e) => e.role == .digit).length;
+
+    for (var i = digitsCharactersLength; i < rawCharacters.length; i++) {
+      characters.add(
+        AnimatedCharacter(
+          role: .digit,
+          character: rawCharacters[i],
+          animationController: createAnimationController(animate: animated),
+        ),
+      );
+    }
+  }
+
+  void removeExcessDigits() {
+    final components = DecimalComponents.fromMoney(widget.money);
+    final rawCharacters = components.main.toString().split('');
+
+    final digitsCharactersIndexes = characters.allIndexesWhere((e) => e.role == .digit);
+    final charactersToRetire = digitsCharactersIndexes
+        .sublist(rawCharacters.length)
+        .map((index) => characters[index])
+        .toList(growable: false);
+
+    for (final character in charactersToRetire) {
+      retireCharacter(character);
+    }
+  }
+
+  void updateExistingDigits() {
+    final components = DecimalComponents.fromMoney(widget.money);
+    final rawCharacters = components.main.toString().split('');
+
+    final digitsCharactersIndexes = characters.allIndexesWhere((e) => e.role == .digit);
+
+    for (var i = 0; i < rawCharacters.length; i++) {
+      final index = digitsCharactersIndexes[i];
+      if (characters[index].character != rawCharacters[i]) {
+        characters[index].character = rawCharacters[i];
+      }
+    }
+  }
+
   /// adds grouping separators in the beginning of characters list later to be rearranged by [rearrangeGroupingSeparators]
-  void addPendingGroupingSeparatorAnimated({required int needed, required String separator}) {
+  void addPendingGroupingSeparator({bool animated = true, required String separator}) {
+    final components = DecimalComponents.fromMoney(widget.money);
+    final formatted = AmountFormatter.formattedMain(components.main, separator);
+    final needed = formatted.split('').where((e) => e == separator).length;
+
     final existing = characters.where((e) => e.role == .groupingSeparator).toList();
 
     for (var i = 0; i < needed - existing.length; i++) {
@@ -282,13 +337,17 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
         AnimatedCharacter(
           role: .groupingSeparator,
           character: separator,
-          animationController: AnimationController(vsync: this, duration: widget.animationDuration)..forward(),
+          animationController: createAnimationController(animate: animated),
         ),
       );
     }
   }
 
-  void removeExcessGroupingSeparatorsAnimated({required int needed}) {
+  void removeExcessGroupingSeparatorsAnimated({required String separator}) {
+    final components = DecimalComponents.fromMoney(widget.money);
+    final formatted = AmountFormatter.formattedMain(components.main, separator);
+    final needed = formatted.split('').where((e) => e == separator).length;
+
     final separators = characters.where((e) => e.role == .groupingSeparator).toList();
 
     final charactersToRetire = separators.sublist(0, separators.length - needed).toList(growable: false);
@@ -298,7 +357,11 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
     }
   }
 
-  void rearrangeGroupingSeparators({required List<int> indexes}) {
+  void rearrangeGroupingSeparators({required String separator}) {
+    final components = DecimalComponents.fromMoney(widget.money);
+    final formatted = AmountFormatter.formattedMain(components.main, separator);
+    final indexes = formatted.split('').allIndexesOf(separator);
+
     final separators = characters.where((e) => e.role == .groupingSeparator).toList();
     for (final separator in separators) {
       characters.remove(separator);
@@ -311,11 +374,63 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       );
     }
   }
+
+  void manageFractional({bool animated = true, required String separator}) {
+    // or if money has that part
+    final components = DecimalComponents.fromMoney(widget.money);
+    final show = components.fractional != 0 || widget.forceFractional;
+
+    if (show) {
+      if (characters.any((e) => e.role == .decimalSeparator)) {
+        return;
+      }
+
+      characters.add(
+        AnimatedCharacter(
+          role: .decimalSeparator,
+          character: separator,
+          animationController: createAnimationController(animate: animated),
+        ),
+      );
+      characters.add(
+        AnimatedCharacter(
+          role: .decimalDigit,
+          character: '0',
+          animationController: createAnimationController(animate: animated),
+        ),
+      );
+      characters.add(
+        AnimatedCharacter(
+          role: .decimalDigit,
+          character: '0',
+          animationController: createAnimationController(animate: animated),
+        ),
+      );
+    } else {
+      characters
+          .where((e) => e.role == .decimalSeparator || e.role == .decimalDigit)
+          .toList(growable: false)
+          .forEach(retireCharacter);
+    }
+  }
+
+  AnimationController createAnimationController({required bool animate}) {
+    final controller = AnimationController(vsync: this, duration: widget.animationDuration);
+    if (animate) {
+      controller.forward();
+    } else {
+      controller.value = 1;
+    }
+
+    return controller;
+  }
 }
 
 enum AnimatedCharacterRole {
   digit,
   groupingSeparator,
+  decimalSeparator,
+  decimalDigit,
 }
 
 final class AnimatedCharacter {
