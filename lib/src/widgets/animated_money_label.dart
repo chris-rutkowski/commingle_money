@@ -2,11 +2,15 @@
 
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../commingle_money.dart';
 import '../private/amount_formatter.dart';
 import '../private/decimal_components.dart';
+
+// To improve:
+// - AnimatedPositionedDirectional for RTL
 
 final class AnimatedMoneyLabel extends StatefulWidget {
   final Money money;
@@ -14,6 +18,8 @@ final class AnimatedMoneyLabel extends StatefulWidget {
   final Curve curve;
   final AmountFormatSeparatorsData? separators;
   final bool forceFractional;
+  final bool showCursor;
+  final Color? cursorColor;
 
   const AnimatedMoneyLabel({
     super.key,
@@ -22,6 +28,8 @@ final class AnimatedMoneyLabel extends StatefulWidget {
     this.curve = Curves.easeInOut,
     this.separators,
     this.forceFractional = false,
+    this.showCursor = false,
+    this.cursorColor,
   });
 
   @override
@@ -31,6 +39,31 @@ final class AnimatedMoneyLabel extends StatefulWidget {
 final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with TickerProviderStateMixin {
   final characters = <AnimatedCharacter>[];
   final retiredCharacters = <AnimatedCharacter>[];
+  late final AnimationController cursorController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    cursorController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500))
+      ..repeat(reverse: true);
+  }
+
+  @override
+  void dispose() {
+    // TODO: check if animation was still runing and we do double dispose or something
+    for (final character in characters) {
+      character.animationController.dispose();
+    }
+
+    for (final character in retiredCharacters) {
+      character.animationController.dispose();
+    }
+
+    cursorController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,15 +76,11 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
     final textStyle = base.merge(const TextStyle(fontWeight: FontWeight.bold));
 
-    TextPainter(
-      text: TextSpan(text: widget.money.toString(), style: textStyle),
-      textDirection: TextDirection.ltr,
-    ).layout();
-
     final children = <Widget>[];
 
     var leading = 0.0;
     var width = 0.0;
+    var cursorLeading = 0.0;
 
     for (final character in characters) {
       final painter = TextPainter(
@@ -61,7 +90,6 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
       children.add(
         AnimatedPositioned(
-          // TODO: animated positioned directional
           key: character.key,
           duration: widget.animationDuration,
           curve: widget.curve,
@@ -74,12 +102,15 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       character.retiredLeading = leading;
       leading += painter.width;
       width += painter.width;
+
+      if (!character.role.isPlaceholder) {
+        cursorLeading = leading;
+      }
     }
 
     for (final character in retiredCharacters) {
       children.add(
         AnimatedPositioned(
-          // TODO: animated positioned directional
           key: character.key,
           duration: widget.animationDuration,
           curve: widget.curve,
@@ -100,6 +131,15 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
         clipBehavior: Clip.none, // for cursor
         children: [
           ...children,
+          if (widget.showCursor)
+            AnimatedPositioned(
+              key: const ValueKey('cursor'),
+              duration: widget.animationDuration,
+              curve: widget.curve,
+              top: 0,
+              left: cursorLeading,
+              child: BlinkingCursor(controller: cursorController, textStyle: textStyle, color: widget.cursorColor),
+            ),
         ],
 
         // [
@@ -117,25 +157,6 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
         // ],
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    // TODO: check if animation was still runing and we do double dispose or something
-    for (final character in characters) {
-      character.animationController.dispose();
-    }
-
-    for (final character in retiredCharacters) {
-      character.animationController.dispose();
-    }
-
-    super.dispose();
   }
 
   @override
@@ -184,6 +205,9 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
     removeExcessGroupingSeparatorsAnimated(separator: effectiveSeparators.grouping);
     rearrangeGroupingSeparators(separator: effectiveSeparators.grouping);
     manageFractional(separator: effectiveSeparators.decimal);
+
+    cursorController.value = 0;
+    cursorController.repeat(reverse: true);
 
     // TODO adjusting decimal separators
 
@@ -439,6 +463,10 @@ enum AnimatedCharacterRole {
   fractionalPlaceholder,
 }
 
+extension on AnimatedCharacterRole {
+  bool get isPlaceholder => this == .fractionalPlaceholder;
+}
+
 final class AnimatedCharacter {
   final Key key;
   final AnimatedCharacterRole role;
@@ -543,4 +571,61 @@ extension _ListExtensions<T> on List<T> {
   }
 
   bool none(bool Function(T element) test) => !any(test);
+}
+
+final class BlinkingCursor extends StatelessWidget {
+  final AnimationController controller;
+  final TextStyle textStyle;
+  final Color? color;
+
+  const BlinkingCursor({
+    super.key,
+    required this.controller,
+    required this.textStyle,
+    this.color,
+  });
+
+  /// Implementation as per documentation of [TextField.cursorColor]
+  Color _resolveEffectiveColor(BuildContext context) {
+    final result = color ?? DefaultSelectionStyle.of(context).cursorColor;
+
+    if (result != null) {
+      return result;
+    }
+
+    if (Theme.of(context).platform == TargetPlatform.iOS || Theme.of(context).platform == TargetPlatform.macOS) {
+      return CupertinoTheme.of(context).primaryColor;
+    }
+
+    return Theme.of(context).colorScheme.primary;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final weight = 2.0;
+
+    final painter = TextPainter(
+      text: TextSpan(text: '0', style: textStyle),
+      textDirection: TextDirection.ltr,
+    )..layout();
+
+    return FadeTransition(
+      opacity:
+          TweenSequence<double>([
+            TweenSequenceItem(tween: ConstantTween(1.0), weight: 20),
+            TweenSequenceItem(tween: Tween<double>(begin: 1.0, end: 0.0), weight: 10),
+            TweenSequenceItem(tween: ConstantTween(0), weight: 20),
+          ]).animate(
+            CurvedAnimation(parent: controller, curve: Curves.linear),
+          ),
+      child: Transform.translate(
+        offset: Offset(-weight / 2, 0),
+        child: Container(
+          width: weight,
+          height: painter.height,
+          color: _resolveEffectiveColor(context),
+        ),
+      ),
+    );
+  }
 }
