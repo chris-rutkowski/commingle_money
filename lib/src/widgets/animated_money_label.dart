@@ -121,40 +121,46 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       );
     }
 
-    return AnimatedContainer(
-      duration: widget.animationDuration,
-      curve: widget.curve,
-      width: width,
-      height: 40,
-      color: Colors.yellow.withAlpha(50),
-      child: Stack(
-        clipBehavior: Clip.none, // for cursor
-        children: [
-          ...children,
-          if (widget.showCursor)
-            AnimatedPositioned(
-              key: const ValueKey('cursor'),
-              duration: widget.animationDuration,
-              curve: widget.curve,
-              top: 0,
-              left: cursorLeading,
-              child: BlinkingCursor(controller: cursorController, textStyle: textStyle, color: widget.cursorColor),
-            ),
-        ],
+    return FittedBox(
+      child: AnimatedContainer(
+        duration: widget.animationDuration,
+        curve: widget.curve,
+        width: width,
+        height: 40,
+        color: Colors.yellow.withAlpha(50),
+        child: Stack(
+          clipBehavior: Clip.none, // for cursor
+          children: [
+            ...children,
+            if (widget.showCursor)
+              AnimatedPositioned(
+                key: const ValueKey('cursor'),
+                duration: widget.animationDuration,
+                curve: widget.curve,
+                top: 0,
+                left: cursorLeading,
+                child: BlinkingCursor(
+                  controller: cursorController,
+                  textStyle: textStyle,
+                  color: widget.cursorColor,
+                ),
+              ),
+          ],
 
-        // [
-        //   // Text(widget.money.toString()),
-        //   AnimatedPositioned(
-        //     duration: widget.animationDuration,
-        //     curve: widget.curve,
-        //     top: 0,
-        //     left: 20,
-        //     child: Text(
-        //       'a',
-        //       style: textStyle,
-        //     ),
-        //   ),
-        // ],
+          // [
+          //   // Text(widget.money.toString()),
+          //   AnimatedPositioned(
+          //     duration: widget.animationDuration,
+          //     curve: widget.curve,
+          //     top: 0,
+          //     left: 20,
+          //     child: Text(
+          //       'a',
+          //       style: textStyle,
+          //     ),
+          //   ),
+          // ],
+        ),
       ),
     );
   }
