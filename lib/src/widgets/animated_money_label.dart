@@ -1,5 +1,7 @@
 // ignore_for_file: public_member_api_docs // TEMP
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../commingle_money.dart';
@@ -65,37 +67,7 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
           curve: widget.curve,
           top: 0,
           left: leading,
-          child: ListenableBuilder(
-            listenable: character.animationController,
-            builder: (context, child) {
-              final scale = character.animationController.isForwardOrCompleted
-                  ? Tween(
-                          begin: 0.75,
-                          end: 1.0,
-                        )
-                        .animate(
-                          CurvedAnimation(
-                            parent: character.animationController,
-                            curve: Curves.easeOutBack,
-                          ),
-                        )
-                        .value
-                  : character.animationController.value;
-
-              return Transform.scale(
-                scale: scale,
-
-                // scale: bounce.value,
-                child: Opacity(
-                  opacity: character.animationController.value,
-                  child: Text(
-                    character.character,
-                    style: textStyle,
-                  ),
-                ),
-              );
-            },
-          ),
+          child: AnimatedCharacterWidget(character: character, textStyle: textStyle, placeholderColor: Colors.grey),
         ),
       );
 
@@ -113,23 +85,7 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
           curve: widget.curve,
           top: 0,
           left: character.retiredLeading,
-          child: ListenableBuilder(
-            listenable: character.animationController,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: character.animationController.value,
-
-                // scale: bounce.value,
-                child: Opacity(
-                  opacity: character.animationController.value,
-                  child: Text(
-                    character.character,
-                    style: textStyle,
-                  ),
-                ),
-              );
-            },
-          ),
+          child: AnimatedCharacterWidget(character: character, textStyle: textStyle, placeholderColor: Colors.grey),
         ),
       );
     }
@@ -380,40 +336,121 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
   void manageFractional({bool animated = true, required String separator}) {
     // or if money has that part
-    final components = DecimalComponents.fromMoney(widget.money);
+    final components = DecimalComponents.fromDecimal(widget.money.amount);
     final show = components.fractional != 0 || widget.forceFractional;
 
     if (show) {
-      if (characters.any((e) => e.role == .decimalSeparator)) {
-        return;
+      final rawCharacters = components.fractional != 0 ? components.fractional.toString().split('') : <String>[];
+
+      // if (!characters.any((e) => e.role == .decimalDigit)) {
+      //   return;
+      // }
+
+      if (characters.none((e) => e.role == .decimalSeparator)) {
+        characters.add(
+          AnimatedCharacter(
+            role: .decimalSeparator,
+            character: separator,
+            animationController: createAnimationController(animate: animated),
+          ),
+        );
       }
 
-      characters.add(
-        AnimatedCharacter(
-          role: .decimalSeparator,
-          character: separator,
-          animationController: createAnimationController(animate: animated),
-        ),
-      );
-      characters.add(
-        AnimatedCharacter(
-          role: .decimalDigit,
-          character: '0',
-          animationController: createAnimationController(animate: animated),
-        ),
-      );
-      characters.add(
-        AnimatedCharacter(
-          role: .decimalDigit,
-          character: '0',
-          animationController: createAnimationController(animate: animated),
-        ),
-      );
+      Currency.getPrecision(widget.money.currencyCode);
+
+      addPendingFractionalDigits(rawCharacters: rawCharacters, animated: animated);
+      removeExcessFractionalDigits(rawCharacters: rawCharacters, animated: animated);
+      updateExistingFractionalDigits(rawCharacters: rawCharacters, animated: animated);
+      manageFractionalPlaceholders(rawCharacters: rawCharacters, animated: animated);
+
+      // if (characters.any((e) => e.role == .fractionalDigit)) {
+      //   return;
+      // }
+
+      // characters.add(
+      //   AnimatedCharacter(
+      //     role: .fractionalDigit,
+      //     character: '0',
+      //     animationController: createAnimationController(animate: animated),
+      //   ),
+      // );
+      // characters.add(
+      //   AnimatedCharacter(
+      //     role: .fractionalDigit,
+      //     character: '0',
+      //     animationController: createAnimationController(animate: animated),
+      //   ),
+      // );
     } else {
       characters
-          .where((e) => e.role == .decimalSeparator || e.role == .decimalDigit)
+          .where((e) => e.role == .decimalSeparator || e.role == .fractionalDigit || e.role == .fractionalPlaceholder)
           .toList(growable: false)
           .forEach(retireCharacter);
+    }
+  }
+
+  void addPendingFractionalDigits({bool animated = true, required List<String> rawCharacters}) {
+    final existingFractionalDigitsCharactersLength = characters.where((e) => e.role == .fractionalDigit).length;
+
+    var index =
+        characters.lastIndexWhereOrNull((e) => e.role == .fractionalDigit) ??
+        characters.lastIndexWhere((e) => e.role == .decimalSeparator);
+
+    for (var i = existingFractionalDigitsCharactersLength; i < rawCharacters.length; i++) {
+      characters.insert(
+        index + 1,
+        AnimatedCharacter(
+          role: .fractionalDigit,
+          character: rawCharacters[i],
+          animationController: createAnimationController(animate: animated),
+        ),
+      );
+
+      index++;
+    }
+  }
+
+  void manageFractionalPlaceholders({bool animated = true, required List<String> rawCharacters}) {
+    final precision = Currency.getPrecision(widget.money.currencyCode);
+    final needed = max(precision - rawCharacters.length, 0);
+
+    final indexes = characters.allIndexesWhere((e) => e.role == .fractionalPlaceholder).toList(growable: false);
+
+    for (var i = 0; i < needed - indexes.length; i++) {
+      characters.add(
+        AnimatedCharacter(
+          role: .fractionalPlaceholder,
+          character: '0',
+          animationController: createAnimationController(animate: animated),
+        ),
+      );
+    }
+
+    for (var i = 0; i < indexes.length - needed; i++) {
+      retireCharacter(characters[indexes[i]]);
+    }
+  }
+
+  void removeExcessFractionalDigits({bool animated = true, required List<String> rawCharacters}) {
+    final charactersIndexes = characters.allIndexesWhere((e) => e.role == .fractionalDigit);
+    final charactersToRetire = charactersIndexes
+        .sublist(rawCharacters.length)
+        .map((index) => characters[index])
+        .toList(growable: false);
+
+    for (final character in charactersToRetire) {
+      retireCharacter(character);
+    }
+  }
+
+  void updateExistingFractionalDigits({bool animated = true, required List<String> rawCharacters}) {
+    final indexes = characters.allIndexesWhere((e) => e.role == .fractionalDigit);
+
+    for (var i = 0; i < rawCharacters.length; i++) {
+      final index = indexes[i];
+      if (characters[index].character != rawCharacters[i]) {
+        characters[index].character = rawCharacters[i];
+      }
     }
   }
 
@@ -433,7 +470,8 @@ enum AnimatedCharacterRole {
   digit,
   groupingSeparator,
   decimalSeparator,
-  decimalDigit,
+  fractionalDigit,
+  fractionalPlaceholder,
 }
 
 final class AnimatedCharacter {
@@ -453,6 +491,56 @@ final class AnimatedCharacter {
   @override
   String toString() {
     return 'AnimatedCharacter($character - $role)';
+  }
+}
+
+class AnimatedCharacterWidget extends StatelessWidget {
+  final AnimatedCharacter character;
+  final TextStyle textStyle;
+  final Color placeholderColor;
+
+  const AnimatedCharacterWidget({
+    super.key,
+    required this.character,
+    required this.textStyle,
+    required this.placeholderColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final effectiveStyle = textStyle.copyWith(
+      color: character.role == .fractionalPlaceholder ? placeholderColor : null,
+    );
+
+    return ListenableBuilder(
+      listenable: character.animationController,
+      builder: (context, child) {
+        final scale = character.animationController.isForwardOrCompleted
+            ? Tween(
+                    begin: 0.75,
+                    end: 1.0,
+                  )
+                  .animate(
+                    CurvedAnimation(
+                      parent: character.animationController,
+                      curve: Curves.easeOutBack,
+                    ),
+                  )
+                  .value
+            : character.animationController.value;
+
+        return Transform.scale(
+          scale: scale,
+          child: Opacity(
+            opacity: character.animationController.value,
+            child: Text(
+              character.character,
+              style: effectiveStyle,
+            ),
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -477,6 +565,16 @@ extension _ListExtensions<T> on List<T> {
     }
 
     return result;
+  }
+
+  int? lastIndexWhereOrNull(bool Function(T element) test) {
+    for (var i = length - 1; i >= 0; i--) {
+      if (test(this[i])) {
+        return i;
+      }
+    }
+
+    return null;
   }
 
   bool none(bool Function(T element) test) => !any(test);
