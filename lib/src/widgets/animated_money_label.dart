@@ -283,14 +283,17 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
     final digitsCharactersLength = characters.where((e) => e.role == .digit).length;
 
+    var index = characters.lastIndexWhere((e) => e.role == .digit); // -1 if null, so as intended
     for (var i = digitsCharactersLength; i < rawCharacters.length; i++) {
-      characters.add(
+      characters.insert(
+        index + 1,
         AnimatedCharacter(
           role: .digit,
           character: rawCharacters[i],
           animationController: createAnimationController(animate: animated),
         ),
       );
+      index++;
     }
   }
 
@@ -446,16 +449,11 @@ final class AnimatedCharacter {
     this.retiredLeading = 0,
     required this.animationController,
   }) : key = UniqueKey();
-}
 
-final class PositionedAnimatedCharacter {
-  final AnimatedCharacter animatedCharacter;
-  final double leading;
-
-  const PositionedAnimatedCharacter({
-    required this.animatedCharacter,
-    required this.leading,
-  });
+  @override
+  String toString() {
+    return 'AnimatedCharacter($character - $role)';
+  }
 }
 
 extension _ListExtensions<T> on List<T> {
@@ -480,4 +478,6 @@ extension _ListExtensions<T> on List<T> {
 
     return result;
   }
+
+  bool none(bool Function(T element) test) => !any(test);
 }
