@@ -1,4 +1,5 @@
 import 'package:commingle_money/commingle_money.dart';
+import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 final class AnimatedMoneyFieldScreen extends StatefulWidget {
@@ -53,6 +54,9 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                AnimatedMoneyLabel(
+                  money: Money(amount: Decimal.parse('1232455'), currencyCode: CurrencyCodes.usd),
+                ),
                 ConstrainedBox(
                   constraints: const BoxConstraints(minHeight: 72),
                   child: AnimatedMoneyField(

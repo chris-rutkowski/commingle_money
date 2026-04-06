@@ -407,14 +407,10 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
                 width: constraints.maxWidth,
                 child: FittedBox(
                   fit: BoxFit.scaleDown,
-                  child: AnimatedSize(
-                    duration: widget.contentAnimationDuration,
-                    curve: Curves.easeOutCubic,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: chunks,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: chunks,
                   ),
                 ),
               ),
@@ -475,20 +471,16 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
 
     final widgets = <Widget>[];
 
-    void addText({
-      required String id,
-      required String text,
-      required TextStyle style,
-    }) {
-      if (text.isEmpty) return;
-      widgets.add(
-        _AnimatedMoneyChunk(
-          id: id,
-          text: text,
-          style: style,
-          duration: widget.contentAnimationDuration,
-        ),
-      );
+    void addTokens(List<_MoneyTokenData> tokens) {
+      for (final token in tokens) {
+        widgets.add(
+          _AnimatedMoneyToken(
+            key: ValueKey(token.id),
+            token: token,
+            duration: widget.contentAnimationDuration,
+          ),
+        );
+      }
     }
 
     void addCursor() {
@@ -503,47 +495,81 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
     }
 
     if (controller._operator == null) {
-      addText(
-        id: 'currency',
-        text: '$currency ',
-        style: controller._leftInput.isEmpty ? placeholderSecondaryStyle : secondaryStyle,
-      );
-      addText(id: 'integer', text: left.integer, style: left.isPlaceholder ? placeholderStyle : mainStyle);
-      addText(id: 'decimal', text: left.decimalSeparator, style: mainStyle);
-      addText(id: 'fraction', text: left.fraction, style: mainStyle);
+      addTokens([
+        _MoneyTokenData(
+          id: 'currency',
+          text: '$currency ',
+          style: controller._leftInput.isEmpty ? placeholderSecondaryStyle : secondaryStyle,
+        ),
+        ...left.buildTokens(
+          prefix: 'value',
+          mainStyle: left.isPlaceholder ? placeholderStyle : mainStyle,
+          placeholderStyle: placeholderStyle,
+          includePlaceholderFraction: false,
+        ),
+      ]);
       addCursor();
-      addText(
-        id: 'fraction-placeholder',
-        text: left.placeholderFraction,
-        style: placeholderStyle,
-      );
+      addTokens(left.buildPlaceholderFractionTokens(prefix: 'value', style: placeholderStyle));
       return widgets;
     }
 
     if (controller._rightInput.isEmpty) {
-      addText(id: 'left', text: left.fullTextOrZero, style: mainStyle);
-      addText(id: 'operator', text: controller._operator!.symbol, style: mainStyle);
+      addTokens([
+        ...left.buildTokens(
+          prefix: 'left',
+          mainStyle: mainStyle,
+          placeholderStyle: placeholderStyle,
+        ),
+        _MoneyTokenData(
+          id: 'operator',
+          text: controller._operator!.symbol,
+          style: mainStyle,
+        ),
+      ]);
       addCursor();
       return widgets;
     }
 
-    addText(
-      id: 'expression-prefix',
-      text: '${left.fullTextOrZero}${controller._operator!.symbol}${right.fullTextOrZero}',
-      style: placeholderStyle,
-    );
+    addTokens([
+      ...left.buildTokens(
+        prefix: 'expression-left',
+        mainStyle: placeholderStyle,
+        placeholderStyle: placeholderStyle,
+      ),
+      _MoneyTokenData(
+        id: 'expression-operator',
+        text: controller._operator!.symbol,
+        style: placeholderStyle,
+      ),
+      ...right.buildTokens(
+        prefix: 'expression-right',
+        mainStyle: placeholderStyle,
+        placeholderStyle: placeholderStyle,
+        includePlaceholderFraction: false,
+      ),
+    ]);
     addCursor();
-    addText(id: 'equals', text: '=', style: placeholderStyle);
-    addText(
-      id: 'result',
-      text: _FormattedOperand.fromRaw(
+    addTokens([
+      ...right.buildPlaceholderFractionTokens(
+        prefix: 'expression-right',
+        style: placeholderStyle,
+      ),
+      _MoneyTokenData(
+        id: 'equals',
+        text: '=',
+        style: placeholderStyle,
+      ),
+      ..._FormattedOperand.fromRaw(
         raw: controller._formatResult(controller.value),
         separators: separators,
         decimalDigits: decimalDigits,
         placeholderWhenEmpty: false,
-      ).fullTextOrZero,
-      style: mainStyle,
-    );
+      ).buildTokens(
+        prefix: 'result',
+        mainStyle: mainStyle,
+        placeholderStyle: placeholderStyle,
+      ),
+    ]);
 
     return widgets;
   }
@@ -551,57 +577,101 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
 
 final _digitRegExp = RegExp(r'\d');
 
-final class _AnimatedMoneyChunk extends StatelessWidget {
+final class _MoneyTokenData {
   final String id;
   final String text;
   final TextStyle style;
-  final Duration duration;
 
-  const _AnimatedMoneyChunk({
+  const _MoneyTokenData({
     required this.id,
     required this.text,
     required this.style,
+  });
+}
+
+final class _AnimatedMoneyToken extends StatefulWidget {
+  final _MoneyTokenData token;
+  final Duration duration;
+
+  const _AnimatedMoneyToken({
+    super.key,
+    required this.token,
     required this.duration,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return AnimatedSize(
-      duration: duration,
-      curve: Curves.easeOutCubic,
-      child: AnimatedSwitcher(
-        duration: duration,
-        switchInCurve: Curves.easeOutCubic,
-        switchOutCurve: Curves.easeInCubic,
-        layoutBuilder: (currentChild, previousChildren) {
-          return Stack(
-            alignment: Alignment.center,
-            clipBehavior: Clip.none,
-            children: [
-              ...previousChildren,
-              ...?switch (currentChild) {
-                null => null,
-                final child => [child],
-              },
-            ],
-          );
-        },
-        transitionBuilder: (child, animation) {
-          final fade = CurvedAnimation(parent: animation, curve: Curves.easeOut);
-          final scale = Tween<double>(begin: 0.86, end: 1).animate(fade);
+  State<_AnimatedMoneyToken> createState() => _AnimatedMoneyTokenState();
+}
 
-          return FadeTransition(
-            opacity: fade,
-            child: ScaleTransition(
-              scale: scale,
-              child: child,
+final class _AnimatedMoneyTokenState extends State<_AnimatedMoneyToken> with SingleTickerProviderStateMixin {
+  late final AnimationController _appearController;
+  late final Animation<double> _appearAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _appearController = AnimationController(vsync: this, duration: widget.duration);
+    _appearAnimation = CurvedAnimation(parent: _appearController, curve: Curves.easeOutCubic);
+    _appearController.forward();
+  }
+
+  @override
+  void didUpdateWidget(covariant _AnimatedMoneyToken oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.duration != widget.duration) {
+      _appearController.duration = widget.duration;
+    }
+  }
+
+  @override
+  void dispose() {
+    _appearController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FadeTransition(
+      opacity: _appearAnimation,
+      child: ScaleTransition(
+        scale: Tween<double>(begin: 0.86, end: 1).animate(_appearAnimation),
+        child: AnimatedSwitcher(
+          duration: widget.duration,
+          switchInCurve: Curves.easeOutCubic,
+          switchOutCurve: Curves.easeInCubic,
+          layoutBuilder: (currentChild, previousChildren) {
+            return Stack(
+              alignment: Alignment.center,
+              clipBehavior: Clip.none,
+              children: [
+                ...previousChildren,
+                ...?switch (currentChild) {
+                  null => null,
+                  final child => [child],
+                },
+              ],
+            );
+          },
+          transitionBuilder: (child, animation) {
+            final fade = CurvedAnimation(parent: animation, curve: Curves.easeOut);
+            final scale = Tween<double>(begin: 0.86, end: 1).animate(fade);
+
+            return FadeTransition(
+              opacity: fade,
+              child: ScaleTransition(
+                scale: scale,
+                child: child,
+              ),
+            );
+          },
+          child: Text(
+            widget.token.text,
+            key: ValueKey(
+              '${widget.token.id}:${widget.token.text}:${widget.token.style.color}:${widget.token.style.fontSize}',
             ),
-          );
-        },
-        child: Text(
-          text,
-          key: ValueKey('$id:$text:${style.color}:${style.fontSize}'),
-          style: style,
+            style: widget.token.style,
+          ),
         ),
       ),
     );
@@ -653,6 +723,86 @@ final class _FormattedOperand {
   });
 
   String get fullTextOrZero => '$integer$decimalSeparator$fraction$placeholderFraction';
+
+  List<_MoneyTokenData> buildTokens({
+    required String prefix,
+    required TextStyle mainStyle,
+    required TextStyle placeholderStyle,
+    bool includePlaceholderFraction = true,
+  }) {
+    return [
+      ..._buildIntegerTokens(prefix: prefix, style: mainStyle),
+      if (decimalSeparator.isNotEmpty)
+        _MoneyTokenData(
+          id: '$prefix-decimal',
+          text: decimalSeparator,
+          style: mainStyle,
+        ),
+      ..._buildFractionTokens(prefix: prefix, style: mainStyle),
+      if (includePlaceholderFraction) ...buildPlaceholderFractionTokens(prefix: prefix, style: placeholderStyle),
+    ];
+  }
+
+  List<_MoneyTokenData> buildPlaceholderFractionTokens({
+    required String prefix,
+    required TextStyle style,
+  }) {
+    return [
+      for (var index = 0; index < placeholderFraction.length; index += 1)
+        _MoneyTokenData(
+          id: '$prefix-placeholder-$index',
+          text: placeholderFraction[index],
+          style: style,
+        ),
+    ];
+  }
+
+  List<_MoneyTokenData> _buildIntegerTokens({
+    required String prefix,
+    required TextStyle style,
+  }) {
+    final tokens = <_MoneyTokenData>[];
+    var digitIndex = 0;
+
+    for (var index = 0; index < integer.length; index += 1) {
+      final character = integer[index];
+
+      if (_digitRegExp.hasMatch(character)) {
+        tokens.add(
+          _MoneyTokenData(
+            id: '$prefix-int-$digitIndex',
+            text: character,
+            style: style,
+          ),
+        );
+        digitIndex += 1;
+      } else {
+        tokens.add(
+          _MoneyTokenData(
+            id: '$prefix-separator-after-${digitIndex - 1}',
+            text: character,
+            style: style,
+          ),
+        );
+      }
+    }
+
+    return tokens;
+  }
+
+  List<_MoneyTokenData> _buildFractionTokens({
+    required String prefix,
+    required TextStyle style,
+  }) {
+    return [
+      for (var index = 0; index < fraction.length; index += 1)
+        _MoneyTokenData(
+          id: '$prefix-frac-$index',
+          text: fraction[index],
+          style: style,
+        ),
+    ];
+  }
 
   factory _FormattedOperand.fromRaw({
     required String raw,

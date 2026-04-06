@@ -108,9 +108,10 @@ void main() {
       await tester.pump(const Duration(milliseconds: 250));
 
       expect(find.text('USD '), findsAtLeastNWidgets(1));
-      expect(find.text('12'), findsAtLeastNWidgets(1));
+      expect(find.text('1'), findsAtLeastNWidgets(1));
+      expect(find.text('2'), findsAtLeastNWidgets(1));
       expect(find.text('.'), findsAtLeastNWidgets(1));
-      expect(find.text('00'), findsAtLeastNWidgets(1));
+      expect(find.text('0'), findsAtLeastNWidgets(2));
       expect(find.byType(FittedBox), findsOneWidget);
     });
 
@@ -163,6 +164,77 @@ void main() {
       expect(controller.operator, isNull);
       expect(controller.value.toString(), '7');
       expect(find.text('USD '), findsAtLeastNWidgets(1));
+    });
+
+    testWidgets('cursor stays before placeholder decimal digits in arithmetic preview', (tester) async {
+      final focusNode = FocusNode();
+      final controller = AnimatedMoneyFieldController();
+
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Scaffold(
+            body: Center(
+              child: AnimatedMoneyField(
+                focusNode: focusNode,
+                controller: controller,
+                contentAnimationDuration: Duration.zero,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byType(AnimatedMoneyField));
+      await tester.pump();
+
+      await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '58');
+      await tester.pump();
+
+      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      await tester.pump();
+
+      await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '1.');
+      await tester.pump();
+
+      final dotFinder = find.text('.');
+      final zeroFinder = find.text('0');
+      final equalsFinder = find.text('=');
+      final cursorFinder = find.byKey(const Key('animated-money-field-cursor'));
+
+      expect(dotFinder, findsAtLeastNWidgets(1));
+      expect(zeroFinder, findsAtLeastNWidgets(2));
+      expect(equalsFinder, findsAtLeastNWidgets(1));
+
+      final dotX = tester.getTopLeft(dotFinder.first).dx;
+      final cursorXAtDot = tester.getTopLeft(cursorFinder).dx;
+      final zeroWidgets = zeroFinder.evaluate().toList();
+      final zeroXAtDot = zeroWidgets
+          .map((element) => (element.renderObject! as RenderBox).localToGlobal(Offset.zero).dx)
+          .reduce((value, element) => value < element ? value : element);
+      final equalsXAtDot = tester.getTopLeft(equalsFinder.first).dx;
+
+      expect(dotX, lessThan(cursorXAtDot));
+      expect(cursorXAtDot, lessThan(zeroXAtDot));
+      expect(zeroXAtDot, lessThan(equalsXAtDot));
+
+      await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '1.2');
+      await tester.pump();
+
+      final twoFinder = find.text('2');
+      final trailingZeroFinder = find.text('0');
+
+      expect(twoFinder, findsAtLeastNWidgets(1));
+      expect(trailingZeroFinder, findsAtLeastNWidgets(1));
+
+      final twoX = tester.getTopLeft(twoFinder.first).dx;
+      final cursorXAtTenths = tester.getTopLeft(cursorFinder).dx;
+      final zeroXAtTenths = trailingZeroFinder
+          .evaluate()
+          .map((element) => (element.renderObject! as RenderBox).localToGlobal(Offset.zero).dx)
+          .reduce((value, element) => value < element ? value : element);
+
+      expect(twoX, lessThan(cursorXAtTenths));
+      expect(cursorXAtTenths, lessThan(zeroXAtTenths));
     });
   });
 }
