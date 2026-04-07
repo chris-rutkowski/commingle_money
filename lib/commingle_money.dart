@@ -11,7 +11,6 @@ export 'src/money_formatter.dart';
 export 'src/money_presentation_defaults.dart';
 export 'src/widgets/animated_money_field/animated_money_field.dart';
 export 'src/widgets/animated_money_field/awesome_money_field_math_controller.dart';
-export 'src/widgets/animated_money_field/private/animated_money_label.dart';
 export 'src/widgets/deprecated_animated_money_field.dart';
 export 'src/widgets/money_label/money_label.dart';
 export 'src/widgets/money_label/money_label_animation.dart';

@@ -4,6 +4,10 @@ import 'package:flutter/services.dart';
 
 import '../../../commingle_money.dart';
 
+
+// To improve:
+// - AnimatedPositionedDirectional for RTL
+
 // ignore_for_file: public_member_api_docs TODO TO document
 
 const _sentinel = ' ';
@@ -170,12 +174,12 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ?widget.prefix,
-                    AnimatedMoneyLabel(
+                    AwesomeDigitsWidget(
                       stringNumber: stringNumber.isEmpty ? null : stringNumber,
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus,
                     ),
-                    AnimatedMoneyLabel(
+                    AwesomeDigitsWidget(
                       stringNumber: '', // '+'
                       placeholder: '',
                       currencyCode: widget.moneyController.currencyCode,

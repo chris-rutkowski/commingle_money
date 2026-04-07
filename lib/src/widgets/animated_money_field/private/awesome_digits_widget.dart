@@ -13,10 +13,7 @@ import 'animated_character.dart';
 import 'animated_character_widget.dart';
 import 'blinking_cursor_widget.dart';
 
-// To improve:
-// - AnimatedPositionedDirectional for RTL
-
-final class AnimatedMoneyLabel extends StatefulWidget {
+final class AwesomeDigitsWidget extends StatefulWidget {
   final String? stringNumber;
   final CurrencyCode currencyCode;
   final Duration animationDuration;
@@ -26,7 +23,7 @@ final class AnimatedMoneyLabel extends StatefulWidget {
   final Color? cursorColor;
   final String placeholder;
 
-  const AnimatedMoneyLabel({
+  const AwesomeDigitsWidget({
     super.key,
     required this.stringNumber,
     required this.currencyCode,
@@ -39,10 +36,10 @@ final class AnimatedMoneyLabel extends StatefulWidget {
   });
 
   @override
-  State<AnimatedMoneyLabel> createState() => _AnimatedMoneyLabelState();
+  State<AwesomeDigitsWidget> createState() => _AwesomeDigitsWidgetState();
 }
 
-final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with TickerProviderStateMixin {
+final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with TickerProviderStateMixin {
   final characters = <AnimatedCharacter>[];
   final retiredCharacters = <AnimatedCharacter>[];
   late final AnimationController cursorController;
@@ -175,7 +172,7 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
   }
 
   @override
-  void didUpdateWidget(covariant AnimatedMoneyLabel oldWidget) {
+  void didUpdateWidget(covariant AwesomeDigitsWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     final effectiveSeparators = _resolveEffectiveSeparators(context);
 
