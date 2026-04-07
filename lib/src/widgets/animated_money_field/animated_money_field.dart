@@ -138,11 +138,12 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: () => widget.focusNode.requestFocus(),
+      onTap: widget.focusNode.requestFocus,
       child: Stack(
         children: [
           FittedBox(
             child: ListenableBuilder(
+              // TODO: not sure if it needs to listen
               listenable: widget.moneyController,
               builder: (context, child) {
                 return Row(
