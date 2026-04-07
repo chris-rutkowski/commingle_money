@@ -405,8 +405,13 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       );
     }
 
-    for (var i = 0; i < indexes.length - needed; i++) {
-      retireCharacter(characters[indexes[i]]);
+    final charactersToRetire = indexes
+        .take(max(0, indexes.length - needed))
+        .map((index) => characters[index])
+        .toList(growable: false);
+
+    for (final character in charactersToRetire) {
+      retireCharacter(character);
     }
   }
 
