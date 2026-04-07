@@ -12,6 +12,7 @@ final class AnimatedMoneyFieldScreen extends StatefulWidget {
 final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScreen> {
   final focusNode = FocusNode();
   final controller = OldAnimatedMoneyFieldController();
+  final operationController = AwesomeMoneyFieldOperationController();
   late final MoneyEditingController moneyEditingController;
 
   @override
@@ -79,6 +80,7 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                 //   ),
                 // ),
                 AnimatedMoneyField(
+                  operationController: operationController,
                   moneyController: moneyEditingController,
                   focusNode: focusNode,
                   prefix: const Text('Prefix '),
@@ -109,23 +111,23 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                   runSpacing: 8,
                   children: [
                     ElevatedButton(
-                      onPressed: () => _applyOperator(OldAnimatedMoneyFieldOperator.plus),
+                      onPressed: () => operationController.handle(AwesomeMoneyFieldOperator.plus),
                       child: const Text('+'),
                     ),
                     ElevatedButton(
-                      onPressed: () => _applyOperator(OldAnimatedMoneyFieldOperator.minus),
+                      onPressed: () => operationController.handle(AwesomeMoneyFieldOperator.minus),
                       child: const Text('-'),
                     ),
                     ElevatedButton(
-                      onPressed: () => _applyOperator(OldAnimatedMoneyFieldOperator.multiply),
+                      onPressed: () => operationController.handle(AwesomeMoneyFieldOperator.multiply),
                       child: const Text('×'),
                     ),
                     ElevatedButton(
-                      onPressed: () => _applyOperator(OldAnimatedMoneyFieldOperator.divide),
+                      onPressed: () => operationController.handle(AwesomeMoneyFieldOperator.divide),
                       child: const Text('÷'),
                     ),
                     ElevatedButton(
-                      onPressed: _evaluate,
+                      onPressed: () => operationController.handle(AwesomeMoneyFieldOperator.equals),
                       child: const Text('='),
                     ),
                     OutlinedButton(
