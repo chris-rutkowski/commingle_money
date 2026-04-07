@@ -1,13 +1,13 @@
-// ignore_for_file: public_member_api_docs // TEMP
+// ignore_for_file: public_member_api_docs
 
 import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../commingle_money.dart';
-import '../private/amount_formatter.dart';
-import '../private/decimal_components.dart';
+import '../../../../commingle_money.dart';
+import '../../../private/amount_formatter.dart';
+import '../../../private/decimal_components.dart';
 
 // To improve:
 // - AnimatedPositionedDirectional for RTL
