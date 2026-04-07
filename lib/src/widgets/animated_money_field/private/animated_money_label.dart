@@ -3,7 +3,6 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../commingle_money.dart';
@@ -15,22 +14,22 @@ import 'blinking_cursor_widget.dart';
 // - AnimatedPositionedDirectional for RTL
 
 final class AnimatedMoneyLabel extends StatefulWidget {
-  final Money? money;
+  final String? stringNumber;
+  final CurrencyCode currencyCode;
   final Duration animationDuration;
   final Curve curve;
   final AmountFormatSeparatorsData? separators;
-  final bool forceFractional;
   final bool showCursor;
   final Color? cursorColor;
   final String placeholder;
 
   const AnimatedMoneyLabel({
     super.key,
-    required this.money,
+    required this.stringNumber,
+    required this.currencyCode,
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
     this.separators,
-    this.forceFractional = false,
     this.showCursor = false,
     this.cursorColor,
     this.placeholder = '0',
@@ -71,8 +70,6 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
   @override
   Widget build(BuildContext context) {
-    // final characters = widget.money.abs().toString().split('');
-
     final base =
         // MoneyPresentationDefaults.maybeOf(context)?.primaryTextStyle ??
         Theme.of(context).textTheme.headlineLarge!; // ??
@@ -181,17 +178,8 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
     super.didUpdateWidget(oldWidget);
     final effectiveSeparators = _resolveEffectiveSeparators(context);
 
-    // if (oldWidget.money.currencyCode != widget.money.currencyCode) {
-    //   print('not animating due to different currency code');
-    //   // recreate tokens
-    //   return;
-    // }
-
     // TODO consider that abs or something here
 
-    // if ((oldCharacters.length - newCharacters.length).abs() == 1) {
-
-    // final newCharacters = widget.money.amount.abs().toString().split('');
     managePlaceholder();
     addPendingDigits();
     removeExcessDigits();
@@ -224,7 +212,7 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       existingPlaceholder.character = widget.placeholder;
     }
 
-    if (widget.money == null && existingPlaceholder == null) {
+    if (widget.stringNumber == null && existingPlaceholder == null) {
       characters.add(
         AnimatedCharacter(
           role: .placeholder,
@@ -232,19 +220,17 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
           animationController: createAnimationController(animate: false),
         ),
       );
-    } else if (widget.money != null && existingPlaceholder != null) {
+    } else if (widget.stringNumber != null && existingPlaceholder != null) {
       retireCharacter(existingPlaceholder);
     }
   }
 
   void addPendingDigits({bool animated = true}) {
-    if (widget.money == null) {
+    if (widget.stringNumber == null) {
       return;
     }
 
-    final components = DecimalComponents.fromMoney(widget.money!);
-    final rawCharacters = components.main.toString().split('');
-
+    final rawCharacters = getMainDigits();
     final digitsCharactersLength = characters.where((e) => e.role == .digit).length;
 
     var index = characters.lastIndexWhere((e) => e.role == .digit); // -1 if null, so as intended
@@ -262,10 +248,7 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
   }
 
   void removeExcessDigits() {
-    final keepCount = widget.money == null
-        ? 0
-        : DecimalComponents.fromMoney(widget.money!).main.toString().split('').length;
-
+    final keepCount = widget.stringNumber == null ? 0 : getMainDigits().length;
     final digitsCharactersIndexes = characters.allIndexesWhere((e) => e.role == .digit);
     final charactersToRetire = digitsCharactersIndexes
         .sublist(keepCount)
@@ -278,13 +261,11 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
   }
 
   void updateExistingDigits() {
-    if (widget.money == null) {
+    if (widget.stringNumber == null) {
       return;
     }
 
-    final components = DecimalComponents.fromMoney(widget.money!);
-    final rawCharacters = components.main.toString().split('');
-
+    final rawCharacters = getMainDigits();
     final digitsCharactersIndexes = characters.allIndexesWhere((e) => e.role == .digit);
 
     for (var i = 0; i < rawCharacters.length; i++) {
@@ -297,11 +278,11 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
   /// adds grouping separators in the beginning of characters list later to be rearranged by [rearrangeGroupingSeparators]
   void addPendingGroupingSeparator({bool animated = true, required String separator}) {
-    if (widget.money == null) {
+    if (widget.stringNumber == null) {
       return;
     }
 
-    final components = DecimalComponents.fromMoney(widget.money!);
+    final components = DecimalComponents.fromDigits(getMainDigitsAsInt());
     final formatted = AmountFormatter.formattedMain(components.main, separator);
     final needed = formatted.split('').where((e) => e == separator).length;
 
@@ -320,10 +301,10 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
   }
 
   void removeExcessGroupingSeparatorsAnimated({required String separator}) {
-    final needed = widget.money == null
+    final needed = widget.stringNumber == null
         ? 0
         : AmountFormatter.formattedMain(
-            DecimalComponents.fromMoney(widget.money!).main,
+            DecimalComponents.fromDigits(getMainDigitsAsInt()).main,
             separator,
           ).split('').where((e) => e == separator).length;
 
@@ -337,11 +318,11 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
   }
 
   void rearrangeGroupingSeparators({required String separator}) {
-    if (widget.money == null) {
+    if (widget.stringNumber == null) {
       return;
     }
 
-    final components = DecimalComponents.fromMoney(widget.money!);
+    final components = DecimalComponents.fromDigits(getMainDigitsAsInt());
     final formatted = AmountFormatter.formattedMain(components.main, separator);
     final indexes = formatted.split('').allIndexesOf(separator);
 
@@ -360,12 +341,9 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
   void manageFractional({bool animated = true, required String separator}) {
     // or if money has that part
-    final components = DecimalComponents.fromDecimal(widget.money?.amount ?? Decimal.zero);
-    final show = widget.money != null && (components.fractional != 0 || widget.forceFractional);
+    final show = widget.stringNumber != null && widget.stringNumber!.contains('.');
 
     if (show) {
-      final rawCharacters = components.fractional != 0 ? components.fractional.toString().split('') : <String>[];
-
       if (characters.none((e) => e.role == .decimalSeparator)) {
         characters.add(
           AnimatedCharacter(
@@ -375,6 +353,8 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
           ),
         );
       }
+
+      final rawCharacters = getFractionalDigits();
 
       addPendingFractionalDigits(rawCharacters: rawCharacters, animated: animated);
       removeExcessFractionalDigits(rawCharacters: rawCharacters, animated: animated);
@@ -410,7 +390,7 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
   }
 
   void manageFractionalPlaceholders({bool animated = true, required List<String> rawCharacters}) {
-    final precision = Currency.getPrecision(widget.money?.currencyCode);
+    final precision = Currency.getPrecision(widget.currencyCode);
     final needed = max(precision - rawCharacters.length, 0);
 
     final indexes = characters.allIndexesWhere((e) => e.role == .fractionalPlaceholder).toList(growable: false);
@@ -453,6 +433,8 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
     }
   }
 
+  // <Utilities>
+
   AnimationController createAnimationController({required bool animate}) {
     final controller = AnimationController(vsync: this, duration: widget.animationDuration);
 
@@ -464,6 +446,28 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
 
     return controller;
   }
+
+  List<String> getMainDigits() {
+    if (widget.stringNumber == null) {
+      return [];
+    }
+
+    return widget.stringNumber!.split('.')[0].split('');
+  }
+
+  List<int> getMainDigitsAsInt() => getMainDigits().map(int.parse).toList();
+
+  List<String> getFractionalDigits() {
+    if (widget.stringNumber == null || !widget.stringNumber!.contains('.')) {
+      return [];
+    }
+
+    return widget.stringNumber!.split('.')[1].split('');
+  }
+
+  List<int> getFractionalDigitsAsInt() => getFractionalDigits().map(int.parse).toList();
+
+  // </Utilities>
 }
 
 enum AnimatedCharacterRole {

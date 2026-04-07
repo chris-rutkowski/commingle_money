@@ -57,6 +57,10 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
       return;
     }
 
+    if (widget.controller.value == null) {
+      widget.controller.value = Money(currencyCode: widget.currencyCode, amount: Decimal.zero);
+    }
+
     setState(() {
       forceAmountFractional = true;
     });
@@ -151,6 +155,19 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     return _sentinelValue;
   }
 
+  String? effectiveAmountString() {
+    if (widget.controller.value == null) {
+      return forceAmountFractional ? '0.' : null;
+    }
+
+    final amount = widget.controller.value!.amount;
+    if (forceAmountFractional && !amount.toString().contains('.')) {
+      return '$amount.';
+    }
+
+    return amount.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -166,8 +183,8 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     AnimatedMoneyLabel(
-                      money: widget.controller.value,
-                      forceFractional: forceAmountFractional,
+                      stringNumber: effectiveAmountString(),
+                      currencyCode: widget.controller.value?.currencyCode ?? widget.currencyCode,
                       showCursor: widget.focusNode.hasFocus,
                     ),
                   ],

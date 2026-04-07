@@ -46,6 +46,25 @@ final class DecimalComponents {
     );
   }
 
+  /// Creates [DecimalComponents] from whole-number [digits].
+  factory DecimalComponents.fromDigits(List<int> digits, {NumberSign sign = .positive}) {
+    var main = Decimal.zero;
+
+    for (final digit in digits) {
+      if (digit < 0 || digit > 9) {
+        throw ArgumentError.value(digit, 'digits', 'Each digit must be between 0 and 9');
+      }
+
+      main = main.shift(1) + Decimal.fromInt(digit);
+    }
+
+    return DecimalComponents(
+      sign: sign,
+      main: main.toInt(),
+      fractional: 0,
+    );
+  }
+
   /// Creates [DecimalComponents] from [Money].
   factory DecimalComponents.fromMoney(Money money) {
     final abs = money.amount.abs();
