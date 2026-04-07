@@ -11,7 +11,7 @@ final class AnimatedMoneyFieldScreen extends StatefulWidget {
 
 final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScreen> {
   final focusNode = FocusNode();
-  final controller = AnimatedMoneyFieldController();
+  final controller = OldAnimatedMoneyFieldController();
 
   @override
   void initState() {
@@ -31,7 +31,7 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
     setState(() {});
   }
 
-  void _applyOperator(AnimatedMoneyFieldOperator operator) {
+  void _applyOperator(OldAnimatedMoneyFieldOperator operator) {
     controller.applyOperator(operator);
     focusNode.requestFocus();
   }
@@ -54,14 +54,19 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                AnimatedMoneyLabel(
-                  money: Money(amount: Decimal.parse('25320'), currencyCode: CurrencyCodes.usd),
-                  // money: Money(amount: Decimal.parse('2539.2'), currencyCode: CurrencyCodes.usd),
-                  forceFractional: true,
+                SizedBox(
+                  // width: 200,
+                  child: AnimatedMoneyLabel(
+                    money: Money(amount: Decimal.parse('999999999999999999'), currencyCode: CurrencyCodes.usd),
+                    // money: Money(amount: Decimal.parse('2539.2'), currencyCode: CurrencyCodes.usd),
+                    // forceFractional: true,
+                    // showCursor: true,
+                  ),
                 ),
+                const TextField(),
                 ConstrainedBox(
                   constraints: const BoxConstraints(minHeight: 72),
-                  child: AnimatedMoneyField(
+                  child: OldAnimatedMoneyField(
                     controller: controller,
                     focusNode: focusNode,
                     cursorBlinkDuration: const Duration(milliseconds: 900),
@@ -83,19 +88,19 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                   runSpacing: 8,
                   children: [
                     ElevatedButton(
-                      onPressed: () => _applyOperator(AnimatedMoneyFieldOperator.plus),
+                      onPressed: () => _applyOperator(OldAnimatedMoneyFieldOperator.plus),
                       child: const Text('+'),
                     ),
                     ElevatedButton(
-                      onPressed: () => _applyOperator(AnimatedMoneyFieldOperator.minus),
+                      onPressed: () => _applyOperator(OldAnimatedMoneyFieldOperator.minus),
                       child: const Text('-'),
                     ),
                     ElevatedButton(
-                      onPressed: () => _applyOperator(AnimatedMoneyFieldOperator.multiply),
+                      onPressed: () => _applyOperator(OldAnimatedMoneyFieldOperator.multiply),
                       child: const Text('×'),
                     ),
                     ElevatedButton(
-                      onPressed: () => _applyOperator(AnimatedMoneyFieldOperator.divide),
+                      onPressed: () => _applyOperator(OldAnimatedMoneyFieldOperator.divide),
                       child: const Text('÷'),
                     ),
                     ElevatedButton(

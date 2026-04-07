@@ -6,31 +6,31 @@ import 'package:flutter/services.dart';
 
 import '../amount_format_separators.dart';
 
-/// Arithmetic operators supported by [AnimatedMoneyField].
-enum AnimatedMoneyFieldOperator {
+/// Arithmetic operators supported by [OldAnimatedMoneyField].
+enum OldAnimatedMoneyFieldOperator {
   plus('+'),
   minus('-'),
   multiply('×'),
   divide('÷')
   ;
 
-  const AnimatedMoneyFieldOperator(this.symbol);
+  const OldAnimatedMoneyFieldOperator(this.symbol);
 
   /// Symbol rendered inside the field.
   final String symbol;
 }
 
-/// Controller for [AnimatedMoneyField].
-final class AnimatedMoneyFieldController extends ChangeNotifier {
+/// Controller for [OldAnimatedMoneyField].
+final class OldAnimatedMoneyFieldController extends ChangeNotifier {
   /// Maximum amount of fractional digits accepted by the field.
   final int decimalDigits;
 
   String _leftInput = '';
-  AnimatedMoneyFieldOperator? _operator;
+  OldAnimatedMoneyFieldOperator? _operator;
   String _rightInput = '';
 
   /// Creates a controller with optional [initialText].
-  AnimatedMoneyFieldController({
+  OldAnimatedMoneyFieldController({
     this.decimalDigits = 2,
     String initialText = '',
   }) {
@@ -47,7 +47,7 @@ final class AnimatedMoneyFieldController extends ChangeNotifier {
   }
 
   /// Current operator, if any.
-  AnimatedMoneyFieldOperator? get operator => _operator;
+  OldAnimatedMoneyFieldOperator? get operator => _operator;
 
   /// Raw text of the left operand.
   String get leftInput => _leftInput;
@@ -78,7 +78,7 @@ final class AnimatedMoneyFieldController extends ChangeNotifier {
   }
 
   /// Applies an arithmetic operator to the current value.
-  void applyOperator(AnimatedMoneyFieldOperator newOperator) {
+  void applyOperator(OldAnimatedMoneyFieldOperator newOperator) {
     if (_operator != null && _rightInput.isNotEmpty) {
       final evaluated = _evaluate(_parse(_leftInput), _operator!, _parse(_rightInput));
       _leftInput = _formatResult(evaluated);
@@ -182,14 +182,14 @@ final class AnimatedMoneyFieldController extends ChangeNotifier {
 
   Decimal _evaluate(
     Decimal left,
-    AnimatedMoneyFieldOperator operator,
+    OldAnimatedMoneyFieldOperator operator,
     Decimal right,
   ) {
     return switch (operator) {
-      AnimatedMoneyFieldOperator.plus => left + right,
-      AnimatedMoneyFieldOperator.minus => left - right,
-      AnimatedMoneyFieldOperator.multiply => left * right,
-      AnimatedMoneyFieldOperator.divide =>
+      OldAnimatedMoneyFieldOperator.plus => left + right,
+      OldAnimatedMoneyFieldOperator.minus => left - right,
+      OldAnimatedMoneyFieldOperator.multiply => left * right,
+      OldAnimatedMoneyFieldOperator.divide =>
         right == Decimal.zero ? left : (left / right).toDecimal(scaleOnInfinitePrecision: decimalDigits),
     };
   }
@@ -205,7 +205,7 @@ final class AnimatedMoneyFieldController extends ChangeNotifier {
 }
 
 /// Centered money field with custom animations and simple arithmetic support.
-final class AnimatedMoneyField extends StatefulWidget {
+final class OldAnimatedMoneyField extends StatefulWidget {
   /// Currency text rendered before the number when there is no operator.
   final String currency;
 
@@ -216,7 +216,7 @@ final class AnimatedMoneyField extends StatefulWidget {
   final FocusNode focusNode;
 
   /// Optional external controller.
-  final AnimatedMoneyFieldController? controller;
+  final OldAnimatedMoneyFieldController? controller;
 
   /// Optional style for the main amount text.
   final TextStyle? style;
@@ -233,7 +233,7 @@ final class AnimatedMoneyField extends StatefulWidget {
   /// Duration used for visible field transitions.
   final Duration contentAnimationDuration;
 
-  const AnimatedMoneyField({
+  const OldAnimatedMoneyField({
     super.key,
     this.currency = 'USD',
     this.decimalDigits = 2,
@@ -247,24 +247,24 @@ final class AnimatedMoneyField extends StatefulWidget {
   });
 
   @override
-  State<AnimatedMoneyField> createState() => _AnimatedMoneyFieldState();
+  State<OldAnimatedMoneyField> createState() => _OldAnimatedMoneyFieldState();
 }
 
-final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with SingleTickerProviderStateMixin {
+final class _OldAnimatedMoneyFieldState extends State<OldAnimatedMoneyField> with SingleTickerProviderStateMixin {
   late final TextEditingController _hiddenTextController;
   late final AnimationController _cursorController;
 
-  AnimatedMoneyFieldController? _internalController;
+  OldAnimatedMoneyFieldController? _internalController;
   static const _pendingOperatorBackspaceSentinel = '0';
 
-  AnimatedMoneyFieldController get _controller => widget.controller ?? _internalController!;
+  OldAnimatedMoneyFieldController get _controller => widget.controller ?? _internalController!;
 
   @override
   void initState() {
     super.initState();
 
     _internalController = widget.controller == null
-        ? AnimatedMoneyFieldController(decimalDigits: widget.decimalDigits)
+        ? OldAnimatedMoneyFieldController(decimalDigits: widget.decimalDigits)
         : null;
 
     assert(
@@ -287,7 +287,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
   }
 
   @override
-  void didUpdateWidget(covariant AnimatedMoneyField oldWidget) {
+  void didUpdateWidget(covariant OldAnimatedMoneyField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.cursorBlinkDuration != widget.cursorBlinkDuration) {
@@ -299,7 +299,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
       _internalController?.removeListener(_onControllerChange);
 
       _internalController = widget.controller == null
-          ? (_internalController ?? AnimatedMoneyFieldController(decimalDigits: widget.decimalDigits))
+          ? (_internalController ?? OldAnimatedMoneyFieldController(decimalDigits: widget.decimalDigits))
           : null;
 
       assert(
@@ -445,7 +445,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> with Sing
   }
 
   List<Widget> _buildChunks({
-    required AnimatedMoneyFieldController controller,
+    required OldAnimatedMoneyFieldController controller,
     required String currency,
     required AmountFormatSeparatorsData separators,
     required int decimalDigits,

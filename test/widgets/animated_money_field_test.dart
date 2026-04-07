@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   group('AnimatedMoneyFieldController', () {
     test('sanitizes decimal input and limits fraction digits', () {
-      final controller = AnimatedMoneyFieldController();
+      final controller = OldAnimatedMoneyFieldController();
 
       controller.replaceEditingText('00012.987');
 
@@ -15,40 +15,40 @@ void main() {
     });
 
     test('replaces operator before second operand is entered', () {
-      final controller = AnimatedMoneyFieldController()..replaceEditingText('101');
+      final controller = OldAnimatedMoneyFieldController()..replaceEditingText('101');
 
-      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
-      controller.applyOperator(AnimatedMoneyFieldOperator.minus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.plus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.minus);
 
       expect(controller.leftInput, '101');
       expect(controller.rightInput, isEmpty);
-      expect(controller.operator, AnimatedMoneyFieldOperator.minus);
+      expect(controller.operator, OldAnimatedMoneyFieldOperator.minus);
       expect(controller.rawEditingText, isEmpty);
     });
 
     test('evaluates previous expression when another operator is pressed', () {
-      final controller = AnimatedMoneyFieldController()..replaceEditingText('101');
+      final controller = OldAnimatedMoneyFieldController()..replaceEditingText('101');
 
-      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.plus);
       controller.replaceEditingText('1');
-      controller.applyOperator(AnimatedMoneyFieldOperator.multiply);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.multiply);
 
       expect(controller.leftInput, '102');
       expect(controller.rightInput, isEmpty);
-      expect(controller.operator, AnimatedMoneyFieldOperator.multiply);
+      expect(controller.operator, OldAnimatedMoneyFieldOperator.multiply);
       expect(controller.value.toString(), '102');
     });
 
     test('equals evaluates expression and trailing operator is dropped', () {
-      final controller = AnimatedMoneyFieldController()..replaceEditingText('12');
+      final controller = OldAnimatedMoneyFieldController()..replaceEditingText('12');
 
-      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.plus);
       controller.evaluate();
 
       expect(controller.leftInput, '12');
       expect(controller.operator, isNull);
 
-      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.plus);
       controller.replaceEditingText('3');
       controller.evaluate();
 
@@ -59,9 +59,9 @@ void main() {
     });
 
     test('pending operator can be cleared explicitly', () {
-      final controller = AnimatedMoneyFieldController()..replaceEditingText('5');
+      final controller = OldAnimatedMoneyFieldController()..replaceEditingText('5');
 
-      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.plus);
       controller.clearPendingOperator();
 
       expect(controller.operator, isNull);
@@ -73,7 +73,7 @@ void main() {
   group('AnimatedMoneyField widget', () {
     testWidgets('uses numeric keyboard, shows cursor on focus, and renders decimal placeholders', (tester) async {
       final focusNode = FocusNode();
-      final controller = AnimatedMoneyFieldController();
+      final controller = OldAnimatedMoneyFieldController();
 
       await tester.pumpWidget(
         MaterialApp(
@@ -81,7 +81,7 @@ void main() {
             body: AmountFormatSeparators(
               data: const AmountFormatSeparatorsData(),
               child: Center(
-                child: AnimatedMoneyField(
+                child: OldAnimatedMoneyField(
                   focusNode: focusNode,
                   controller: controller,
                 ),
@@ -94,7 +94,7 @@ void main() {
       expect(find.text('USD '), findsOneWidget);
       expect(find.text('0'), findsOneWidget);
 
-      await tester.tap(find.byType(AnimatedMoneyField));
+      await tester.tap(find.byType(OldAnimatedMoneyField));
       await tester.pump();
 
       expect(focusNode.hasFocus, isTrue);
@@ -117,13 +117,13 @@ void main() {
 
     testWidgets('backspace removes pending operator and unfocus evaluates expression', (tester) async {
       final focusNode = FocusNode();
-      final controller = AnimatedMoneyFieldController();
+      final controller = OldAnimatedMoneyFieldController();
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: Center(
-              child: AnimatedMoneyField(
+              child: OldAnimatedMoneyField(
                 focusNode: focusNode,
                 controller: controller,
                 contentAnimationDuration: const Duration(milliseconds: 50),
@@ -133,13 +133,13 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(AnimatedMoneyField));
+      await tester.tap(find.byType(OldAnimatedMoneyField));
       await tester.pump();
 
       await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '5');
       await tester.pump();
 
-      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.plus);
       await tester.pump();
 
       final hiddenBeforeBackspace = tester.widget<TextField>(
@@ -153,7 +153,7 @@ void main() {
       expect(controller.operator, isNull);
       expect(find.text('USD '), findsAtLeastNWidgets(1));
 
-      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.plus);
       await tester.pump();
       await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '2');
       await tester.pump();
@@ -168,13 +168,13 @@ void main() {
 
     testWidgets('cursor stays before placeholder decimal digits in arithmetic preview', (tester) async {
       final focusNode = FocusNode();
-      final controller = AnimatedMoneyFieldController();
+      final controller = OldAnimatedMoneyFieldController();
 
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
             body: Center(
-              child: AnimatedMoneyField(
+              child: OldAnimatedMoneyField(
                 focusNode: focusNode,
                 controller: controller,
                 contentAnimationDuration: Duration.zero,
@@ -184,13 +184,13 @@ void main() {
         ),
       );
 
-      await tester.tap(find.byType(AnimatedMoneyField));
+      await tester.tap(find.byType(OldAnimatedMoneyField));
       await tester.pump();
 
       await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '58');
       await tester.pump();
 
-      controller.applyOperator(AnimatedMoneyFieldOperator.plus);
+      controller.applyOperator(OldAnimatedMoneyFieldOperator.plus);
       await tester.pump();
 
       await tester.enterText(find.byKey(const Key('animated-money-field-hidden-input')), '1.');
