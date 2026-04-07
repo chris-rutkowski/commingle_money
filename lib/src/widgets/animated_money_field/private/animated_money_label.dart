@@ -33,7 +33,7 @@ final class AnimatedMoneyLabel extends StatefulWidget {
     this.forceFractional = false,
     this.showCursor = false,
     this.cursorColor,
-    this.placeholder = 'zero',
+    this.placeholder = '0',
   });
 
   @override
