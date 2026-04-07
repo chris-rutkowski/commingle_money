@@ -79,7 +79,7 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                 //   ),
                 // ),
                 AnimatedMoneyField(
-                  controller: moneyEditingController,
+                  moneyController: moneyEditingController,
                   focusNode: focusNode,
                   prefix: const Text('Prefix '),
                   suffix: const Text(' Suffix'),

@@ -13,14 +13,14 @@ const _sentinelValue = TextEditingValue(
 final class AnimatedMoneyField extends StatefulWidget {
   final Widget? prefix;
   final Widget? suffix;
-  final MoneyEditingController controller;
+  final MoneyEditingController moneyController;
   final FocusNode focusNode;
 
   const AnimatedMoneyField({
     super.key,
     this.prefix,
     this.suffix,
-    required this.controller,
+    required this.moneyController,
     required this.focusNode,
   });
 
@@ -41,10 +41,10 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     _stringNumber = value;
 
     if (value.isEmpty) {
-      widget.controller.value = null;
+      widget.moneyController.value = null;
     } else {
-      widget.controller.value = Money(
-        currencyCode: widget.controller.currencyCode,
+      widget.moneyController.value = Money(
+        currencyCode: widget.moneyController.currencyCode,
         amount: Decimal.parse(value),
       );
     }
@@ -56,16 +56,16 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     inputController = TextEditingController.fromValue(_sentinelValue);
 
     widget.focusNode.addListener(_handleFocusNodeChanged);
-    widget.controller.addListener(_handleControllerChanged);
+    widget.moneyController.addListener(_handleControllerChanged);
 
-    stringNumber = widget.controller.value?.amount.toString() ?? '';
+    stringNumber = widget.moneyController.value?.amount.toString() ?? '';
   }
 
   @override
   void dispose() {
     inputController.dispose();
     widget.focusNode.removeListener(_handleFocusNodeChanged);
-    widget.controller.removeListener(_handleControllerChanged);
+    widget.moneyController.removeListener(_handleControllerChanged);
     super.dispose();
   }
 
@@ -74,8 +74,8 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
   }
 
   void _handleControllerChanged() {
-    if (widget.controller.value?.amount != Decimal.tryParse(stringNumber)) {
-      stringNumber = widget.controller.value?.amount.toString() ?? '';
+    if (widget.moneyController.value?.amount != Decimal.tryParse(stringNumber)) {
+      stringNumber = widget.moneyController.value?.amount.toString() ?? '';
     }
   }
 
@@ -97,7 +97,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
 
   void _onDigitInput(int digit) {
     if (stringNumber.contains('.')) {
-      final precision = Currency.getPrecision(widget.controller.currencyCode);
+      final precision = Currency.getPrecision(widget.moneyController.currencyCode);
       if (stringNumber.split('.').last.length >= precision) {
         return;
       }
@@ -143,7 +143,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
         children: [
           FittedBox(
             child: ListenableBuilder(
-              listenable: widget.controller,
+              listenable: widget.moneyController,
               builder: (context, child) {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
@@ -151,7 +151,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
                     ?widget.prefix,
                     AnimatedMoneyLabel(
                       stringNumber: stringNumber.isEmpty ? null : stringNumber,
-                      currencyCode: widget.controller.currencyCode,
+                      currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus,
                     ),
                     ?widget.suffix,
