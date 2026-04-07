@@ -24,6 +24,7 @@ const _sentinel = ' ';
 
 final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
   late final TextEditingController _inputController;
+  var forceAmountFractional = false;
 
   TextEditingValue get _sentinelValue => const TextEditingValue(
     text: _sentinel,
@@ -49,6 +50,16 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     setState(() {});
   }
 
+  void _onDecimalSignInput() {
+    if (forceAmountFractional) {
+      return;
+    }
+
+    setState(() {
+      forceAmountFractional = true;
+    });
+  }
+
   TextEditingValue _handleRawInput(TextEditingValue previousValue, TextEditingValue nextValue) {
     final payload = nextValue.text.trim();
 
@@ -66,7 +77,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
       widget.controller.value = widget.controller.value! ~/ 10;
     } else if (payload.length == 1) {
       if (payload == '.' || payload == ',') {
-        debugPrint('decimal sign');
+        _onDecimalSignInput();
       } else if (int.tryParse(payload) case final parsedDigit?) {
         final decimalDigit = Decimal.fromInt(parsedDigit);
         if (widget.controller.value == null) {
@@ -101,8 +112,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
                   children: [
                     AnimatedMoneyLabel(
                       money: widget.controller.value,
-
-                      // forceFractional: true,
+                      forceFractional: forceAmountFractional,
                       showCursor: widget.focusNode.hasFocus,
                     ),
                   ],
