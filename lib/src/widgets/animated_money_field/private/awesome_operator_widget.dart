@@ -1,0 +1,183 @@
+// ignore_for_file: public_member_api_docs
+
+import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
+
+import '../../../../commingle_money.dart';
+import 'animated_character.dart';
+import 'animated_character_widget.dart';
+
+final class AwesomeOperatorWidget extends StatefulWidget {
+  final AwesomeMoneyFieldButton? operator;
+  final Duration animationDuration;
+  final Curve curve;
+
+  const AwesomeOperatorWidget({
+    super.key,
+    required this.operator,
+
+    this.animationDuration = const Duration(milliseconds: 250),
+    this.curve = Curves.easeInOut,
+  });
+
+  @override
+  State<AwesomeOperatorWidget> createState() => _AwesomeOperatorWidgetState();
+}
+
+final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> with TickerProviderStateMixin {
+  final characters = <AnimatedCharacter>[];
+  final retiredCharacters = <AnimatedCharacter>[];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // TODO: check if animation was still runing and we do double dispose or something
+    for (final character in characters) {
+      character.animationController.dispose();
+    }
+
+    for (final character in retiredCharacters) {
+      character.animationController.dispose();
+    }
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final base =
+        // MoneyPresentationDefaults.maybeOf(context)?.primaryTextStyle ??
+        Theme.of(context).textTheme.headlineLarge!; // ??
+    // DefaultTextStyle.of(context).style;
+
+    final textStyle = base.merge(const TextStyle(fontWeight: FontWeight.bold));
+
+    final children = <Widget>[];
+
+    var width = 0.0;
+
+    for (final character in characters) {
+      final painter = TextPainter(
+        text: TextSpan(text: character.character, style: textStyle),
+        textDirection: TextDirection.ltr,
+      )..layout();
+
+      children.add(
+        AnimatedPositioned(
+          key: character.key,
+          duration: widget.animationDuration,
+          curve: widget.curve,
+          left: 0,
+          child: AnimatedCharacterWidget(character: character, textStyle: textStyle, placeholderColor: Colors.grey),
+        ),
+      );
+
+      width += painter.width;
+    }
+
+    for (final character in retiredCharacters) {
+      children.add(
+        AnimatedPositioned(
+          key: character.key,
+          duration: widget.animationDuration,
+          curve: widget.curve,
+          left: 0,
+          child: AnimatedCharacterWidget(character: character, textStyle: textStyle, placeholderColor: Colors.grey),
+        ),
+      );
+    }
+
+    return AnimatedContainer(
+      duration: widget.animationDuration,
+      curve: widget.curve,
+      width: width,
+      height: 40,
+      color: Colors.yellow.withAlpha(50),
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          ...children,
+        ],
+      ),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    manage(animated: false);
+  }
+
+  void retireCharacter(AnimatedCharacter character) {
+    characters.remove(character);
+    retiredCharacters.add(character);
+
+    character.animationController.reverse().then((value) {
+      character.animationController.dispose();
+      retiredCharacters.remove(character);
+    });
+  }
+
+  @override
+  void didUpdateWidget(covariant AwesomeOperatorWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    manage();
+  }
+
+  void manage({bool animated = true}) {
+    if (widget.operator != null) {
+      final string = _buttonToString(widget.operator!);
+
+      if (characters.firstOrNull?.character != string) {
+        characters.toList().forEach(retireCharacter);
+
+        characters.add(
+          AnimatedCharacter(
+            animationController: createAnimationController(animate: animated),
+            role: .decimalSeparator,
+            character: string,
+          ),
+        );
+      }
+    } else {
+      characters.toList().forEach(retireCharacter);
+    }
+  }
+
+  // <Utilities>
+
+  AnimationController createAnimationController({required bool animate}) {
+    final controller = AnimationController(vsync: this, duration: widget.animationDuration);
+
+    if (animate) {
+      controller.forward();
+    } else {
+      controller.value = 1;
+    }
+
+    return controller;
+  }
+
+  // </Utilities>
+}
+
+String _buttonToString(AwesomeMoneyFieldButton button) {
+  switch (button) {
+    case AwesomeMoneyFieldButton.plus:
+      return '+';
+    case AwesomeMoneyFieldButton.minus:
+      return '-';
+    case AwesomeMoneyFieldButton.multiply:
+      return '×';
+    case AwesomeMoneyFieldButton.divide:
+      return '÷';
+    case AwesomeMoneyFieldButton.equal:
+      return '=';
+  }
+}

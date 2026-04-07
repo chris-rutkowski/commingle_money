@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../commingle_money.dart';
-
+import 'private/awesome_digits_widget.dart';
+import 'private/awesome_operator_widget.dart';
 
 // To improve:
 // - AnimatedPositionedDirectional for RTL
@@ -78,11 +79,13 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
       return;
     }
 
-    if (button != AwesomeMoneyFieldButton.equal) {
-      activeButton = button;
-    } else {
-      activeButton = null;
-    }
+    setState(() {
+      if (button != AwesomeMoneyFieldButton.equal) {
+        activeButton = button;
+      } else {
+        activeButton = null;
+      }
+    });
   }
 
   @override
@@ -179,10 +182,8 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus,
                     ),
-                    AwesomeDigitsWidget(
-                      stringNumber: '', // '+'
-                      placeholder: '',
-                      currencyCode: widget.moneyController.currencyCode,
+                    AwesomeOperatorWidget(
+                      operator: activeButton,
                     ),
                     ?widget.suffix,
                   ],
