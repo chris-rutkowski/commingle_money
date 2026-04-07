@@ -19,9 +19,15 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
     super.initState();
     controller.addListener(_onControllerChanged);
 
+    // moneyEditingController = MoneyEditingController(
+    //   currencyCode: CurrencyCodes.btc,
+    //   amount: Decimal.parse('1'),
+    //   separators: AmountFormatSeparators.read(context),
+    // );
+
     moneyEditingController = MoneyEditingController(
-      currencyCode: 'USD',
-      amount: Decimal.parse('1'),
+      currencyCode: CurrencyCodes.btc,
+      amount: Decimal.zero,
       separators: AmountFormatSeparators.read(context),
     );
   }
@@ -61,18 +67,28 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                SizedBox(
-                  // width: 200,
-                  child: AnimatedMoneyLabel(
-                    money: Money(amount: Decimal.parse('999999999999999999'), currencyCode: CurrencyCodes.usd),
-                    // money: Money(amount: Decimal.parse('2539.2'), currencyCode: CurrencyCodes.usd),
-                    // forceFractional: true,
-                    // showCursor: true,
-                  ),
-                ),
+                // const SizedBox(
+                //   // width: 200,
+                //   child: AnimatedMoneyLabel(
+                //     // money: Money(amount: Decimal.parse('0'), currencyCode: CurrencyCodes.usd),
+                //     money: null,
+                //     // money: Money(amount: Decimal.parse('2539.2'), currencyCode: CurrencyCodes.usd),
+                //     forceFractional: true,
+                //     showCursor: true,
+                //     placeholder: '0',
+                //   ),
+                // ),
                 AnimatedMoneyField(
                   controller: moneyEditingController,
                   focusNode: focusNode,
+                  prefix: const Text('Prefix '),
+                  suffix: const Text(' Suffix'),
+                ),
+                ListenableBuilder(
+                  listenable: moneyEditingController,
+                  builder: (context, child) {
+                    return Text('Current value: ${moneyEditingController.value}');
+                  },
                 ),
                 // ConstrainedBox(
                 //   constraints: const BoxConstraints(minHeight: 72),
@@ -86,12 +102,7 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                 //   ),
                 // ),
                 const SizedBox(height: 16),
-                Text(
-                  'Tap the amount, type digits from the numeric keyboard, and use the buttons below for arithmetic.',
-                  textAlign: TextAlign.center,
-                  style: textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 24),
+
                 Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 8,
@@ -120,6 +131,34 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                     OutlinedButton(
                       onPressed: focusNode.unfocus,
                       child: const Text('Unfocus'),
+                    ),
+                  ],
+                ),
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => moneyEditingController.value = Money(
+                        amount: Decimal.parse('23.12'),
+                        currencyCode: CurrencyCodes.usd,
+                      ),
+                      child: const Text('USD 23.12'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => moneyEditingController.value = Money(
+                        amount: Decimal.parse('15.4234'),
+                        currencyCode: CurrencyCodes.btc,
+                      ),
+                      child: const Text('BTC 15.4234'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        moneyEditingController.currencyCode = CurrencyCodes.usd;
+                        moneyEditingController.value = null;
+                      },
+                      child: const Text('USD null'),
                     ),
                   ],
                 ),
