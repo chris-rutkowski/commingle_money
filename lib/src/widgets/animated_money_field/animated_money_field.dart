@@ -3,47 +3,69 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../commingle_money.dart';
-import '../../private/decimal_components.dart';
+
+const _sentinel = ' ';
+const _sentinelValue = TextEditingValue(
+  text: _sentinel,
+  selection: TextSelection.collapsed(offset: _sentinel.length),
+);
 
 final class AnimatedMoneyField extends StatefulWidget {
+  final Widget? prefix;
+  final Widget? suffix;
   final MoneyEditingController controller;
   final FocusNode focusNode;
-  final CurrencyCode currencyCode;
 
   const AnimatedMoneyField({
     super.key,
+    this.prefix,
+    this.suffix,
     required this.controller,
     required this.focusNode,
-    required this.currencyCode,
   });
 
   @override
   State<AnimatedMoneyField> createState() => _AnimatedMoneyFieldState();
 }
 
-const _sentinel = ' ';
-
 final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
-  late final TextEditingController _inputController;
-  var forceAmountFractional = false;
+  late final TextEditingController inputController;
 
-  TextEditingValue get _sentinelValue => const TextEditingValue(
-    text: _sentinel,
-    selection: TextSelection.collapsed(offset: _sentinel.length),
-  );
+  var _stringNumber = '';
+  String get stringNumber => _stringNumber;
+  set stringNumber(String value) {
+    if (value == _stringNumber) {
+      return;
+    }
+
+    _stringNumber = value;
+
+    if (value.isEmpty) {
+      widget.controller.value = null;
+    } else {
+      widget.controller.value = Money(
+        currencyCode: widget.controller.currencyCode,
+        amount: Decimal.parse(value),
+      );
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    _inputController = TextEditingController.fromValue(_sentinelValue);
+    inputController = TextEditingController.fromValue(_sentinelValue);
 
     widget.focusNode.addListener(_handleFocusNodeChanged);
+    widget.controller.addListener(_handleControllerChanged);
+
+    stringNumber = widget.controller.value?.amount.toString() ?? '';
   }
 
   @override
   void dispose() {
-    _inputController.dispose();
+    inputController.dispose();
     widget.focusNode.removeListener(_handleFocusNodeChanged);
+    widget.controller.removeListener(_handleControllerChanged);
     super.dispose();
   }
 
@@ -51,91 +73,48 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     setState(() {});
   }
 
+  void _handleControllerChanged() {
+    if (widget.controller.value?.amount != Decimal.tryParse(stringNumber)) {
+      stringNumber = widget.controller.value?.amount.toString() ?? '';
+    }
+  }
+
   void _onDecimalSignInput() {
-    // TODO: let's check if currency allows fractional
-    if (forceAmountFractional) {
+    if (stringNumber.contains('.')) {
       return;
     }
 
-    if (widget.controller.value == null) {
-      widget.controller.value = Money(currencyCode: widget.currencyCode, amount: Decimal.zero);
-    }
-
     setState(() {
-      forceAmountFractional = true;
+      stringNumber = '${stringNumber.isEmpty ? '0' : stringNumber}.';
     });
   }
 
   void _onBackspace() {
-    if (widget.controller.value == null) {
-      return;
-    }
-
-    if (widget.controller.value!.amount == Decimal.zero) {
-      widget.controller.value = null;
-      return;
-    }
-
-    // clears decimal separator if fractional part is already empty
-    final components = DecimalComponents.fromDecimal(widget.controller.value!.amount);
-    if (components.fractional == 0 && forceAmountFractional) {
-      setState(() {
-        forceAmountFractional = false;
-      });
-      return;
-    }
-
-    if (components.fractional != 0) {
-      final updatedComponents = components.copyWith(
-        fractional: components.fractional >= 10 ? components.fractional ~/ 10 : 0,
-      );
-
-      widget.controller.value = Money(
-        currencyCode: widget.controller.value!.currencyCode,
-        amount: updatedComponents.toDecimal(),
-      );
-      return;
-    }
-
-    if (components.main < 10) {
-      widget.controller.value = null;
-      return;
-    }
-
-    widget.controller.value = widget.controller.value! ~/ 10;
+    setState(() {
+      stringNumber = stringNumber.isNotEmpty ? stringNumber.substring(0, stringNumber.length - 1) : '';
+    });
   }
 
   void _onDigitInput(int digit) {
-    final decimalDigit = Decimal.fromInt(digit);
-    if (widget.controller.value == null) {
-      widget.controller.value = Money(currencyCode: widget.currencyCode, amount: decimalDigit);
-      return;
-    }
-
-    final components = DecimalComponents.fromDecimal(widget.controller.value!.amount);
-
-    if (components.fractional != 0 || forceAmountFractional) {
-      final precision = Currency.getPrecision(widget.controller.value!.currencyCode);
-
-      if (components.fractional.toString().length >= precision) {
+    if (stringNumber.contains('.')) {
+      final precision = Currency.getPrecision(widget.controller.currencyCode);
+      if (stringNumber.split('.').last.length >= precision) {
         return;
       }
-
-      final updatedComponents = components.copyWith(
-        fractional: components.fractional * 10 + digit,
-      );
-
-      widget.controller.value = Money(
-        currencyCode: widget.controller.value!.currencyCode,
-        amount: updatedComponents.toDecimal(),
-      );
-      return;
     }
 
-    widget.controller.value = widget.controller.value! * Decimal.ten + decimalDigit;
+    setState(() {
+      if (stringNumber == '0') {
+        stringNumber = '$digit';
+      } else {
+        stringNumber = '$stringNumber$digit';
+      }
+    });
+
+    return;
   }
 
-  TextEditingValue _handleRawInput(TextEditingValue previousValue, TextEditingValue nextValue) {
+  TextEditingValue handleInput(TextEditingValue previousValue, TextEditingValue nextValue) {
     final payload = nextValue.text.trim();
 
     if (payload.isEmpty) {
@@ -155,19 +134,6 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     return _sentinelValue;
   }
 
-  String? effectiveAmountString() {
-    if (widget.controller.value == null) {
-      return forceAmountFractional ? '0.' : null;
-    }
-
-    final amount = widget.controller.value!.amount;
-    if (forceAmountFractional && !amount.toString().contains('.')) {
-      return '$amount.';
-    }
-
-    return amount.toString();
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -182,30 +148,31 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    ?widget.prefix,
                     AnimatedMoneyLabel(
-                      stringNumber: effectiveAmountString(),
-                      currencyCode: widget.controller.value?.currencyCode ?? widget.currencyCode,
+                      stringNumber: stringNumber.isEmpty ? null : stringNumber,
+                      currencyCode: widget.controller.currencyCode,
                       showCursor: widget.focusNode.hasFocus,
                     ),
+                    ?widget.suffix,
                   ],
                 );
               },
             ),
           ),
           SizedBox(
-            width: 1,
-            height: 1,
+            width: 0,
+            height: 0,
             child: TextField(
-              controller: _inputController,
+              controller: inputController,
               focusNode: widget.focusNode,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               textInputAction: TextInputAction.done, // TODO: configurable and callback
-              onSubmitted: (_) {}, // TODO: configurable callback
               enableInteractiveSelection: false,
               showCursor: false,
               autocorrect: false,
               enableSuggestions: false,
-              inputFormatters: [TextInputFormatter.withFunction(_handleRawInput)],
+              inputFormatters: [TextInputFormatter.withFunction(handleInput)],
             ),
           ),
         ],
