@@ -9,6 +9,8 @@ import '../../../../commingle_money.dart';
 import '../../../private/amount_formatter.dart';
 import '../../../private/decimal_components.dart';
 import '../../../private/list_extensions.dart';
+import 'animated_character.dart';
+import 'animated_character_widget.dart';
 import 'blinking_cursor_widget.dart';
 
 // To improve:
@@ -214,9 +216,9 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
     if (widget.stringNumber == null && existingPlaceholder == null) {
       characters.add(
         AnimatedCharacter(
+          animationController: createAnimationController(animate: false),
           role: .placeholder,
           character: widget.placeholder,
-          animationController: createAnimationController(animate: false),
         ),
       );
     } else if (widget.stringNumber != null && existingPlaceholder != null) {
@@ -237,9 +239,9 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       characters.insert(
         index + 1,
         AnimatedCharacter(
+          animationController: createAnimationController(animate: animated),
           role: .digit,
           character: rawCharacters[i],
-          animationController: createAnimationController(animate: animated),
         ),
       );
       index++;
@@ -291,9 +293,9 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       characters.insert(
         0,
         AnimatedCharacter(
+          animationController: createAnimationController(animate: animated),
           role: .groupingSeparator,
           character: separator,
-          animationController: createAnimationController(animate: animated),
         ),
       );
     }
@@ -346,9 +348,9 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       if (characters.none((e) => e.role == .decimalSeparator)) {
         characters.add(
           AnimatedCharacter(
+            animationController: createAnimationController(animate: animated),
             role: .decimalSeparator,
             character: separator,
-            animationController: createAnimationController(animate: animated),
           ),
         );
       }
@@ -378,9 +380,9 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
       characters.insert(
         index + 1,
         AnimatedCharacter(
+          animationController: createAnimationController(animate: animated),
           role: .fractionalDigit,
           character: rawCharacters[i],
-          animationController: createAnimationController(animate: animated),
         ),
       );
 
@@ -397,9 +399,9 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
     for (var i = 0; i < needed - indexes.length; i++) {
       characters.add(
         AnimatedCharacter(
+          animationController: createAnimationController(animate: animated),
           role: .fractionalPlaceholder,
           character: '0',
-          animationController: createAnimationController(animate: animated),
         ),
       );
     }
@@ -472,87 +474,4 @@ final class _AnimatedMoneyLabelState extends State<AnimatedMoneyLabel> with Tick
   List<int> getFractionalDigitsAsInt() => getFractionalDigits().map(int.parse).toList();
 
   // </Utilities>
-}
-
-enum AnimatedCharacterRole {
-  placeholder,
-  digit,
-  groupingSeparator,
-  decimalSeparator,
-  fractionalDigit,
-  fractionalPlaceholder,
-}
-
-extension on AnimatedCharacterRole {
-  bool get isPlaceholder => this == .placeholder || this == .fractionalPlaceholder;
-}
-
-final class AnimatedCharacter {
-  final Key key;
-  final AnimatedCharacterRole role;
-  String character;
-  double retiredLeading;
-  final AnimationController animationController;
-
-  AnimatedCharacter({
-    required this.role,
-    required this.character,
-    this.retiredLeading = 0,
-    required this.animationController,
-  }) : key = UniqueKey();
-
-  @override
-  String toString() {
-    return 'AnimatedCharacter($character - $role)';
-  }
-}
-
-final class AnimatedCharacterWidget extends StatelessWidget {
-  final AnimatedCharacter character;
-  final TextStyle textStyle;
-  final Color placeholderColor;
-
-  const AnimatedCharacterWidget({
-    super.key,
-    required this.character,
-    required this.textStyle,
-    required this.placeholderColor,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final effectiveStyle = textStyle.copyWith(
-      color: character.role.isPlaceholder ? placeholderColor : null,
-    );
-
-    return ListenableBuilder(
-      listenable: character.animationController,
-      builder: (context, child) {
-        final scale = character.animationController.isForwardOrCompleted
-            ? Tween(
-                    begin: 0.75,
-                    end: 1.0,
-                  )
-                  .animate(
-                    CurvedAnimation(
-                      parent: character.animationController,
-                      curve: Curves.easeOutBack,
-                    ),
-                  )
-                  .value
-            : character.animationController.value;
-
-        return Transform.scale(
-          scale: scale,
-          child: Opacity(
-            opacity: character.animationController.value,
-            child: Text(
-              character.character,
-              style: effectiveStyle,
-            ),
-          ),
-        );
-      },
-    );
-  }
 }
