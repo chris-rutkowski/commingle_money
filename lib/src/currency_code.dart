@@ -27,6 +27,9 @@ abstract final class CurrencyCodes {
   /// BRL - Brazilian Real
   static const CurrencyCode brl = 'BRL';
 
+  /// BTC - Bitcoin
+  static const CurrencyCode btc = 'BTC';
+
   /// CAD - Canadian Dollar
   static const CurrencyCode cad = 'CAD';
 
