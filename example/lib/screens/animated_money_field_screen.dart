@@ -45,7 +45,6 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
     setState(() {});
   }
 
-
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
@@ -70,7 +69,7 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                 //     placeholder: '0',
                 //   ),
                 // ),
-                AnimatedMoneyField(
+                AwesomeMoneyField(
                   operationController: operationController,
                   moneyController: moneyEditingController,
                   focusNode: focusNode,

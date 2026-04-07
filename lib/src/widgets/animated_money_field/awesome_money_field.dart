@@ -17,7 +17,7 @@ const _sentinelValue = TextEditingValue(
   selection: TextSelection.collapsed(offset: _sentinel.length),
 );
 
-final class AnimatedMoneyField extends StatefulWidget {
+final class AwesomeMoneyField extends StatefulWidget {
   final Widget? prefix;
   final Widget? suffix;
 
@@ -26,7 +26,7 @@ final class AnimatedMoneyField extends StatefulWidget {
   final MoneyEditingController moneyController;
   final FocusNode focusNode;
 
-  const AnimatedMoneyField({
+  const AwesomeMoneyField({
     super.key,
     this.prefix,
     this.suffix,
@@ -36,10 +36,10 @@ final class AnimatedMoneyField extends StatefulWidget {
   });
 
   @override
-  State<AnimatedMoneyField> createState() => _AnimatedMoneyFieldState();
+  State<AwesomeMoneyField> createState() => _AwesomeMoneyFieldState();
 }
 
-final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
+final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   late final TextEditingController inputController;
   AwesomeMoneyFieldButton? activeButton;
 
