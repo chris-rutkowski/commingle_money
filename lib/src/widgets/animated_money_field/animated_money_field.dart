@@ -73,7 +73,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     if (activeButton == button) {
       return;
     }
-    
+
     if (button != AwesomeMoneyFieldButton.equal) {
       activeButton = button;
     } else {
@@ -174,6 +174,11 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
                       stringNumber: stringNumber.isEmpty ? null : stringNumber,
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus,
+                    ),
+                    AnimatedMoneyLabel(
+                      stringNumber: '', // '+'
+                      placeholder: '',
+                      currencyCode: widget.moneyController.currencyCode,
                     ),
                     ?widget.suffix,
                   ],
