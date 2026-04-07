@@ -5,17 +5,12 @@ import 'package:flutter/services.dart';
 import '../../../commingle_money.dart';
 import 'private/awesome_digits_widget.dart';
 import 'private/awesome_operator_widget.dart';
+import 'private/utils.dart';
 
 // To improve:
 // - AnimatedPositionedDirectional for RTL
 
 // ignore_for_file: public_member_api_docs TODO TO document
-
-const _sentinel = ' ';
-const _sentinelValue = TextEditingValue(
-  text: _sentinel,
-  selection: TextSelection.collapsed(offset: _sentinel.length),
-);
 
 final class AwesomeMoneyField extends StatefulWidget {
   final Widget? prefix;
@@ -65,7 +60,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   @override
   void initState() {
     super.initState();
-    inputController = TextEditingController.fromValue(_sentinelValue);
+    inputController = TextEditingController.fromValue(sentinelValue);
 
     widget.operationController?.listener = onOperationInput;
     widget.focusNode.addListener(_handleFocusNodeChanged);
@@ -158,7 +153,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
       // TODO: pasted value - replace the whole value if possible
     }
 
-    return _sentinelValue;
+    return sentinelValue;
   }
 
   @override
