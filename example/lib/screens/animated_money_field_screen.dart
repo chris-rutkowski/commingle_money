@@ -12,11 +12,18 @@ final class AnimatedMoneyFieldScreen extends StatefulWidget {
 final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScreen> {
   final focusNode = FocusNode();
   final controller = OldAnimatedMoneyFieldController();
+  late final MoneyEditingController moneyEditingController;
 
   @override
   void initState() {
     super.initState();
     controller.addListener(_onControllerChanged);
+
+    moneyEditingController = MoneyEditingController(
+      currencyCode: 'USD',
+      amount: Decimal.parse('1'),
+      separators: AmountFormatSeparators.read(context),
+    );
   }
 
   @override
@@ -63,18 +70,21 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                     // showCursor: true,
                   ),
                 ),
-                const TextField(),
-                ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 72),
-                  child: OldAnimatedMoneyField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    cursorBlinkDuration: const Duration(milliseconds: 900),
-                    contentAnimationDuration: const Duration(milliseconds: 900),
-                    style: textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600),
-                    secondaryStyle: textTheme.titleLarge,
-                  ),
+                AnimatedMoneyField(
+                  controller: moneyEditingController,
+                  focusNode: focusNode,
                 ),
+                // ConstrainedBox(
+                //   constraints: const BoxConstraints(minHeight: 72),
+                //   child: OldAnimatedMoneyField(
+                //     controller: controller,
+                //     focusNode: focusNode,
+                //     cursorBlinkDuration: const Duration(milliseconds: 900),
+                //     contentAnimationDuration: const Duration(milliseconds: 900),
+                //     style: textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600),
+                //     secondaryStyle: textTheme.titleLarge,
+                //   ),
+                // ),
                 const SizedBox(height: 16),
                 Text(
                   'Tap the amount, type digits from the numeric keyboard, and use the buttons below for arithmetic.',
