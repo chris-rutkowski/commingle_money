@@ -14,7 +14,7 @@ import 'animated_character_widget.dart';
 import 'blinking_cursor_widget.dart';
 
 final class AwesomeDigitsWidget extends StatefulWidget {
-  final String? stringNumber;
+  final String? text;
   final CurrencyCode currencyCode;
   final Duration animationDuration;
   final Curve curve;
@@ -25,7 +25,7 @@ final class AwesomeDigitsWidget extends StatefulWidget {
 
   const AwesomeDigitsWidget({
     super.key,
-    required this.stringNumber,
+    required this.text,
     required this.currencyCode,
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
@@ -210,7 +210,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
       existingPlaceholder.character = widget.placeholder;
     }
 
-    if (widget.stringNumber == null && existingPlaceholder == null) {
+    if (widget.text == null && existingPlaceholder == null) {
       characters.add(
         AnimatedCharacter(
           animationController: createAnimationController(animate: false),
@@ -218,13 +218,13 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
           character: widget.placeholder,
         ),
       );
-    } else if (widget.stringNumber != null && existingPlaceholder != null) {
+    } else if (widget.text != null && existingPlaceholder != null) {
       retireCharacter(existingPlaceholder);
     }
   }
 
   void addPendingDigits({bool animated = true}) {
-    if (widget.stringNumber == null) {
+    if (widget.text == null) {
       return;
     }
 
@@ -246,7 +246,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
   }
 
   void removeExcessDigits() {
-    final keepCount = widget.stringNumber == null ? 0 : getMainDigits().length;
+    final keepCount = widget.text == null ? 0 : getMainDigits().length;
     final digitsCharactersIndexes = characters.allIndexesWhere((e) => e.role == .digit);
     final charactersToRetire = digitsCharactersIndexes
         .sublist(keepCount)
@@ -259,7 +259,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
   }
 
   void updateExistingDigits() {
-    if (widget.stringNumber == null) {
+    if (widget.text == null) {
       return;
     }
 
@@ -276,7 +276,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
 
   /// adds grouping separators in the beginning of characters list later to be rearranged by [rearrangeGroupingSeparators]
   void addPendingGroupingSeparator({bool animated = true, required String separator}) {
-    if (widget.stringNumber == null) {
+    if (widget.text == null) {
       return;
     }
 
@@ -299,7 +299,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
   }
 
   void removeExcessGroupingSeparatorsAnimated({required String separator}) {
-    final needed = widget.stringNumber == null
+    final needed = widget.text == null
         ? 0
         : AmountFormatter.formattedMain(
             DecimalComponents.fromDigits(getMainDigitsAsInt()).main,
@@ -316,7 +316,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
   }
 
   void rearrangeGroupingSeparators({required String separator}) {
-    if (widget.stringNumber == null) {
+    if (widget.text == null) {
       return;
     }
 
@@ -339,7 +339,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
 
   void manageFractional({bool animated = true, required String separator}) {
     // or if money has that part
-    final show = widget.stringNumber != null && widget.stringNumber!.contains('.');
+    final show = widget.text != null && widget.text!.contains('.');
 
     if (show) {
       if (characters.none((e) => e.role == .decimalSeparator)) {
@@ -451,21 +451,21 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
   }
 
   List<String> getMainDigits() {
-    if (widget.stringNumber == null) {
+    if (widget.text == null) {
       return [];
     }
 
-    return widget.stringNumber!.split('.')[0].split('');
+    return widget.text!.split('.')[0].split('');
   }
 
   List<int> getMainDigitsAsInt() => getMainDigits().map(int.parse).toList();
 
   List<String> getFractionalDigits() {
-    if (widget.stringNumber == null || !widget.stringNumber!.contains('.')) {
+    if (widget.text == null || !widget.text!.contains('.')) {
       return [];
     }
 
-    return widget.stringNumber!.split('.')[1].split('');
+    return widget.text!.split('.')[1].split('');
   }
 
   List<int> getFractionalDigitsAsInt() => getFractionalDigits().map(int.parse).toList();

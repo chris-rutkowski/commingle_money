@@ -38,14 +38,14 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   late final TextEditingController inputController;
   AwesomeMoneyFieldButton? activeButton;
 
-  var _stringNumber = '';
-  String get stringNumber => _stringNumber;
-  set stringNumber(String value) {
-    if (value == _stringNumber) {
+  var _operandA = '';
+  String get operandA => _operandA;
+  set operandA(String value) {
+    if (value == _operandA) {
       return;
     }
 
-    _stringNumber = value;
+    _operandA = value;
 
     if (value.isEmpty) {
       widget.moneyController.value = null;
@@ -66,7 +66,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
     widget.focusNode.addListener(_handleFocusNodeChanged);
     widget.moneyController.addListener(_handleControllerChanged);
 
-    stringNumber = widget.moneyController.value?.amount.toString() ?? '';
+    operandA = widget.moneyController.value?.amount.toString() ?? '';
   }
 
   void onOperationInput(AwesomeMoneyFieldButton button) {
@@ -96,40 +96,40 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   }
 
   void _handleControllerChanged() {
-    if (widget.moneyController.value?.amount != Decimal.tryParse(stringNumber)) {
-      stringNumber = widget.moneyController.value?.amount.toString() ?? '';
+    if (widget.moneyController.value?.amount != Decimal.tryParse(operandA)) {
+      operandA = widget.moneyController.value?.amount.toString() ?? '';
     }
   }
 
   void _onDecimalSignInput() {
-    if (stringNumber.contains('.')) {
+    if (operandA.contains('.')) {
       return;
     }
 
     setState(() {
-      stringNumber = '${stringNumber.isEmpty ? '0' : stringNumber}.';
+      operandA = '${operandA.isEmpty ? '0' : operandA}.';
     });
   }
 
   void _onBackspace() {
     setState(() {
-      stringNumber = stringNumber.isNotEmpty ? stringNumber.substring(0, stringNumber.length - 1) : '';
+      operandA = operandA.isNotEmpty ? operandA.substring(0, operandA.length - 1) : '';
     });
   }
 
   void _onDigitInput(int digit) {
-    if (stringNumber.contains('.')) {
+    if (operandA.contains('.')) {
       final precision = Currency.getPrecision(widget.moneyController.currencyCode);
-      if (stringNumber.split('.').last.length >= precision) {
+      if (operandA.split('.').last.length >= precision) {
         return;
       }
     }
 
     setState(() {
-      if (stringNumber == '0') {
-        stringNumber = '$digit';
+      if (operandA == '0') {
+        operandA = '$digit';
       } else {
-        stringNumber = '$stringNumber$digit';
+        operandA = '$operandA$digit';
       }
     });
 
@@ -173,7 +173,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
                   children: [
                     ?widget.prefix,
                     AwesomeDigitsWidget(
-                      stringNumber: stringNumber.isEmpty ? null : stringNumber,
+                      text: operandA.isEmpty ? null : operandA,
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus,
                     ),
