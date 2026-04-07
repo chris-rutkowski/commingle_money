@@ -7,11 +7,13 @@ import '../../../commingle_money.dart';
 final class AnimatedMoneyField extends StatefulWidget {
   final MoneyEditingController controller;
   final FocusNode focusNode;
+  final CurrencyCode currencyCode;
 
   const AnimatedMoneyField({
     super.key,
     required this.controller,
     required this.focusNode,
+    required this.currencyCode,
   });
 
   @override
@@ -52,19 +54,30 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
 
     if (payload.isEmpty) {
       // backspace
-      print('backspace');
-    } else if (payload.length == 1) {
-      final parsedDigit = int.tryParse(payload);
+      if (widget.controller.value == null) {
+        return _sentinelValue;
+      }
 
-      if (parsedDigit != null) {
-        widget.controller.value = widget.controller.value! * Decimal.fromInt(10) + Decimal.fromInt(parsedDigit);
-        print('value is now ${widget.controller.value}');
+      if (widget.controller.value!.amount == Decimal.zero) {
+        widget.controller.value = null;
+        return _sentinelValue;
+      }
+
+      widget.controller.value = widget.controller.value! ~/ 10;
+    } else if (payload.length == 1) {
+      if (payload == '.' || payload == ',') {
+        debugPrint('decimal sign');
+      } else if (int.tryParse(payload) case final parsedDigit?) {
+        final decimalDigit = Decimal.fromInt(parsedDigit);
+        if (widget.controller.value == null) {
+          widget.controller.value = Money(currencyCode: widget.currencyCode, amount: decimalDigit);
+        } else {
+          widget.controller.value = widget.controller.value! * Decimal.ten + decimalDigit;
+        }
       } else {
-        // decimal separator
-        print('decimal separator');
+        debugPrint('Unknown character `$payload`');
       }
       // if number than number, otherwise decimal separator
-      print('character $payload');
     } else {
       // paste value - replace the whole value if possible
     }
@@ -87,7 +100,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     AnimatedMoneyLabel(
-                      money: widget.controller.value!,
+                      money: widget.controller.value,
 
                       // forceFractional: true,
                       showCursor: widget.focusNode.hasFocus,
