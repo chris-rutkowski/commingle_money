@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import '../../../../commingle_money.dart';
 import '../../../private/amount_formatter.dart';
 import '../../../private/decimal_components.dart';
+import '../../../private/list_extensions.dart';
 import 'blinking_cursor_widget.dart';
 
 // To improve:
@@ -506,7 +507,7 @@ final class AnimatedCharacter {
   }
 }
 
-class AnimatedCharacterWidget extends StatelessWidget {
+final class AnimatedCharacterWidget extends StatelessWidget {
   final AnimatedCharacter character;
   final TextStyle textStyle;
   final Color placeholderColor;
@@ -554,40 +555,4 @@ class AnimatedCharacterWidget extends StatelessWidget {
       },
     );
   }
-}
-
-extension _ListExtensions<T> on List<T> {
-  List<int> allIndexesOf(T value) {
-    final result = <int>[];
-    for (var i = 0; i < length; i++) {
-      if (this[i] == value) {
-        result.add(i);
-      }
-    }
-
-    return result;
-  }
-
-  List<int> allIndexesWhere(bool Function(T element) test) {
-    final result = <int>[];
-    for (var i = 0; i < length; i++) {
-      if (test(this[i])) {
-        result.add(i);
-      }
-    }
-
-    return result;
-  }
-
-  int? lastIndexWhereOrNull(bool Function(T element) test) {
-    for (var i = length - 1; i >= 0; i--) {
-      if (test(this[i])) {
-        return i;
-      }
-    }
-
-    return null;
-  }
-
-  bool none(bool Function(T element) test) => !any(test);
 }
