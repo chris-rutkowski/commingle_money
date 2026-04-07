@@ -52,6 +52,7 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
   }
 
   void _onDecimalSignInput() {
+    // TODO: let's check if currency allows fractional
     if (forceAmountFractional) {
       return;
     }
@@ -72,11 +73,28 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     }
 
     // clears decimal separator if fractional part is already empty
-    final components = DecimalComponents.fromMoney(widget.controller.value!);
+    final components = DecimalComponents.fromDecimal(widget.controller.value!.amount);
     if (components.fractional == 0 && forceAmountFractional) {
       setState(() {
         forceAmountFractional = false;
       });
+      return;
+    }
+
+    if (components.fractional != 0) {
+      final updatedComponents = components.copyWith(
+        fractional: components.fractional >= 10 ? components.fractional ~/ 10 : 0,
+      );
+
+      widget.controller.value = Money(
+        currencyCode: widget.controller.value!.currencyCode,
+        amount: updatedComponents.toDecimal(),
+      );
+      return;
+    }
+
+    if (components.main < 10) {
+      widget.controller.value = null;
       return;
     }
 
@@ -87,6 +105,26 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     final decimalDigit = Decimal.fromInt(digit);
     if (widget.controller.value == null) {
       widget.controller.value = Money(currencyCode: widget.currencyCode, amount: decimalDigit);
+      return;
+    }
+
+    final components = DecimalComponents.fromDecimal(widget.controller.value!.amount);
+
+    if (components.fractional != 0 || forceAmountFractional) {
+      final precision = Currency.getPrecision(widget.controller.value!.currencyCode);
+
+      if (components.fractional.toString().length >= precision) {
+        return;
+      }
+
+      final updatedComponents = components.copyWith(
+        fractional: components.fractional * 10 + digit,
+      );
+
+      widget.controller.value = Money(
+        currencyCode: widget.controller.value!.currencyCode,
+        amount: updatedComponents.toDecimal(),
+      );
       return;
     }
 
