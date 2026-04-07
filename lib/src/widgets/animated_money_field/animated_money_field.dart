@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 
 import '../../../commingle_money.dart';
 
+// ignore_for_file: public_member_api_docs TODO TO document
+
 const _sentinel = ' ';
 const _sentinelValue = TextEditingValue(
   text: _sentinel,
@@ -13,6 +15,9 @@ const _sentinelValue = TextEditingValue(
 final class AnimatedMoneyField extends StatefulWidget {
   final Widget? prefix;
   final Widget? suffix;
+
+  /// Operation controller for handling arithmetic operations.
+  final AwesomeMoneyFieldMathController? operationController;
   final MoneyEditingController moneyController;
   final FocusNode focusNode;
 
@@ -20,6 +25,7 @@ final class AnimatedMoneyField extends StatefulWidget {
     super.key,
     this.prefix,
     this.suffix,
+    this.operationController,
     required this.moneyController,
     required this.focusNode,
   });
@@ -30,6 +36,7 @@ final class AnimatedMoneyField extends StatefulWidget {
 
 final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
   late final TextEditingController inputController;
+  AwesomeMoneyFieldButton? activeButton;
 
   var _stringNumber = '';
   String get stringNumber => _stringNumber;
@@ -55,10 +62,23 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
     super.initState();
     inputController = TextEditingController.fromValue(_sentinelValue);
 
+    widget.operationController?.listener = onOperationInput;
     widget.focusNode.addListener(_handleFocusNodeChanged);
     widget.moneyController.addListener(_handleControllerChanged);
 
     stringNumber = widget.moneyController.value?.amount.toString() ?? '';
+  }
+
+  void onOperationInput(AwesomeMoneyFieldButton button) {
+    if (activeButton == button) {
+      return;
+    }
+    
+    if (button != AwesomeMoneyFieldButton.equal) {
+      activeButton = button;
+    } else {
+      activeButton = null;
+    }
   }
 
   @override
