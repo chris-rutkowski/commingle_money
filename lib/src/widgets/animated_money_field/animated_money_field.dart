@@ -32,12 +32,19 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
   void initState() {
     super.initState();
     _inputController = TextEditingController.fromValue(_sentinelValue);
+
+    widget.focusNode.addListener(_handleFocusNodeChanged);
   }
 
   @override
   void dispose() {
     _inputController.dispose();
+    widget.focusNode.removeListener(_handleFocusNodeChanged);
     super.dispose();
+  }
+
+  void _handleFocusNodeChanged() {
+    setState(() {});
   }
 
   TextEditingValue _handleRawInput(TextEditingValue previousValue, TextEditingValue nextValue) {
@@ -76,11 +83,16 @@ final class _AnimatedMoneyFieldState extends State<AnimatedMoneyField> {
             child: ListenableBuilder(
               listenable: widget.controller,
               builder: (context, child) {
-                return AnimatedMoneyLabel(
-                  money: widget.controller.value!,
+                return Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    AnimatedMoneyLabel(
+                      money: widget.controller.value!,
 
-                  // forceFractional: true,
-                  // showCursor: true,
+                      // forceFractional: true,
+                      showCursor: widget.focusNode.hasFocus,
+                    ),
+                  ],
                 );
               },
             ),
