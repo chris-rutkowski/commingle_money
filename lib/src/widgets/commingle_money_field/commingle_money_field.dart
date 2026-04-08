@@ -53,6 +53,9 @@ final class CommingleMoneyField extends StatefulWidget {
   /// Curve of animations when the value changes.
   final Curve curve;
 
+  /// The type of action button to use for the keyboard, by default [TextInputAction.done].
+  final TextInputAction textInputAction;
+
   /// Creates an [CommingleMoneyField] widget.
   const CommingleMoneyField({
     super.key,
@@ -67,6 +70,7 @@ final class CommingleMoneyField extends StatefulWidget {
     this.focusNode,
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
+    this.textInputAction = TextInputAction.done,
   });
 
   @override
@@ -349,32 +353,31 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     final textStyle = resolveEffectiveTextStyle(context);
     final showAffixes = activeOperator == null;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: effectiveFocusNode.requestFocus,
-      child: Stack(
-        children: [
-          FittedBox(
-            child: ListenableBuilder(
-              // TODO: not sure if it needs to listen
-              listenable: widget.controller,
-              builder: (context, child) {
-                return Row(
+    return Stack(
+      children: [
+        FittedBox(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (widget.prefix case final prefix?)
+                AnimatedAppearanceWrapper(
+                  visible: showAffixes,
+                  duration: widget.animationDuration,
+                  curve: widget.curve,
+                  alignment: .centerLeft,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      end: widget.affixesSpacing,
+                    ),
+                    child: prefix,
+                  ),
+                ),
+              GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onTap: effectiveFocusNode.requestFocus,
+                child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (widget.prefix case final prefix?)
-                      AnimatedAppearanceWrapper(
-                        visible: showAffixes,
-                        duration: widget.animationDuration,
-                        curve: widget.curve,
-                        alignment: .centerLeft,
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.only(
-                            end: widget.affixesSpacing,
-                          ),
-                          child: prefix,
-                        ),
-                      ),
                     AnimatedNumberWidget(
                       text: operandA.isEmpty ? null : operandA,
                       textStyle: textStyle,
@@ -426,41 +429,42 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                     ),
-                    if (widget.suffix case final suffix?)
-                      AnimatedAppearanceWrapper(
-                        visible: showAffixes,
-                        duration: widget.animationDuration,
-                        curve: widget.curve,
-                        alignment: .centerRight,
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.only(
-                            start: widget.affixesSpacing,
-                          ),
-                          child: suffix,
-                        ),
-                      ),
                   ],
-                );
-              },
-            ),
+                ),
+              ),
+          
+              if (widget.suffix case final suffix?)
+                AnimatedAppearanceWrapper(
+                  visible: showAffixes,
+                  duration: widget.animationDuration,
+                  curve: widget.curve,
+                  alignment: .centerRight,
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(
+                      start: widget.affixesSpacing,
+                    ),
+                    child: suffix,
+                  ),
+                ),
+            ],
           ),
-          SizedBox(
-            width: 0,
-            height: 0,
-            child: TextField(
-              controller: inputController,
-              focusNode: effectiveFocusNode,
-              keyboardType: const TextInputType.numberWithOptions(decimal: true),
-              textInputAction: TextInputAction.done, // TODO: configurable and callback
-              enableInteractiveSelection: false,
-              showCursor: false,
-              autocorrect: false,
-              enableSuggestions: false,
-              inputFormatters: [TextInputFormatter.withFunction(handleInput)],
-            ),
+        ),
+        SizedBox(
+          width: 0,
+          height: 0,
+          child: TextField(
+            controller: inputController,
+            focusNode: effectiveFocusNode,
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            textInputAction: widget.textInputAction,
+            enableInteractiveSelection: false,
+            showCursor: false,
+            autocorrect: false,
+            enableSuggestions: false,
+            inputFormatters: [TextInputFormatter.withFunction(handleInput)],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
