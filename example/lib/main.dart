@@ -39,7 +39,8 @@ final class MyApp extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
-        theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+        theme: ThemeData.light(),
+        darkTheme: ThemeData.dark(),
         home: const MenuScreen(),
       ),
     );

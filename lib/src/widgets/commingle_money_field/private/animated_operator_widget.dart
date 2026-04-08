@@ -54,8 +54,12 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
 
   @override
   Widget build(BuildContext context) {
-    final children = <Widget>[];
+    final painter = TextPainter(
+      text: TextSpan(text: '0', style: widget.textStyle),
+      textDirection: TextDirection.ltr,
+    )..layout();
 
+    final children = <Widget>[];
     var width = 0.0;
 
     for (final character in characters) {
@@ -107,8 +111,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
       duration: widget.animationDuration,
       curve: widget.curve,
       width: width,
-      height: 40,
-      color: Colors.yellow.withAlpha(50),
+      height: painter.height,
       child: Stack(
         clipBehavior: Clip.none,
         children: [

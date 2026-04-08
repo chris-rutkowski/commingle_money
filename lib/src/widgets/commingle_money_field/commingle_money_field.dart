@@ -308,7 +308,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
         debugPrint('Unknown character `$payload`');
       }
     } else {
-      // TODO: pasted value - replace the whole value if possible
+      // placeholder for pasted value
     }
 
     return sentinelValue;

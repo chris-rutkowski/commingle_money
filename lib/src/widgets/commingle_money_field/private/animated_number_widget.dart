@@ -79,8 +79,12 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
 
   @override
   Widget build(BuildContext context) {
-    final children = <Widget>[];
+    final painter = TextPainter(
+      text: TextSpan(text: '0', style: widget.textStyle),
+      textDirection: TextDirection.ltr,
+    )..layout();
 
+    final children = <Widget>[];
     var leading = 0.0;
     var width = 0.0;
     var cursorLeading = 0.0;
@@ -140,10 +144,9 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
       duration: widget.animationDuration,
       curve: widget.curve,
       width: width,
-      height: 40,
-      color: Colors.yellow.withAlpha(50),
+      height: painter.height,
       child: Stack(
-        clipBehavior: Clip.none, // for cursor
+        clipBehavior: Clip.none,
         children: [
           ...children,
           if (widget.showCursor)
