@@ -25,7 +25,7 @@ final class BlinkingCursorWidget extends StatelessWidget {
       return result;
     }
 
-    if (Theme.of(context).platform == TargetPlatform.iOS || Theme.of(context).platform == TargetPlatform.macOS) {
+    if (Theme.of(context).platform == .iOS || Theme.of(context).platform == .macOS) {
       return CupertinoTheme.of(context).primaryColor;
     }
 
