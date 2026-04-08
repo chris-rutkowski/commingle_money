@@ -49,6 +49,7 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
               mainAxisSize: MainAxisSize.min,
               children: [
                 CommingleMoneyField(
+                  placeholder: 'amount',
                   mathOperatorDispatcher: mathOperatorDispatcher,
                   controller: moneyEditingController,
                   focusNode: focusNode,
