@@ -2,14 +2,14 @@ import 'package:commingle_money/commingle_money.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
-final class AnimatedMoneyFieldScreen extends StatefulWidget {
-  const AnimatedMoneyFieldScreen({super.key});
+final class CommingleMoneyFieldScreen extends StatefulWidget {
+  const CommingleMoneyFieldScreen({super.key});
 
   @override
-  State<AnimatedMoneyFieldScreen> createState() => _AnimatedMoneyFieldScreenState();
+  State<CommingleMoneyFieldScreen> createState() => _CommingleMoneyFieldScreenState();
 }
 
-final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScreen> {
+final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScreen> {
   final focusNode = FocusNode();
   final mathOperatorDispatcher = MathOperatorDispatcher();
   late final MoneyEditingController moneyEditingController;
@@ -17,12 +17,11 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
   @override
   void initState() {
     super.initState();
+  }
 
-    // moneyEditingController = MoneyEditingController(
-    //   currencyCode: CurrencyCodes.btc,
-    //   amount: Decimal.parse('1'),
-    //   separators: AmountFormatSeparators.read(context),
-    // );
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
     moneyEditingController = MoneyEditingController(
       currencyCode: CurrencyCodes.usd,
@@ -33,8 +32,8 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
 
   @override
   void dispose() {
-    moneyEditingController.dispose();
     focusNode.dispose();
+    moneyEditingController.dispose();
     super.dispose();
   }
 
@@ -49,17 +48,6 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                // const SizedBox(
-                //   // width: 200,
-                //   child: AnimatedMoneyLabel(
-                //     // money: Money(amount: Decimal.parse('0'), currencyCode: CurrencyCodes.usd),
-                //     money: null,
-                //     // money: Money(amount: Decimal.parse('2539.2'), currencyCode: CurrencyCodes.usd),
-                //     forceFractional: true,
-                //     showCursor: true,
-                //     placeholder: '0',
-                //   ),
-                // ),
                 CommingleMoneyField(
                   mathOperatorDispatcher: mathOperatorDispatcher,
                   moneyController: moneyEditingController,
@@ -71,20 +59,20 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                 ListenableBuilder(
                   listenable: moneyEditingController,
                   builder: (context, child) {
-                    return Text('Current value: ${moneyEditingController.value}');
+                    // return Text('Current value: ${moneyEditingController.value.toString()}');
+
+                    if (moneyEditingController.value == null) {
+                      return Text(
+                        'Current value: ${moneyEditingController.currencyCode} null',
+                      );
+                    } else {
+                      return Text(
+                        'Current value: ${moneyEditingController.value.toString()}',
+                      );
+                    }
                   },
                 ),
-                // ConstrainedBox(
-                //   constraints: const BoxConstraints(minHeight: 72),
-                //   child: OldAnimatedMoneyField(
-                //     controller: controller,
-                //     focusNode: focusNode,
-                //     cursorBlinkDuration: const Duration(milliseconds: 900),
-                //     contentAnimationDuration: const Duration(milliseconds: 900),
-                //     style: textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w600),
-                //     secondaryStyle: textTheme.titleLarge,
-                //   ),
-                // ),
+
                 const SizedBox(height: 16),
 
                 Wrap(
