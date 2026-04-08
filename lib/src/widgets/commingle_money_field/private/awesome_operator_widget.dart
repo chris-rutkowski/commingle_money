@@ -3,13 +3,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../commingle_money.dart';
+import '../math_operator.dart';
 import 'animated_character.dart';
 import 'animated_character_widget.dart';
 import 'awesome_style_override.dart';
 
 final class AwesomeOperatorWidget extends StatefulWidget {
-  final AwesomeMoneyFieldButton? operator;
+  final MathOperator? operator;
   final Duration animationDuration;
   final Curve curve;
   final AwesomeStyleOverride? styleOverride;
@@ -177,18 +177,18 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
   // </Utilities>
 }
 
-extension on AwesomeMoneyFieldButton {
+extension on MathOperator {
   String get stringValue {
     switch (this) {
-      case AwesomeMoneyFieldButton.plus:
+      case .plus:
         return '+';
-      case AwesomeMoneyFieldButton.minus:
+      case .minus:
         return '-';
-      case AwesomeMoneyFieldButton.multiply:
+      case .multiply:
         return '×';
-      case AwesomeMoneyFieldButton.divide:
+      case .divide:
         return '÷';
-      case AwesomeMoneyFieldButton.equal:
+      case .equal:
         return '=';
     }
   }

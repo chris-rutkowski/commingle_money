@@ -2,7 +2,7 @@
 
 import 'package:decimal/decimal.dart';
 
-import '../../../commingle_money.dart';
+import '../amount_editing_state.dart';
 
 extension AmountEditingStatePrivate on AmountEditingState {
   static AmountEditingState fromValue(Decimal? value) {

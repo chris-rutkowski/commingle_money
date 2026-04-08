@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import '../../../commingle_money.dart';
+import 'money_label.dart';
 
 /// Defines animation parameters for transitioning between values in a [MoneyLabel].
 final class MoneyLabelAnimation extends Equatable {
