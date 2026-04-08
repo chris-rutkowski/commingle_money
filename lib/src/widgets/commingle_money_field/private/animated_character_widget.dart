@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'animated_character.dart';
+import 'animated_character_role.dart';
 import 'animated_number_widget.dart';
 import 'animated_operator_widget.dart';
 import 'style_type_override.dart';

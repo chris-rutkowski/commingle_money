@@ -12,6 +12,7 @@ import '../../../private/amount_formatter.dart';
 import '../../../private/decimal_components.dart';
 import '../../../private/list_extensions.dart';
 import 'animated_character.dart';
+import 'animated_character_role.dart';
 import 'animated_character_widget.dart';
 import 'blinking_cursor_widget.dart';
 import 'style_type_override.dart';

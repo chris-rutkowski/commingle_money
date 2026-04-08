@@ -2,19 +2,8 @@
 
 import 'package:flutter/material.dart';
 
-enum AnimatedCharacterRole {
-  placeholder,
-  digit,
-  groupingSeparator,
-  decimalSeparator,
-  fractionalDigit,
-  fractionalPlaceholder,
-  operator,
-}
+import 'animated_character_role.dart';
 
-extension AnimatedCharacterRoleExtension on AnimatedCharacterRole {
-  bool get isPlaceholder => this == .placeholder || this == .fractionalPlaceholder;
-}
 
 final class AnimatedCharacter {
   final Key key;
