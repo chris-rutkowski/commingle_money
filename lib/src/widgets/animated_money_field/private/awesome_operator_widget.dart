@@ -80,6 +80,8 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
             textStyle: textStyle,
             placeholderColor: Colors.grey,
             styleOverride: widget.styleOverride,
+            curve: widget.curve,
+            duration: widget.animationDuration,
           ),
         ),
       );
@@ -99,6 +101,8 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
             textStyle: textStyle,
             placeholderColor: Colors.grey,
             styleOverride: widget.styleOverride,
+            curve: widget.curve,
+            duration: widget.animationDuration,
           ),
         ),
       );

@@ -10,6 +10,8 @@ final class AnimatedCharacterWidget extends StatelessWidget {
   final TextStyle textStyle;
   final Color placeholderColor;
   final AwesomeStyleOverride? styleOverride;
+  final Curve curve;
+  final Duration duration;
 
   const AnimatedCharacterWidget({
     super.key,
@@ -17,6 +19,8 @@ final class AnimatedCharacterWidget extends StatelessWidget {
     required this.textStyle,
     required this.placeholderColor,
     this.styleOverride,
+    required this.curve,
+    required this.duration,
   });
 
   @override
@@ -49,8 +53,8 @@ final class AnimatedCharacterWidget extends StatelessWidget {
           child: Opacity(
             opacity: character.animationController.value,
             child: AnimatedDefaultTextStyle(
-              // TODO: inject duration and curve
-              duration: const Duration(milliseconds: 300),
+              duration: duration,
+              curve: curve,
               style: effectiveStyle,
               child: Text(character.character),
             ),
