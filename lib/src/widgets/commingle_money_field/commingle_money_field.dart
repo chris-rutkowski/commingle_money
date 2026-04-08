@@ -14,6 +14,7 @@ import 'private/sentinel.dart';
 
 // To improve:
 // - AnimatedPositionedDirectional and overall RTL support
+// - Support cut, copy and paste
 
 /// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders matching currency precision and reach animations.
 /// When provided with [mathOperatorDispatcher] also supports basic arithmetic operations.
@@ -372,6 +373,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                     child: prefix,
                   ),
                 ),
+
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: effectiveFocusNode.requestFocus,
@@ -432,7 +434,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                   ],
                 ),
               ),
-          
+
               if (widget.suffix case final suffix?)
                 AnimatedAppearanceWrapper(
                   visible: showAffixes,
