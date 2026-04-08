@@ -57,7 +57,20 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
     }
   }
 
-  var operandB = '';
+  var _operandB = '';
+  String get operandB => _operandB;
+  set operandB(String value) {
+    if (value == _operandB) {
+      return;
+    }
+    _operandB = value;
+
+    final evaluated = evaluate();
+
+    if (evaluated != null) {
+      widget.moneyController.value = evaluated;
+    }
+  }
 
   @override
   void initState() {
@@ -76,9 +89,19 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
       return;
     }
 
+    if (button != AwesomeMoneyFieldButton.equal && !widget.focusNode.hasFocus) {
+      widget.focusNode.requestFocus();
+    }
+
+    final operatorADecimal = Decimal.tryParse(operandA);
+    if (operatorADecimal == null || operatorADecimal == Decimal.zero) {
+      return;
+    }
+
     setState(() {
       if (button != AwesomeMoneyFieldButton.equal) {
         activeButton = button;
+        widget.focusNode.requestFocus();
       } else {
         activeButton = null;
       }
@@ -98,8 +121,24 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   }
 
   void _handleControllerChanged() {
-    if (widget.moneyController.value?.amount != Decimal.tryParse(operandA)) {
-      operandA = widget.moneyController.value?.amount.toString() ?? '';
+    var reset = false;
+
+    final evaluated = evaluate()?.roundedToCurrencyPrecision();
+
+    if (evaluated != null && widget.moneyController.value != evaluated) {
+      reset = true;
+    }
+
+    if (evaluated == null && widget.moneyController.value?.amount != Decimal.tryParse(operandA)) {
+      reset = true;
+    }
+
+    if (reset) {
+      setState(() {
+        operandA = widget.moneyController.value?.amount.toString() ?? '';
+        activeButton = null;
+        operandB = '';
+      });
     }
   }
 
@@ -192,6 +231,37 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
     }
 
     return sentinelValue;
+  }
+
+  Money? evaluate() {
+    final operandADecimal = Decimal.tryParse(operandA);
+    final operandBDecimal = Decimal.tryParse(operandB);
+
+    if (operandADecimal == null || operandBDecimal == null) {
+      return null;
+    }
+
+    final operandAMoney = Money(
+      currencyCode: widget.moneyController.currencyCode,
+      amount: operandADecimal,
+    );
+
+    switch (activeButton) {
+      case .plus:
+        return operandAMoney + operandBDecimal;
+      case .minus:
+        return operandAMoney - operandBDecimal;
+      case .multiply:
+        return operandAMoney * operandBDecimal;
+      case .divide:
+        if (operandBDecimal != Decimal.zero) {
+          return operandAMoney / operandBDecimal;
+        }
+      case .equal:
+      case null:
+        return null;
+    }
+    return null;
   }
 
   @override
