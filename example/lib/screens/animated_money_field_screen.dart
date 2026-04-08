@@ -60,7 +60,7 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                 //     placeholder: '0',
                 //   ),
                 // ),
-                AwesomeMoneyField(
+                CommingleMoneyField(
                   operationController: operationController,
                   moneyController: moneyEditingController,
                   focusNode: focusNode,

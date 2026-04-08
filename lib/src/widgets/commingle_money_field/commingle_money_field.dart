@@ -12,7 +12,7 @@ import 'private/utils.dart';
 
 /// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders and reach animations.
 /// When provided with [operationController] also supports basic arithmetic operations.
-final class AwesomeMoneyField extends StatefulWidget {
+final class CommingleMoneyField extends StatefulWidget {
   /// Optional [Widget] to display before the field value, hidden during arithmetic operation.
   final Widget? prefix;
 
@@ -34,8 +34,8 @@ final class AwesomeMoneyField extends StatefulWidget {
   /// Curve of animations when the value changes.
   final Curve curve;
 
-  /// Creates an [AwesomeMoneyField] widget.
-  const AwesomeMoneyField({
+  /// Creates an [CommingleMoneyField] widget.
+  const CommingleMoneyField({
     super.key,
     this.prefix,
     this.suffix,
@@ -47,10 +47,10 @@ final class AwesomeMoneyField extends StatefulWidget {
   });
 
   @override
-  State<AwesomeMoneyField> createState() => _AwesomeMoneyFieldState();
+  State<CommingleMoneyField> createState() => _CommingleMoneyFieldState();
 }
 
-final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
+final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
   late final TextEditingController inputController;
 
   final fallbackFocusNode = FocusNode();
@@ -104,7 +104,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   }
 
   @override
-  void didUpdateWidget(covariant AwesomeMoneyField oldWidget) {
+  void didUpdateWidget(covariant CommingleMoneyField oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     if (oldWidget.operationController != widget.operationController) {
