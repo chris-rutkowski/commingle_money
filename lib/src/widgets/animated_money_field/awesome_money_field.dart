@@ -10,17 +10,25 @@ import 'private/utils.dart';
 // To improve:
 // - AnimatedPositionedDirectional for RTL
 
-// ignore_for_file: public_member_api_docs TODO TO document
-
+/// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders and reach animations.
+/// When provided with [operationController] also supports basic arithmetic operations.
 final class AwesomeMoneyField extends StatefulWidget {
+  /// Optional [Widget] to display before the field value, hidden during arithmetic operation.
   final Widget? prefix;
+
+  /// Optional [Widget] to display after the field value, hidden during arithmetic operation.
   final Widget? suffix;
 
-  /// Operation controller for handling arithmetic operations.
+  /// Optional [AwesomeMoneyFieldMathController] for providing arithmetic operations requests
   final AwesomeMoneyFieldMathController? operationController;
+
+  /// [MoneyEditingController] for setting and obtaining value of the field as user types.
   final MoneyEditingController moneyController;
+
+  /// [FocusNode] for managing focus of the field.
   final FocusNode focusNode;
 
+  /// Creates an [AwesomeMoneyField] widget.
   const AwesomeMoneyField({
     super.key,
     this.prefix,
