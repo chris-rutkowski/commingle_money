@@ -140,14 +140,6 @@ final class Money extends Equatable {
       amount: Decimal.fromBigInt(amount ~/ decimalDivisor),
     );
   }
-
-  Money backspace() {
-    // todo check for 0 and decimals
-    return Money(
-      currencyCode: currencyCode,
-      amount: Decimal.fromBigInt(amount ~/ Decimal.fromInt(10)),
-    );
-  }
 }
 
 Decimal _getDecimal(dynamic value, CurrencyCode currencyCode) {
