@@ -8,13 +8,13 @@ import 'animated_character.dart';
 import 'animated_character_widget.dart';
 import 'style_type_override.dart';
 
-final class AwesomeOperatorWidget extends StatefulWidget {
+final class AnimatedOperatorWidget extends StatefulWidget {
   final MathOperator? operator;
   final Duration animationDuration;
   final Curve curve;
   final StyleTypeOverride? styleTypeOverride;
 
-  const AwesomeOperatorWidget({
+  const AnimatedOperatorWidget({
     super.key,
     required this.operator,
     required this.animationDuration,
@@ -23,10 +23,10 @@ final class AwesomeOperatorWidget extends StatefulWidget {
   });
 
   @override
-  State<AwesomeOperatorWidget> createState() => _AwesomeOperatorWidgetState();
+  State<AnimatedOperatorWidget> createState() => _AnimatedOperatorWidgetState();
 }
 
-final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> with TickerProviderStateMixin {
+final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> with TickerProviderStateMixin {
   final characters = <AnimatedCharacter>[];
   final retiredCharacters = <AnimatedCharacter>[];
 
@@ -139,7 +139,7 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
   }
 
   @override
-  void didUpdateWidget(covariant AwesomeOperatorWidget oldWidget) {
+  void didUpdateWidget(covariant AnimatedOperatorWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
 
     manage();

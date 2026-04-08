@@ -8,7 +8,7 @@ import '../../money.dart';
 import 'math_operator.dart';
 import 'math_operator_dispatcher.dart';
 import 'private/animated_number_widget.dart';
-import 'private/awesome_operator_widget.dart';
+import 'private/animated_operator_widget.dart';
 import 'private/utils.dart';
 
 // To improve:
@@ -355,7 +355,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                                 : .placeholder
                           : null,
                     ),
-                    AwesomeOperatorWidget(
+                    AnimatedOperatorWidget(
                       operator: activeOperator,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
@@ -370,7 +370,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       curve: widget.curve,
                       styleTypeOverride: .placeholder,
                     ),
-                    AwesomeOperatorWidget(
+                    AnimatedOperatorWidget(
                       operator: operandB.isEmpty ? null : .equal,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
