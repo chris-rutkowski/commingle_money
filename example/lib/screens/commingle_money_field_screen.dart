@@ -19,23 +19,9 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
 
   final focusNode = FocusNode();
   final mathOperatorDispatcher = MathOperatorDispatcher();
-  late final MoneyEditingController moneyEditingController;
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    moneyEditingController = MoneyEditingController(
-      currencyCode: CurrencyCodes.usd,
-      // amount: null,
-      separators: AmountFormatSeparators.read(context),
-    );
-  }
+  final moneyEditingController = MoneyEditingController(
+    currencyCode: CurrencyCodes.usd,
+  );
 
   @override
   void dispose() {
