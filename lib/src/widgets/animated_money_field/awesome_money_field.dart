@@ -25,8 +25,8 @@ final class AwesomeMoneyField extends StatefulWidget {
   /// [MoneyEditingController] for setting and obtaining value of the field as user types.
   final MoneyEditingController moneyController;
 
-  /// [FocusNode] for managing focus of the field.
-  final FocusNode focusNode;
+  /// Optional [FocusNode] for managing focus of the field.
+  final FocusNode? focusNode;
 
   /// Duration of animations when the value changes.
   final Duration animationDuration;
@@ -41,7 +41,7 @@ final class AwesomeMoneyField extends StatefulWidget {
     this.suffix,
     this.operationController,
     required this.moneyController,
-    required this.focusNode,
+    this.focusNode,
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
   });
@@ -52,6 +52,10 @@ final class AwesomeMoneyField extends StatefulWidget {
 
 final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   late final TextEditingController inputController;
+
+  final fallbackFocusNode = FocusNode();
+  FocusNode get effectiveFocusNode => widget.focusNode ?? fallbackFocusNode;
+
   AwesomeMoneyFieldButton? activeButton;
 
   var _operandA = '';
@@ -92,21 +96,36 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   void initState() {
     super.initState();
     inputController = TextEditingController.fromValue(sentinelValue);
-
     widget.operationController?.listener = onOperationInput;
-    widget.focusNode.addListener(_handleFocusNodeChanged);
+    effectiveFocusNode.addListener(_handleFocusNodeChanged);
     widget.moneyController.addListener(_handleControllerChanged);
 
     operandA = widget.moneyController.value?.amount.toString() ?? '';
   }
 
-  void onOperationInput(AwesomeMoneyFieldButton button) {
-    if (button != .equal && !widget.focusNode.hasFocus) {
-      widget.focusNode.requestFocus();
+  @override
+  void didUpdateWidget(covariant AwesomeMoneyField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.operationController != widget.operationController) {
+      oldWidget.operationController?.listener = null;
+      widget.operationController?.listener = onOperationInput;
     }
 
-    if (button == .equal && widget.focusNode.hasFocus) {
-      widget.focusNode.unfocus();
+    if (oldWidget.focusNode != widget.focusNode) {
+      final oldFocusNode = oldWidget.focusNode ?? fallbackFocusNode;
+      oldFocusNode.removeListener(_handleFocusNodeChanged);
+      effectiveFocusNode.addListener(_handleFocusNodeChanged);
+    }
+  }
+
+  void onOperationInput(AwesomeMoneyFieldButton button) {
+    if (button != .equal && !effectiveFocusNode.hasFocus) {
+      effectiveFocusNode.requestFocus();
+    }
+
+    if (button == .equal && effectiveFocusNode.hasFocus) {
+      effectiveFocusNode.unfocus();
     }
 
     final operatorADecimal = Decimal.tryParse(operandA);
@@ -133,8 +152,10 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
 
   @override
   void dispose() {
+    widget.operationController?.listener = null;
     inputController.dispose();
-    widget.focusNode.removeListener(_handleFocusNodeChanged);
+    effectiveFocusNode.removeListener(_handleFocusNodeChanged);
+    fallbackFocusNode.dispose();
     widget.moneyController.removeListener(_handleControllerChanged);
     super.dispose();
   }
@@ -143,7 +164,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
     setState(() {
       // setState always executed to update cursor and other widgets
 
-      if (!widget.focusNode.hasFocus) {
+      if (!effectiveFocusNode.hasFocus) {
         activeButton = null;
         operandB = '';
         operandA = widget.moneyController.value?.amount.toString() ?? '';
@@ -301,7 +322,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTap: widget.focusNode.requestFocus,
+      onTap: effectiveFocusNode.requestFocus,
       child: Stack(
         children: [
           FittedBox(
@@ -316,7 +337,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
                     AwesomeDigitsWidget(
                       text: operandA.isEmpty ? null : operandA,
                       currencyCode: widget.moneyController.currencyCode,
-                      showCursor: widget.focusNode.hasFocus && activeButton == null,
+                      showCursor: effectiveFocusNode.hasFocus && activeButton == null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                       styleOverride: activeButton != null
@@ -335,7 +356,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
                       text: operandB.isEmpty ? null : operandB,
                       placeholder: '',
                       currencyCode: widget.moneyController.currencyCode,
-                      showCursor: widget.focusNode.hasFocus && activeButton != null,
+                      showCursor: effectiveFocusNode.hasFocus && activeButton != null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                       styleOverride: .placeholder,
@@ -364,7 +385,7 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
             height: 0,
             child: TextField(
               controller: inputController,
-              focusNode: widget.focusNode,
+              focusNode: effectiveFocusNode,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
               textInputAction: TextInputAction.done, // TODO: configurable and callback
               enableInteractiveSelection: false,
