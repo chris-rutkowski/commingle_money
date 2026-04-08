@@ -7,6 +7,7 @@ import '../../currency.dart';
 import '../../money.dart';
 import 'math_operator.dart';
 import 'math_operator_dispatcher.dart';
+import 'private/animated_appearance_wrapper.dart';
 import 'private/animated_number_widget.dart';
 import 'private/animated_operator_widget.dart';
 import 'private/sentinel.dart';
@@ -333,6 +334,8 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
   @override
   Widget build(BuildContext context) {
+    final showAffixes = activeOperator == null;
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: effectiveFocusNode.requestFocus,
@@ -346,7 +349,14 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    ?widget.prefix,
+                    if (widget.prefix case final prefix?)
+                      AnimatedAppearanceWrapper(
+                        visible: showAffixes,
+                        duration: widget.animationDuration,
+                        curve: widget.curve,
+                        alignment: .centerLeft,
+                        child: prefix,
+                      ),
                     AnimatedNumberWidget(
                       text: operandA.isEmpty ? null : operandA,
                       currencyCode: widget.moneyController.currencyCode,
@@ -393,7 +403,14 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                     ),
-                    ?widget.suffix,
+                    if (widget.suffix case final suffix?)
+                      AnimatedAppearanceWrapper(
+                        visible: showAffixes,
+                        duration: widget.animationDuration,
+                        curve: widget.curve,
+                        alignment: .centerRight,
+                        child: suffix,
+                      ),
                   ],
                 );
               },
