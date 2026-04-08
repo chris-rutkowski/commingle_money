@@ -96,19 +96,15 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
       )..layout();
 
       children.add(
-        AnimatedPositioned(
+        AnimatedCharacterWidget(
           key: character.key,
+          left: leading,
+          character: character,
+          textStyle: widget.textStyle,
+          placeholderColor: widget.placeholderColor,
+          styleTypeOverride: widget.styleTypeOverride,
           duration: widget.animationDuration,
           curve: widget.curve,
-          left: leading,
-          child: AnimatedCharacterWidget(
-            character: character,
-            textStyle: widget.textStyle,
-            placeholderColor: widget.placeholderColor,
-            styleTypeOverride: widget.styleTypeOverride,
-            duration: widget.animationDuration,
-            curve: widget.curve,
-          ),
         ),
       );
 
@@ -123,19 +119,15 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
 
     for (final character in retiredCharacters) {
       children.add(
-        AnimatedPositioned(
+        AnimatedCharacterWidget(
           key: character.key,
+          left: character.retiredLeading,
+          character: character,
+          textStyle: widget.textStyle,
+          placeholderColor: widget.placeholderColor,
+          styleTypeOverride: widget.styleTypeOverride,
           duration: widget.animationDuration,
           curve: widget.curve,
-          left: character.retiredLeading,
-          child: AnimatedCharacterWidget(
-            character: character,
-            textStyle: widget.textStyle,
-            placeholderColor: widget.placeholderColor,
-            styleTypeOverride: widget.styleTypeOverride,
-            duration: widget.animationDuration,
-            curve: widget.curve,
-          ),
         ),
       );
     }

@@ -10,6 +10,7 @@ import 'style_type_override.dart';
 
 /// Single character widget displayed in [AnimatedNumberWidget] and [AnimatedOperatorWidget]
 final class AnimatedCharacterWidget extends StatelessWidget {
+  final double left;
   final AnimatedCharacter character;
   final TextStyle textStyle;
   final Color? placeholderColor;
@@ -19,6 +20,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
 
   const AnimatedCharacterWidget({
     super.key,
+    required this.left,
     required this.character,
     required this.textStyle,
     required this.placeholderColor,
@@ -35,47 +37,52 @@ final class AnimatedCharacterWidget extends StatelessWidget {
           : null,
     );
 
-    return ListenableBuilder(
-      listenable: character.animationController,
-      child: AnimatedDefaultTextStyle(
-        duration: duration,
-        curve: curve,
-        style: effectiveStyle,
-        child: Text(character.character),
+    return AnimatedPositioned(
+      left: left,
+      duration: duration,
+      curve: curve,
+      child: ListenableBuilder(
+        listenable: character.animationController,
+        child: AnimatedDefaultTextStyle(
+          duration: duration,
+          curve: curve,
+          style: effectiveStyle,
+          child: Text(character.character),
+        ),
+        builder: (context, child) {
+          final scale = character.animationController.isForwardOrCompleted
+              ? Tween(
+                      begin: 0.75,
+                      end: 1.0,
+                    )
+                    .animate(
+                      CurvedAnimation(
+                        parent: character.animationController,
+                        curve: Curves.easeOutBack,
+                      ),
+                    )
+                    .value
+              : Tween(
+                      begin: 0.9,
+                      end: 1.0,
+                    )
+                    .animate(
+                      CurvedAnimation(
+                        parent: character.animationController,
+                        curve: Curves.easeOut,
+                      ),
+                    )
+                    .value;
+      
+          return Transform.scale(
+            scale: scale,
+            child: Opacity(
+              opacity: character.animationController.value,
+              child: child,
+            ),
+          );
+        },
       ),
-      builder: (context, child) {
-        final scale = character.animationController.isForwardOrCompleted
-            ? Tween(
-                    begin: 0.75,
-                    end: 1.0,
-                  )
-                  .animate(
-                    CurvedAnimation(
-                      parent: character.animationController,
-                      curve: Curves.easeOutBack,
-                    ),
-                  )
-                  .value
-            : Tween(
-                    begin: 0.9,
-                    end: 1.0,
-                  )
-                  .animate(
-                    CurvedAnimation(
-                      parent: character.animationController,
-                      curve: Curves.easeOut,
-                    ),
-                  )
-                  .value;
-
-        return Transform.scale(
-          scale: scale,
-          child: Opacity(
-            opacity: character.animationController.value,
-            child: child,
-          ),
-        );
-      },
     );
   }
 

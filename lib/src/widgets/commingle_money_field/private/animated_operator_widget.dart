@@ -69,19 +69,15 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
       )..layout();
 
       children.add(
-        AnimatedPositioned(
+        AnimatedCharacterWidget(
           key: character.key,
-          duration: widget.animationDuration,
-          curve: widget.curve,
           left: 0,
-          child: AnimatedCharacterWidget(
-            character: character,
-            textStyle: widget.textStyle,
-            placeholderColor: widget.placeholderColor,
-            styleTypeOverride: widget.styleTypeOverride,
-            curve: widget.curve,
-            duration: widget.animationDuration,
-          ),
+          character: character,
+          textStyle: widget.textStyle,
+          placeholderColor: widget.placeholderColor,
+          styleTypeOverride: widget.styleTypeOverride,
+          curve: widget.curve,
+          duration: widget.animationDuration,
         ),
       );
 
@@ -90,19 +86,15 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
 
     for (final character in retiredCharacters) {
       children.add(
-        AnimatedPositioned(
+        AnimatedCharacterWidget(
           key: character.key,
-          duration: widget.animationDuration,
-          curve: widget.curve,
           left: 0,
-          child: AnimatedCharacterWidget(
-            character: character,
-            textStyle: widget.textStyle,
-            placeholderColor: widget.placeholderColor,
-            styleTypeOverride: widget.styleTypeOverride,
-            curve: widget.curve,
-            duration: widget.animationDuration,
-          ),
+          character: character,
+          textStyle: widget.textStyle,
+          placeholderColor: widget.placeholderColor,
+          styleTypeOverride: widget.styleTypeOverride,
+          curve: widget.curve,
+          duration: widget.animationDuration,
         ),
       );
     }
