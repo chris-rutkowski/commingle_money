@@ -9,7 +9,7 @@ import 'math_operator.dart';
 import 'math_operator_dispatcher.dart';
 import 'private/animated_number_widget.dart';
 import 'private/animated_operator_widget.dart';
-import 'private/utils.dart';
+import 'private/sentinel.dart';
 
 // To improve:
 // - AnimatedPositionedDirectional for RTL
