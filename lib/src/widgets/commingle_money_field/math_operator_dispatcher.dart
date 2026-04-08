@@ -1,7 +1,7 @@
 import 'commingle_money_field.dart';
 import 'math_operator.dart';
 
-/// A callback invoked when a math [operator] is pressed.
+/// A callback invoked when a math [operator] is dispatched.
 typedef MathOperatorListener = void Function(MathOperator operator);
 
 /// A dispatcher used to notify [CommingleMoneyField] (or other listener) about user's intent to perform an arithmetic operations.
