@@ -98,17 +98,19 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
     }
 
     final operatorADecimal = Decimal.tryParse(operandA);
+
+    // ignoring operation if operandA is 0 or null
     if (operatorADecimal == null || operatorADecimal == Decimal.zero) {
       return;
     }
 
     setState(() {
-      if (button != AwesomeMoneyFieldButton.equal) {
-        activeButton = button;
-      } else {
+      if (button == AwesomeMoneyFieldButton.equal) {
         activeButton = null;
         operandB = '';
         operandA = widget.moneyController.value?.amount.toString() ?? '';
+      } else {
+        activeButton = button;
       }
     });
   }
