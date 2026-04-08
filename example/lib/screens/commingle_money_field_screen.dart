@@ -116,28 +116,12 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
               alignment: WrapAlignment.center,
               spacing: 8,
               runSpacing: 8,
-              children: [
-                ElevatedButton(
-                  onPressed: () => mathOperatorDispatcher.handle(MathOperator.plus),
-                  child: const Text('+'),
-                ),
-                ElevatedButton(
-                  onPressed: () => mathOperatorDispatcher.handle(MathOperator.minus),
-                  child: const Text('−'),
-                ),
-                ElevatedButton(
-                  onPressed: () => mathOperatorDispatcher.handle(MathOperator.multiply),
-                  child: const Text('×'),
-                ),
-                ElevatedButton(
-                  onPressed: () => mathOperatorDispatcher.handle(MathOperator.divide),
-                  child: const Text('÷'),
-                ),
-                ElevatedButton(
-                  onPressed: () => mathOperatorDispatcher.handle(MathOperator.equal),
-                  child: const Text('='),
-                ),
-              ],
+              children: MathOperator.values.map((operator) {
+                return ElevatedButton(
+                  onPressed: () => mathOperatorDispatcher.handle(operator),
+                  child: Text(defaultMathOperatorSymbolResolver(operator)),
+                );
+              }).toList(),
             ),
 
             const SizedBox(height: 16),
