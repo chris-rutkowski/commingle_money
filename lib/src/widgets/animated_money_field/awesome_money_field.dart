@@ -265,7 +265,8 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
       case .plus:
         return operandAMoney + operandBDecimal;
       case .minus:
-        return operandAMoney - operandBDecimal;
+        final result = operandAMoney - operandBDecimal;
+        return result.amount >= Decimal.zero ? result : operandAMoney * Decimal.zero;
       case .multiply:
         return operandAMoney * operandBDecimal;
       case .divide:
@@ -300,18 +301,26 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
                       text: operandA.isEmpty ? null : operandA,
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus && activeButton == null,
+                      styleOverride: activeButton != null
+                          ? operandB.isEmpty
+                                ? .normal
+                                : .placeholder
+                          : null,
                     ),
                     AwesomeOperatorWidget(
                       operator: activeButton,
+                      styleOverride: operandB.isEmpty ? .normal : .placeholder,
                     ),
                     AwesomeDigitsWidget(
                       text: operandB.isEmpty ? null : operandB,
                       placeholder: '',
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus && activeButton != null,
+                      styleOverride: .placeholder,
                     ),
                     AwesomeOperatorWidget(
                       operator: operandB.isEmpty ? null : .equal,
+                      styleOverride: operandB.isEmpty ? .placeholder : .normal,
                     ),
                     AwesomeDigitsWidget(
                       text: operandB.isEmpty ? null : widget.moneyController.value?.amount.toString(),

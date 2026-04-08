@@ -6,18 +6,21 @@ import 'package:flutter/material.dart';
 import '../../../../commingle_money.dart';
 import 'animated_character.dart';
 import 'animated_character_widget.dart';
+import 'awesome_style_override.dart';
 
 final class AwesomeOperatorWidget extends StatefulWidget {
   final AwesomeMoneyFieldButton? operator;
   final Duration animationDuration;
   final Curve curve;
+  final AwesomeStyleOverride? styleOverride;
 
   const AwesomeOperatorWidget({
     super.key,
     required this.operator,
 
-    this.animationDuration = const Duration(milliseconds: 250),
-    this.curve = Curves.easeInOut,
+    this.animationDuration = const Duration(milliseconds: 250), // TODO: injected
+    this.curve = Curves.easeInOut, // TODO: injected
+    this.styleOverride,
   });
 
   @override
@@ -72,7 +75,12 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
           duration: widget.animationDuration,
           curve: widget.curve,
           left: 0,
-          child: AnimatedCharacterWidget(character: character, textStyle: textStyle, placeholderColor: Colors.grey),
+          child: AnimatedCharacterWidget(
+            character: character,
+            textStyle: textStyle,
+            placeholderColor: Colors.grey,
+            styleOverride: widget.styleOverride,
+          ),
         ),
       );
 
@@ -86,7 +94,12 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
           duration: widget.animationDuration,
           curve: widget.curve,
           left: 0,
-          child: AnimatedCharacterWidget(character: character, textStyle: textStyle, placeholderColor: Colors.grey),
+          child: AnimatedCharacterWidget(
+            character: character,
+            textStyle: textStyle,
+            placeholderColor: Colors.grey,
+            styleOverride: widget.styleOverride,
+          ),
         ),
       );
     }

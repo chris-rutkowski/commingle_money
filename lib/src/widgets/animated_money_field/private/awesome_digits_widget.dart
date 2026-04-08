@@ -11,6 +11,7 @@ import '../../../private/decimal_components.dart';
 import '../../../private/list_extensions.dart';
 import 'animated_character.dart';
 import 'animated_character_widget.dart';
+import 'awesome_style_override.dart';
 import 'blinking_cursor_widget.dart';
 
 final class AwesomeDigitsWidget extends StatefulWidget {
@@ -22,6 +23,7 @@ final class AwesomeDigitsWidget extends StatefulWidget {
   final bool showCursor;
   final Color? cursorColor;
   final String placeholder;
+  final AwesomeStyleOverride? styleOverride;
 
   const AwesomeDigitsWidget({
     super.key,
@@ -33,6 +35,7 @@ final class AwesomeDigitsWidget extends StatefulWidget {
     this.showCursor = false,
     this.cursorColor,
     this.placeholder = '0',
+    this.styleOverride,
   });
 
   @override
@@ -95,7 +98,12 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
           duration: widget.animationDuration,
           curve: widget.curve,
           left: leading,
-          child: AnimatedCharacterWidget(character: character, textStyle: textStyle, placeholderColor: Colors.grey),
+          child: AnimatedCharacterWidget(
+            character: character,
+            textStyle: textStyle,
+            placeholderColor: Colors.grey, // TODO: injected and resolved in animatedwidgetcharacter
+            styleOverride: widget.styleOverride,
+          ),
         ),
       );
 
@@ -115,7 +123,12 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
           duration: widget.animationDuration,
           curve: widget.curve,
           left: character.retiredLeading,
-          child: AnimatedCharacterWidget(character: character, textStyle: textStyle, placeholderColor: Colors.grey),
+          child: AnimatedCharacterWidget(
+            character: character,
+            textStyle: textStyle,
+            placeholderColor: Colors.grey,
+            styleOverride: widget.styleOverride,
+          ),
         ),
       );
     }
