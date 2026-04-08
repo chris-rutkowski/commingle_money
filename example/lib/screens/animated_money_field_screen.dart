@@ -11,14 +11,12 @@ final class AnimatedMoneyFieldScreen extends StatefulWidget {
 
 final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScreen> {
   final focusNode = FocusNode();
-  final controller = OldAnimatedMoneyFieldController();
   final operationController = AwesomeMoneyFieldMathController();
   late final MoneyEditingController moneyEditingController;
 
   @override
   void initState() {
     super.initState();
-    controller.addListener(_onControllerChanged);
 
     // moneyEditingController = MoneyEditingController(
     //   currencyCode: CurrencyCodes.btc,
@@ -35,14 +33,9 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
 
   @override
   void dispose() {
-    controller.removeListener(_onControllerChanged);
-    controller.dispose();
+    moneyEditingController.dispose();
     focusNode.dispose();
     super.dispose();
-  }
-
-  void _onControllerChanged() {
-    setState(() {});
   }
 
   @override
@@ -161,11 +154,6 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                       child: const Text('USD null'),
                     ),
                   ],
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  'Current value: ${controller.value}',
-                  style: textTheme.bodyLarge,
                 ),
               ],
             ),
