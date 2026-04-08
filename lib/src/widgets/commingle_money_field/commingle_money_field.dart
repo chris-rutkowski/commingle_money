@@ -15,6 +15,7 @@ import 'private/sentinel.dart';
 // To improve:
 // - AnimatedPositionedDirectional and overall RTL support
 // - Support cut, copy and paste
+// - Support for negative numbers
 
 /// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders matching currency precision and reach animations.
 /// When provided with [mathOperatorDispatcher] also supports basic arithmetic operations.
