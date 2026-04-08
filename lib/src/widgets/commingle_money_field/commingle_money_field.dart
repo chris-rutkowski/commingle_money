@@ -47,9 +47,6 @@ final class CommingleMoneyField extends StatefulWidget {
   /// [MoneyEditingController] for setting and obtaining value of the field as user types.
   final MoneyEditingController controller;
 
-  /// Optional [FocusNode] for managing focus of the field.
-  final FocusNode? focusNode;
-
   /// Duration of animations when the value changes.
   final Duration animationDuration;
 
@@ -75,7 +72,6 @@ final class CommingleMoneyField extends StatefulWidget {
     this.placeholderColor,
     this.mathOperatorDispatcher,
     required this.controller,
-    this.focusNode,
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
     this.textInputAction = TextInputAction.done,
@@ -89,8 +85,7 @@ final class CommingleMoneyField extends StatefulWidget {
 final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
   final inputController = TextEditingController.fromValue(sentinelValue);
 
-  final fallbackFocusNode = FocusNode();
-  FocusNode get effectiveFocusNode => widget.focusNode ?? fallbackFocusNode;
+  FocusNode get effectiveFocusNode => widget.controller.focusNode;
 
   MathOperator? activeOperator;
 
@@ -144,7 +139,6 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     widget.mathOperatorDispatcher?.listener = null;
     inputController.dispose();
     effectiveFocusNode.removeListener(handleFocusNodeChanged);
-    fallbackFocusNode.dispose();
     widget.controller.removeListener(handleControllerChanged);
     super.dispose();
   }
@@ -156,12 +150,6 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     if (oldWidget.mathOperatorDispatcher != widget.mathOperatorDispatcher) {
       oldWidget.mathOperatorDispatcher?.listener = null;
       widget.mathOperatorDispatcher?.listener = onOperatorInput;
-    }
-
-    if (oldWidget.focusNode != widget.focusNode) {
-      final oldFocusNode = oldWidget.focusNode ?? fallbackFocusNode;
-      oldFocusNode.removeListener(handleFocusNodeChanged);
-      effectiveFocusNode.addListener(handleFocusNodeChanged);
     }
   }
 

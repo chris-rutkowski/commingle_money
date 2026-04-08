@@ -17,7 +17,6 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
     CurrencyCodes.bhd,
   ];
 
-  final focusNode = FocusNode();
   final mathOperatorDispatcher = MathOperatorDispatcher();
   final moneyEditingController = MoneyEditingController(
     currencyCode: CurrencyCodes.usd,
@@ -25,7 +24,6 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
 
   @override
   void dispose() {
-    focusNode.dispose();
     moneyEditingController.dispose();
     super.dispose();
   }
@@ -76,7 +74,6 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                 placeholder: 'amount',
                 mathOperatorDispatcher: mathOperatorDispatcher,
                 controller: moneyEditingController,
-                focusNode: focusNode,
                 affixesSpacing: 8,
                 textStyle: textStyle?.copyWith(
                   fontWeight: FontWeight.bold,
@@ -151,11 +148,13 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
               runSpacing: 8,
               children: [
                 ListenableBuilder(
-                  listenable: focusNode,
+                  listenable: moneyEditingController.focusNode,
                   builder: (context, _) {
                     return ElevatedButton(
-                      onPressed: () => focusNode.hasFocus ? focusNode.unfocus() : focusNode.requestFocus(),
-                      child: Text(focusNode.hasFocus ? 'Unfocus' : 'Focus'),
+                      onPressed: () => moneyEditingController.focusNode.hasFocus
+                          ? moneyEditingController.focusNode.unfocus()
+                          : moneyEditingController.focusNode.requestFocus(),
+                      child: Text(moneyEditingController.focusNode.hasFocus ? 'Unfocus' : 'Focus'),
                     );
                   },
                 ),
