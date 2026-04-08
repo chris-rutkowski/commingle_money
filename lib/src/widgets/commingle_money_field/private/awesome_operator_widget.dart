@@ -6,20 +6,20 @@ import 'package:flutter/material.dart';
 import '../math_operator.dart';
 import 'animated_character.dart';
 import 'animated_character_widget.dart';
-import 'awesome_style_override.dart';
+import 'style_type_override.dart';
 
 final class AwesomeOperatorWidget extends StatefulWidget {
   final MathOperator? operator;
   final Duration animationDuration;
   final Curve curve;
-  final AwesomeStyleOverride? styleOverride;
+  final StyleTypeOverride? styleTypeOverride;
 
   const AwesomeOperatorWidget({
     super.key,
     required this.operator,
     required this.animationDuration,
     required this.curve,
-    this.styleOverride,
+    this.styleTypeOverride,
   });
 
   @override
@@ -37,7 +37,6 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
 
   @override
   void dispose() {
-    // TODO: check if animation was still runing and we do double dispose or something
     for (final character in characters) {
       character.animationController.dispose();
     }
@@ -78,7 +77,7 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
             character: character,
             textStyle: textStyle,
             placeholderColor: Colors.grey,
-            styleOverride: widget.styleOverride,
+            styleTypeOverride: widget.styleTypeOverride,
             curve: widget.curve,
             duration: widget.animationDuration,
           ),
@@ -99,7 +98,7 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
             character: character,
             textStyle: textStyle,
             placeholderColor: Colors.grey,
-            styleOverride: widget.styleOverride,
+            styleTypeOverride: widget.styleTypeOverride,
             curve: widget.curve,
             duration: widget.animationDuration,
           ),

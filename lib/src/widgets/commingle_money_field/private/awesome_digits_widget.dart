@@ -13,8 +13,8 @@ import '../../../private/decimal_components.dart';
 import '../../../private/list_extensions.dart';
 import 'animated_character.dart';
 import 'animated_character_widget.dart';
-import 'awesome_style_override.dart';
 import 'blinking_cursor_widget.dart';
+import 'style_type_override.dart';
 
 final class AwesomeDigitsWidget extends StatefulWidget {
   final String? text;
@@ -25,7 +25,7 @@ final class AwesomeDigitsWidget extends StatefulWidget {
   final bool showCursor;
   final Color? cursorColor;
   final String placeholder;
-  final AwesomeStyleOverride? styleOverride;
+  final StyleTypeOverride? styleTypeOverride;
 
   const AwesomeDigitsWidget({
     super.key,
@@ -37,7 +37,7 @@ final class AwesomeDigitsWidget extends StatefulWidget {
     this.showCursor = false,
     this.cursorColor,
     this.placeholder = '0',
-    this.styleOverride,
+    this.styleTypeOverride,
   });
 
   @override
@@ -59,7 +59,6 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
 
   @override
   void dispose() {
-    // TODO: check if animation was still runing and we do double dispose or something
     for (final character in characters) {
       character.animationController.dispose();
     }
@@ -104,7 +103,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
             character: character,
             textStyle: textStyle,
             placeholderColor: Colors.grey, // TODO: injected and resolved in animatedwidgetcharacter
-            styleOverride: widget.styleOverride,
+            styleTypeOverride: widget.styleTypeOverride,
             duration: widget.animationDuration,
             curve: widget.curve,
           ),
@@ -131,7 +130,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
             character: character,
             textStyle: textStyle,
             placeholderColor: Colors.grey,
-            styleOverride: widget.styleOverride,
+            styleTypeOverride: widget.styleTypeOverride,
             duration: widget.animationDuration,
             curve: widget.curve,
           ),

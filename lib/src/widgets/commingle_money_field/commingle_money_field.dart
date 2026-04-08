@@ -344,7 +344,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
-                      styleOverride: activeOperator != null
+                      styleTypeOverride: activeOperator != null
                           ? operandB.isEmpty
                                 ? .normal
                                 : .placeholder
@@ -354,7 +354,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       operator: activeOperator,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
-                      styleOverride: operandB.isEmpty ? .normal : .placeholder,
+                      styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
                     ),
                     AwesomeDigitsWidget(
                       text: operandB.isEmpty ? null : operandB,
@@ -363,13 +363,13 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
-                      styleOverride: .placeholder,
+                      styleTypeOverride: .placeholder,
                     ),
                     AwesomeOperatorWidget(
                       operator: operandB.isEmpty ? null : .equal,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
-                      styleOverride: operandB.isEmpty ? .placeholder : .normal,
+                      styleTypeOverride: operandB.isEmpty ? .placeholder : .normal,
                     ),
                     AwesomeDigitsWidget(
                       text: operandB.isEmpty ? null : widget.moneyController.value?.amount.toString(),

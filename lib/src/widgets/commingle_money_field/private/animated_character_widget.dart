@@ -3,13 +3,13 @@
 import 'package:flutter/material.dart';
 
 import 'animated_character.dart';
-import 'awesome_style_override.dart';
+import 'style_type_override.dart';
 
 final class AnimatedCharacterWidget extends StatelessWidget {
   final AnimatedCharacter character;
   final TextStyle textStyle;
   final Color placeholderColor;
-  final AwesomeStyleOverride? styleOverride;
+  final StyleTypeOverride? styleTypeOverride;
   final Curve curve;
   final Duration duration;
 
@@ -18,7 +18,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
     required this.character,
     required this.textStyle,
     required this.placeholderColor,
-    this.styleOverride,
+    this.styleTypeOverride,
     required this.curve,
     required this.duration,
   });
@@ -26,7 +26,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final effectiveStyle = textStyle.copyWith(
-      color: (styleOverride == .placeholder || (character.role.isPlaceholder && styleOverride != .normal))
+      color: (styleTypeOverride == .placeholder || (character.role.isPlaceholder && styleTypeOverride != .normal))
           ? placeholderColor
           : null,
     );
