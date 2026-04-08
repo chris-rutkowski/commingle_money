@@ -89,8 +89,12 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
       return;
     }
 
-    if (button != AwesomeMoneyFieldButton.equal && !widget.focusNode.hasFocus) {
+    if (button != .equal && !widget.focusNode.hasFocus) {
       widget.focusNode.requestFocus();
+    }
+
+    if (button == .equal && widget.focusNode.hasFocus) {
+      widget.focusNode.unfocus();
     }
 
     final operatorADecimal = Decimal.tryParse(operandA);
@@ -101,9 +105,10 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
     setState(() {
       if (button != AwesomeMoneyFieldButton.equal) {
         activeButton = button;
-        widget.focusNode.requestFocus();
       } else {
         activeButton = null;
+        operandB = '';
+        operandA = widget.moneyController.value?.amount.toString() ?? '';
       }
     });
   }
@@ -117,7 +122,15 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   }
 
   void _handleFocusNodeChanged() {
-    setState(() {});
+    setState(() {
+      // setState always executed to update cursor and other widgets
+
+      if (!widget.focusNode.hasFocus) {
+        activeButton = null;
+        operandB = '';
+        operandA = widget.moneyController.value?.amount.toString() ?? '';
+      }
+    });
   }
 
   void _handleControllerChanged() {

@@ -27,8 +27,8 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
     // );
 
     moneyEditingController = MoneyEditingController(
-      currencyCode: CurrencyCodes.btc,
-      amount: Decimal.zero,
+      currencyCode: CurrencyCodes.usd,
+      // amount: null,
       separators: AmountFormatSeparators.read(context),
     );
   }
@@ -76,6 +76,7 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                   prefix: const Text('Prefix '),
                   suffix: const Text(' Suffix'),
                 ),
+
                 ListenableBuilder(
                   listenable: moneyEditingController,
                   builder: (context, child) {
@@ -144,6 +145,13 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
                         currencyCode: CurrencyCodes.btc,
                       ),
                       child: const Text('BTC 15.4234'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => moneyEditingController.value = Money(
+                        amount: Decimal.parse('1.234'),
+                        currencyCode: CurrencyCodes.bhd,
+                      ),
+                      child: const Text('BHD 1.234'),
                     ),
                     ElevatedButton(
                       onPressed: () {
