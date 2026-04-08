@@ -4,6 +4,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 
 import '../math_operator.dart';
+import '../math_operator_symbol_resolver.dart';
 import 'animated_character.dart';
 import 'animated_character_widget.dart';
 import 'style_type_override.dart';
@@ -14,6 +15,7 @@ final class AnimatedOperatorWidget extends StatefulWidget {
   final Duration animationDuration;
   final Curve curve;
   final Color? placeholderColor;
+  final MathOperatorSymbolResolver symbolResolver;
   final StyleTypeOverride? styleTypeOverride;
 
   const AnimatedOperatorWidget({
@@ -23,6 +25,7 @@ final class AnimatedOperatorWidget extends StatefulWidget {
     required this.animationDuration,
     required this.curve,
     required this.placeholderColor,
+    required this.symbolResolver,
     this.styleTypeOverride,
   });
 
@@ -141,7 +144,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
 
   void manage({bool animated = true}) {
     if (widget.operator != null) {
-      final string = widget.operator!.stringValue;
+      final string = widget.symbolResolver(widget.operator!);
 
       if (characters.firstOrNull?.character != string) {
         characters.toList().forEach(retireCharacter);
@@ -168,21 +171,4 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
   }
 
   // </Utilities>
-}
-
-extension on MathOperator {
-  String get stringValue {
-    switch (this) {
-      case .plus:
-        return '+';
-      case .minus:
-        return '−';
-      case .multiply:
-        return '×';
-      case .divide:
-        return '÷';
-      case .equal:
-        return '=';
-    }
-  }
 }

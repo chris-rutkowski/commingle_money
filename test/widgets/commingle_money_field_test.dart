@@ -345,6 +345,45 @@ void main() {
       await tester.snapshot();
     });
 
+    testWidgets('uses default operator symbols', (tester) async {
+      final controller = createController(amount: Decimal.parse('12'));
+      final dispatcher = MathOperatorDispatcher();
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(
+        controller: controller,
+        dispatcher: dispatcher,
+      );
+
+      dispatcher.handle(MathOperator.plus);
+      await tester.settleField();
+
+      expect(find.text('+'), findsOneWidget);
+    });
+
+    testWidgets('uses custom operator symbols', (tester) async {
+      final controller = createController(amount: Decimal.parse('12'));
+      final dispatcher = MathOperatorDispatcher();
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(
+        controller: controller,
+        dispatcher: dispatcher,
+        mathOperatorSymbolBuilder: (operator) => switch (operator) {
+          MathOperator.plus => 'plus',
+          MathOperator.equal => 'equals',
+          _ => defaultMathOperatorSymbolResolver(operator),
+        },
+      );
+
+      dispatcher.handle(MathOperator.plus);
+      await tester.settleField();
+      expect(find.text('plus'), findsOneWidget);
+
+      await tester.typeSequentially('3');
+      expect(find.text('equals'), findsOneWidget);
+    });
+
     testWidgets('placeholder with custom text style', (tester) async {
       final controller = createController();
       addTearDown(controller.dispose);
@@ -383,12 +422,14 @@ extension _WidgetTester on WidgetTester {
     Widget? suffix,
     double affixesSpacing = 0,
     TextStyle? textStyle,
+    MathOperatorSymbolResolver mathOperatorSymbolBuilder = defaultMathOperatorSymbolResolver,
   }) async {
     await pumpWidget(
       SnapshotWrapper(
         child: CommingleMoneyField(
           controller: controller,
           mathOperatorDispatcher: dispatcher,
+          symbolResolver: mathOperatorSymbolBuilder,
           prefix: prefix,
           suffix: suffix,
           affixesSpacing: affixesSpacing,

@@ -8,6 +8,7 @@ import '../../currency.dart';
 import '../../money.dart';
 import 'math_operator.dart';
 import 'math_operator_dispatcher.dart';
+import 'math_operator_symbol_resolver.dart';
 import 'private/animated_appearance_wrapper.dart';
 import 'private/animated_number_widget.dart';
 import 'private/animated_operator_widget.dart';
@@ -44,6 +45,9 @@ final class CommingleMoneyField extends StatefulWidget {
   /// Optional [MathOperatorDispatcher] for providing user input for arithmetic operations.
   final MathOperatorDispatcher? mathOperatorDispatcher;
 
+  /// Builds the display symbol for each arithmetic operator.
+  final MathOperatorSymbolResolver symbolResolver;
+
   /// [MoneyEditingController] for setting and obtaining value of the field as user types.
   final MoneyEditingController controller;
 
@@ -71,6 +75,7 @@ final class CommingleMoneyField extends StatefulWidget {
     this.placeholder = '0',
     this.placeholderColor,
     this.mathOperatorDispatcher,
+    this.symbolResolver = defaultMathOperatorSymbolResolver,
     required this.controller,
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
@@ -407,6 +412,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                       placeholderColor: widget.placeholderColor,
+                      symbolResolver: widget.symbolResolver,
                       styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
                     ),
                     AnimatedNumberWidget(
@@ -427,6 +433,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                       placeholderColor: widget.placeholderColor,
+                      symbolResolver: widget.symbolResolver,
                       styleTypeOverride: operandB.isEmpty ? .placeholder : .normal,
                     ),
                     AnimatedNumberWidget(
