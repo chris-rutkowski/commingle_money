@@ -389,11 +389,13 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       curve: widget.curve,
                       placeholder: widget.placeholder,
                       placeholderColor: widget.placeholderColor,
-                      styleTypeOverride: activeOperator != null
-                          ? operandB.isEmpty
-                                ? .normal
-                                : .placeholder
-                          : null,
+                      styleTypeOverride: effectiveFocusNode.hasFocus
+                          ? activeOperator != null
+                                ? operandB.isEmpty
+                                      ? .normal
+                                      : .placeholder
+                                : null
+                          : .normal,
                     ),
                     AnimatedOperatorWidget(
                       operator: activeOperator,
