@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'animated_character_role.dart';
 
-
 final class AnimatedCharacter {
   final Key key;
   final AnimationController animationController;
