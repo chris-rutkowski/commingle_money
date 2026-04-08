@@ -17,9 +17,8 @@ final class AwesomeOperatorWidget extends StatefulWidget {
   const AwesomeOperatorWidget({
     super.key,
     required this.operator,
-
-    this.animationDuration = const Duration(milliseconds: 250), // TODO: injected
-    this.curve = Curves.easeInOut, // TODO: injected
+    required this.animationDuration,
+    required this.curve,
     this.styleOverride,
   });
 

@@ -28,6 +28,12 @@ final class AwesomeMoneyField extends StatefulWidget {
   /// [FocusNode] for managing focus of the field.
   final FocusNode focusNode;
 
+  /// Duration of animations when the value changes.
+  final Duration animationDuration;
+
+  /// Curve of animations when the value changes.
+  final Curve curve;
+
   /// Creates an [AwesomeMoneyField] widget.
   const AwesomeMoneyField({
     super.key,
@@ -36,6 +42,8 @@ final class AwesomeMoneyField extends StatefulWidget {
     this.operationController,
     required this.moneyController,
     required this.focusNode,
+    this.animationDuration = const Duration(milliseconds: 250),
+    this.curve = Curves.easeInOut,
   });
 
   @override
@@ -309,6 +317,8 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
                       text: operandA.isEmpty ? null : operandA,
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus && activeButton == null,
+                      animationDuration: widget.animationDuration,
+                      curve: widget.curve,
                       styleOverride: activeButton != null
                           ? operandB.isEmpty
                                 ? .normal
@@ -317,6 +327,8 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
                     ),
                     AwesomeOperatorWidget(
                       operator: activeButton,
+                      animationDuration: widget.animationDuration,
+                      curve: widget.curve,
                       styleOverride: operandB.isEmpty ? .normal : .placeholder,
                     ),
                     AwesomeDigitsWidget(
@@ -324,16 +336,22 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
                       placeholder: '',
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: widget.focusNode.hasFocus && activeButton != null,
+                      animationDuration: widget.animationDuration,
+                      curve: widget.curve,
                       styleOverride: .placeholder,
                     ),
                     AwesomeOperatorWidget(
                       operator: operandB.isEmpty ? null : .equal,
+                      animationDuration: widget.animationDuration,
+                      curve: widget.curve,
                       styleOverride: operandB.isEmpty ? .placeholder : .normal,
                     ),
                     AwesomeDigitsWidget(
                       text: operandB.isEmpty ? null : widget.moneyController.value?.amount.toString(),
                       placeholder: '',
                       currencyCode: widget.moneyController.currencyCode,
+                      animationDuration: widget.animationDuration,
+                      curve: widget.curve,
                     ),
                     ?widget.suffix,
                   ],

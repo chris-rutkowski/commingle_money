@@ -29,8 +29,8 @@ final class AwesomeDigitsWidget extends StatefulWidget {
     super.key,
     required this.text,
     required this.currencyCode,
-    this.animationDuration = const Duration(milliseconds: 250),
-    this.curve = Curves.easeInOut,
+    required this.animationDuration,
+    required this.curve,
     this.separators,
     this.showCursor = false,
     this.cursorColor,
@@ -103,6 +103,8 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
             textStyle: textStyle,
             placeholderColor: Colors.grey, // TODO: injected and resolved in animatedwidgetcharacter
             styleOverride: widget.styleOverride,
+            duration: widget.animationDuration,
+            curve: widget.curve,
           ),
         ),
       );
@@ -128,6 +130,8 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
             textStyle: textStyle,
             placeholderColor: Colors.grey,
             styleOverride: widget.styleOverride,
+            duration: widget.animationDuration,
+            curve: widget.curve,
           ),
         ),
       );
