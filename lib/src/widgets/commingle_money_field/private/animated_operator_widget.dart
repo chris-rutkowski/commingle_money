@@ -10,6 +10,7 @@ import 'style_type_override.dart';
 
 final class AnimatedOperatorWidget extends StatefulWidget {
   final MathOperator? operator;
+  final TextStyle textStyle;
   final Duration animationDuration;
   final Curve curve;
   final Color? placeholderColor;
@@ -18,6 +19,7 @@ final class AnimatedOperatorWidget extends StatefulWidget {
   const AnimatedOperatorWidget({
     super.key,
     required this.operator,
+    required this.textStyle,
     required this.animationDuration,
     required this.curve,
     required this.placeholderColor,
@@ -52,20 +54,13 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
 
   @override
   Widget build(BuildContext context) {
-    final base =
-        // MoneyPresentationDefaults.maybeOf(context)?.primaryTextStyle ??
-        Theme.of(context).textTheme.headlineLarge!; // ??
-    // DefaultTextStyle.of(context).style;
-
-    final textStyle = base.merge(const TextStyle(fontWeight: FontWeight.bold));
-
     final children = <Widget>[];
 
     var width = 0.0;
 
     for (final character in characters) {
       final painter = TextPainter(
-        text: TextSpan(text: character.character, style: textStyle),
+        text: TextSpan(text: character.character, style: widget.textStyle),
         textDirection: TextDirection.ltr,
       )..layout();
 
@@ -77,7 +72,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
           left: 0,
           child: AnimatedCharacterWidget(
             character: character,
-            textStyle: textStyle,
+            textStyle: widget.textStyle,
             placeholderColor: widget.placeholderColor,
             styleTypeOverride: widget.styleTypeOverride,
             curve: widget.curve,
@@ -98,7 +93,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
           left: 0,
           child: AnimatedCharacterWidget(
             character: character,
-            textStyle: textStyle,
+            textStyle: widget.textStyle,
             placeholderColor: widget.placeholderColor,
             styleTypeOverride: widget.styleTypeOverride,
             curve: widget.curve,

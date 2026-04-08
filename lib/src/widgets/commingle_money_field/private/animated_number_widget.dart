@@ -19,6 +19,7 @@ import 'style_type_override.dart';
 
 final class AnimatedNumberWidget extends StatefulWidget {
   final String? text;
+  final TextStyle textStyle;
   final CurrencyCode currencyCode;
   final Duration animationDuration;
   final Curve curve;
@@ -32,6 +33,7 @@ final class AnimatedNumberWidget extends StatefulWidget {
   const AnimatedNumberWidget({
     super.key,
     required this.text,
+    required this.textStyle,
     required this.currencyCode,
     required this.animationDuration,
     required this.curve,
@@ -77,13 +79,6 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
 
   @override
   Widget build(BuildContext context) {
-    final base =
-        // MoneyPresentationDefaults.maybeOf(context)?.primaryTextStyle ??
-        Theme.of(context).textTheme.headlineLarge!; // ??
-    // DefaultTextStyle.of(context).style;
-
-    final textStyle = base.merge(const TextStyle(fontWeight: FontWeight.bold));
-
     final children = <Widget>[];
 
     var leading = 0.0;
@@ -92,7 +87,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
 
     for (final character in characters) {
       final painter = TextPainter(
-        text: TextSpan(text: character.character, style: textStyle),
+        text: TextSpan(text: character.character, style: widget.textStyle),
         textDirection: TextDirection.ltr,
       )..layout();
 
@@ -104,7 +99,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
           left: leading,
           child: AnimatedCharacterWidget(
             character: character,
-            textStyle: textStyle,
+            textStyle: widget.textStyle,
             placeholderColor: widget.placeholderColor,
             styleTypeOverride: widget.styleTypeOverride,
             duration: widget.animationDuration,
@@ -131,7 +126,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
           left: character.retiredLeading,
           child: AnimatedCharacterWidget(
             character: character,
-            textStyle: textStyle,
+            textStyle: widget.textStyle,
             placeholderColor: widget.placeholderColor,
             styleTypeOverride: widget.styleTypeOverride,
             duration: widget.animationDuration,
@@ -160,7 +155,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
               left: cursorLeading,
               child: BlinkingCursorWidget(
                 controller: cursorController,
-                textStyle: textStyle,
+                textStyle: widget.textStyle,
                 color: widget.cursorColor,
               ),
             ),

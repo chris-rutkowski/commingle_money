@@ -27,6 +27,10 @@ final class CommingleMoneyField extends StatefulWidget {
   /// Space between the numeric presentation and any visible prefix or suffix.
   final double affixesSpacing;
 
+  /// The style to use for this field.
+  /// This style overwrites [TextTheme.headlineLarge] from parent [Theme] or, if not present, the [DefaultTextStyle].
+  final TextStyle? textStyle;
+
   /// Placeholder text to display when the field is empty.
   final String placeholder;
 
@@ -55,6 +59,7 @@ final class CommingleMoneyField extends StatefulWidget {
     this.prefix,
     this.suffix,
     this.affixesSpacing = 0,
+    this.textStyle,
     this.placeholder = '0',
     this.placeholderColor,
     this.mathOperatorDispatcher,
@@ -338,6 +343,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = _resolveEffectiveTextStyle(context);
     final showAffixes = activeOperator == null;
 
     return GestureDetector(
@@ -368,6 +374,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       ),
                     AnimatedNumberWidget(
                       text: operandA.isEmpty ? null : operandA,
+                      textStyle: textStyle,
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
                       animationDuration: widget.animationDuration,
@@ -382,6 +389,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                     ),
                     AnimatedOperatorWidget(
                       operator: activeOperator,
+                      textStyle: textStyle,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                       placeholderColor: widget.placeholderColor,
@@ -389,6 +397,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                     ),
                     AnimatedNumberWidget(
                       text: operandB.isEmpty ? null : operandB,
+                      textStyle: textStyle,
                       placeholder: '',
                       placeholderColor: widget.placeholderColor,
                       currencyCode: widget.moneyController.currencyCode,
@@ -399,6 +408,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                     ),
                     AnimatedOperatorWidget(
                       operator: operandB.isEmpty ? null : .equal,
+                      textStyle: textStyle,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                       placeholderColor: widget.placeholderColor,
@@ -406,6 +416,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                     ),
                     AnimatedNumberWidget(
                       text: operandB.isEmpty ? null : widget.moneyController.value?.amount.toString(),
+                      textStyle: textStyle,
                       placeholder: '',
                       placeholderColor: widget.placeholderColor,
                       currencyCode: widget.moneyController.currencyCode,
@@ -448,5 +459,11 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
         ],
       ),
     );
+  }
+
+  TextStyle _resolveEffectiveTextStyle(BuildContext context) {
+    final base = Theme.of(context).textTheme.headlineLarge ?? DefaultTextStyle.of(context).style;
+
+    return base.merge(widget.textStyle);
   }
 }

@@ -53,6 +53,10 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                   moneyController: moneyEditingController,
                   focusNode: focusNode,
                   affixesSpacing: 16,
+                  textStyle: const TextStyle(
+                    // overwriting Headline Large properties
+                    fontWeight: FontWeight.bold,
+                  ),
                   prefix: const Text('Prefix'),
                   suffix: const Text('Suffix'),
                 ),
