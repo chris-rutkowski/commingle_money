@@ -37,6 +37,12 @@ final class AnimatedCharacterWidget extends StatelessWidget {
 
     return ListenableBuilder(
       listenable: character.animationController,
+      child: AnimatedDefaultTextStyle(
+        duration: duration,
+        curve: curve,
+        style: effectiveStyle,
+        child: Text(character.character),
+      ),
       builder: (context, child) {
         final scale = character.animationController.isForwardOrCompleted
             ? Tween(
@@ -56,12 +62,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
           scale: scale,
           child: Opacity(
             opacity: character.animationController.value,
-            child: AnimatedDefaultTextStyle(
-              duration: duration,
-              curve: curve,
-              style: effectiveStyle,
-              child: Text(character.character),
-            ),
+            child: child,
           ),
         );
       },
