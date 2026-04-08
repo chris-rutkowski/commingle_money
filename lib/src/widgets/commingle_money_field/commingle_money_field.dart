@@ -26,6 +26,10 @@ final class CommingleMoneyField extends StatefulWidget {
   /// Placeholder text to display when the field is empty.
   final String placeholder;
 
+  /// Placeholder color to use when the field is empty or to differentiate arithmetic operation from its result.
+  /// If not provided the [ThemeData.inputDecorationTheme]'s [InputDecorationThemeData.hintStyle]'s [TextStyle.color] is used, or Colors.grey if that is not defined.
+  final Color? placeholderColor;
+
   /// Optional [MathOperatorDispatcher] for providing user input for arithmetic operations.
   final MathOperatorDispatcher? mathOperatorDispatcher;
 
@@ -47,6 +51,7 @@ final class CommingleMoneyField extends StatefulWidget {
     this.prefix,
     this.suffix,
     this.placeholder = '0',
+    this.placeholderColor,
     this.mathOperatorDispatcher,
     required this.moneyController,
     this.focusNode,
@@ -349,6 +354,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                       placeholder: widget.placeholder,
+                      placeholderColor: widget.placeholderColor,
                       styleTypeOverride: activeOperator != null
                           ? operandB.isEmpty
                                 ? .normal
@@ -359,11 +365,13 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       operator: activeOperator,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
+                      placeholderColor: widget.placeholderColor,
                       styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
                     ),
                     AnimatedNumberWidget(
                       text: operandB.isEmpty ? null : operandB,
                       placeholder: '',
+                      placeholderColor: widget.placeholderColor,
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
                       animationDuration: widget.animationDuration,
@@ -374,11 +382,13 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       operator: operandB.isEmpty ? null : .equal,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
+                      placeholderColor: widget.placeholderColor,
                       styleTypeOverride: operandB.isEmpty ? .placeholder : .normal,
                     ),
                     AnimatedNumberWidget(
                       text: operandB.isEmpty ? null : widget.moneyController.value?.amount.toString(),
                       placeholder: '',
+                      placeholderColor: widget.placeholderColor,
                       currencyCode: widget.moneyController.currencyCode,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,

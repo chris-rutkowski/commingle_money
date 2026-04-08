@@ -12,7 +12,7 @@ import 'style_type_override.dart';
 final class AnimatedCharacterWidget extends StatelessWidget {
   final AnimatedCharacter character;
   final TextStyle textStyle;
-  final Color placeholderColor;
+  final Color? placeholderColor;
   final StyleTypeOverride? styleTypeOverride;
   final Curve curve;
   final Duration duration;
@@ -21,7 +21,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
     super.key,
     required this.character,
     required this.textStyle,
-    required this.placeholderColor,
+    this.placeholderColor,
     this.styleTypeOverride,
     required this.curve,
     required this.duration,
@@ -31,7 +31,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final effectiveStyle = textStyle.copyWith(
       color: (styleTypeOverride == .placeholder || (character.role.isPlaceholder && styleTypeOverride != .normal))
-          ? placeholderColor
+          ? _resolveEffectivePlaceholderColor(context)
           : null,
     );
 
@@ -66,5 +66,15 @@ final class AnimatedCharacterWidget extends StatelessWidget {
         );
       },
     );
+  }
+
+  Color _resolveEffectivePlaceholderColor(BuildContext context) {
+    final result = placeholderColor ?? Theme.of(context).inputDecorationTheme.hintStyle?.color;
+
+    if (result != null) {
+      return result;
+    }
+
+    return Colors.grey;
   }
 }

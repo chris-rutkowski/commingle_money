@@ -12,6 +12,7 @@ final class AnimatedOperatorWidget extends StatefulWidget {
   final MathOperator? operator;
   final Duration animationDuration;
   final Curve curve;
+  final Color? placeholderColor;
   final StyleTypeOverride? styleTypeOverride;
 
   const AnimatedOperatorWidget({
@@ -19,6 +20,7 @@ final class AnimatedOperatorWidget extends StatefulWidget {
     required this.operator,
     required this.animationDuration,
     required this.curve,
+    required this.placeholderColor,
     this.styleTypeOverride,
   });
 
@@ -76,7 +78,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
           child: AnimatedCharacterWidget(
             character: character,
             textStyle: textStyle,
-            placeholderColor: Colors.grey,
+            placeholderColor: widget.placeholderColor,
             styleTypeOverride: widget.styleTypeOverride,
             curve: widget.curve,
             duration: widget.animationDuration,
@@ -97,7 +99,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
           child: AnimatedCharacterWidget(
             character: character,
             textStyle: textStyle,
-            placeholderColor: Colors.grey,
+            placeholderColor: widget.placeholderColor,
             styleTypeOverride: widget.styleTypeOverride,
             curve: widget.curve,
             duration: widget.animationDuration,

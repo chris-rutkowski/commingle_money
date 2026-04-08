@@ -26,6 +26,7 @@ final class AnimatedNumberWidget extends StatefulWidget {
   final bool showCursor;
   final Color? cursorColor;
   final String placeholder;
+  final Color? placeholderColor;
   final StyleTypeOverride? styleTypeOverride;
 
   const AnimatedNumberWidget({
@@ -38,6 +39,7 @@ final class AnimatedNumberWidget extends StatefulWidget {
     this.showCursor = false,
     this.cursorColor,
     required this.placeholder,
+    required this.placeholderColor,
     this.styleTypeOverride,
   });
 
@@ -103,7 +105,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
           child: AnimatedCharacterWidget(
             character: character,
             textStyle: textStyle,
-            placeholderColor: Colors.grey, // TODO: injected and resolved in animatedwidgetcharacter
+            placeholderColor: widget.placeholderColor,
             styleTypeOverride: widget.styleTypeOverride,
             duration: widget.animationDuration,
             curve: widget.curve,
@@ -130,7 +132,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
           child: AnimatedCharacterWidget(
             character: character,
             textStyle: textStyle,
-            placeholderColor: Colors.grey,
+            placeholderColor: widget.placeholderColor,
             styleTypeOverride: widget.styleTypeOverride,
             duration: widget.animationDuration,
             curve: widget.curve,
