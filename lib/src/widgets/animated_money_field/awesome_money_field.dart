@@ -271,6 +271,8 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
       case .divide:
         if (operandBDecimal != Decimal.zero) {
           return operandAMoney / operandBDecimal;
+        } else {
+          return operandAMoney * Decimal.zero;
         }
       case .equal:
       case null:
