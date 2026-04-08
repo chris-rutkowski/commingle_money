@@ -7,7 +7,7 @@ import '../../currency.dart';
 import '../../money.dart';
 import 'math_operator.dart';
 import 'math_operator_dispatcher.dart';
-import 'private/awesome_digits_widget.dart';
+import 'private/animated_number_widget.dart';
 import 'private/awesome_operator_widget.dart';
 import 'private/utils.dart';
 
@@ -22,6 +22,9 @@ final class CommingleMoneyField extends StatefulWidget {
 
   /// Optional [Widget] to display after the field value, hidden during arithmetic operation.
   final Widget? suffix;
+
+  /// Placeholder text to display when the field is empty.
+  final String placeholder;
 
   /// Optional [MathOperatorDispatcher] for providing user input for arithmetic operations.
   final MathOperatorDispatcher? mathOperatorDispatcher;
@@ -43,6 +46,7 @@ final class CommingleMoneyField extends StatefulWidget {
     super.key,
     this.prefix,
     this.suffix,
+    this.placeholder = '0',
     this.mathOperatorDispatcher,
     required this.moneyController,
     this.focusNode,
@@ -338,12 +342,13 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ?widget.prefix,
-                    AwesomeDigitsWidget(
+                    AnimatedNumberWidget(
                       text: operandA.isEmpty ? null : operandA,
                       currencyCode: widget.moneyController.currencyCode,
                       showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
+                      placeholder: widget.placeholder,
                       styleTypeOverride: activeOperator != null
                           ? operandB.isEmpty
                                 ? .normal
@@ -356,7 +361,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       curve: widget.curve,
                       styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
                     ),
-                    AwesomeDigitsWidget(
+                    AnimatedNumberWidget(
                       text: operandB.isEmpty ? null : operandB,
                       placeholder: '',
                       currencyCode: widget.moneyController.currencyCode,
@@ -371,7 +376,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       curve: widget.curve,
                       styleTypeOverride: operandB.isEmpty ? .placeholder : .normal,
                     ),
-                    AwesomeDigitsWidget(
+                    AnimatedNumberWidget(
                       text: operandB.isEmpty ? null : widget.moneyController.value?.amount.toString(),
                       placeholder: '',
                       currencyCode: widget.moneyController.currencyCode,

@@ -16,7 +16,7 @@ import 'animated_character_widget.dart';
 import 'blinking_cursor_widget.dart';
 import 'style_type_override.dart';
 
-final class AwesomeDigitsWidget extends StatefulWidget {
+final class AnimatedNumberWidget extends StatefulWidget {
   final String? text;
   final CurrencyCode currencyCode;
   final Duration animationDuration;
@@ -27,7 +27,7 @@ final class AwesomeDigitsWidget extends StatefulWidget {
   final String placeholder;
   final StyleTypeOverride? styleTypeOverride;
 
-  const AwesomeDigitsWidget({
+  const AnimatedNumberWidget({
     super.key,
     required this.text,
     required this.currencyCode,
@@ -36,15 +36,15 @@ final class AwesomeDigitsWidget extends StatefulWidget {
     this.separators,
     this.showCursor = false,
     this.cursorColor,
-    this.placeholder = '0',
+    required this.placeholder,
     this.styleTypeOverride,
   });
 
   @override
-  State<AwesomeDigitsWidget> createState() => _AwesomeDigitsWidgetState();
+  State<AnimatedNumberWidget> createState() => _AnimatedNumberWidgetState();
 }
 
-final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with TickerProviderStateMixin {
+final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with TickerProviderStateMixin {
   final characters = <AnimatedCharacter>[];
   final retiredCharacters = <AnimatedCharacter>[];
   late final AnimationController cursorController;
@@ -190,7 +190,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
   }
 
   @override
-  void didUpdateWidget(covariant AwesomeDigitsWidget oldWidget) {
+  void didUpdateWidget(covariant AnimatedNumberWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     final effectiveSeparators = _resolveEffectiveSeparators(context);
 
