@@ -57,6 +57,8 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
     }
   }
 
+  var operandB = '';
+
   @override
   void initState() {
     super.initState();
@@ -102,22 +104,60 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   }
 
   void _onDecimalSignInput() {
-    if (operandA.contains('.')) {
+    if (activeButton != null) {
+      if (!operandB.contains('.')) {
+        setState(() {
+          operandB = '${operandB.isEmpty ? '0' : operandB}.';
+        });
+      }
+
       return;
     }
 
-    setState(() {
-      operandA = '${operandA.isEmpty ? '0' : operandA}.';
-    });
+    if (!operandA.contains('.')) {
+      setState(() {
+        operandA = '${operandA.isEmpty ? '0' : operandA}.';
+      });
+    }
   }
 
   void _onBackspace() {
-    setState(() {
-      operandA = operandA.isNotEmpty ? operandA.substring(0, operandA.length - 1) : '';
-    });
+    if (operandB.isNotEmpty) {
+      setState(() {
+        operandB = operandB.substring(0, operandB.length - 1);
+      });
+
+      return;
+    }
+
+    if (activeButton != null) {
+      setState(() {
+        activeButton = null;
+      });
+
+      return;
+    }
+
+    if (operandA.isNotEmpty) {
+      setState(() {
+        operandA = operandA.substring(0, operandA.length - 1);
+      });
+    }
   }
 
   void _onDigitInput(int digit) {
+    if (activeButton != null) {
+      setState(() {
+        if (operandB == '0') {
+          operandB = '$digit';
+        } else {
+          operandB = '$operandB$digit';
+        }
+      });
+
+      return;
+    }
+
     if (operandA.contains('.')) {
       final precision = Currency.getPrecision(widget.moneyController.currencyCode);
       if (operandA.split('.').last.length >= precision) {
@@ -132,8 +172,6 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
         operandA = '$operandA$digit';
       }
     });
-
-    return;
   }
 
   TextEditingValue handleInput(TextEditingValue previousValue, TextEditingValue nextValue) {
@@ -175,10 +213,24 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
                     AwesomeDigitsWidget(
                       text: operandA.isEmpty ? null : operandA,
                       currencyCode: widget.moneyController.currencyCode,
-                      showCursor: widget.focusNode.hasFocus,
+                      showCursor: widget.focusNode.hasFocus && activeButton == null,
                     ),
                     AwesomeOperatorWidget(
                       operator: activeButton,
+                    ),
+                    AwesomeDigitsWidget(
+                      text: operandB.isEmpty ? null : operandB,
+                      placeholder: '',
+                      currencyCode: widget.moneyController.currencyCode,
+                      showCursor: widget.focusNode.hasFocus && activeButton != null,
+                    ),
+                    AwesomeOperatorWidget(
+                      operator: operandB.isEmpty ? null : .equal,
+                    ),
+                    AwesomeDigitsWidget(
+                      text: operandB.isEmpty ? null : widget.moneyController.value?.amount.toString(),
+                      placeholder: '',
+                      currencyCode: widget.moneyController.currencyCode,
                     ),
                     ?widget.suffix,
                   ],

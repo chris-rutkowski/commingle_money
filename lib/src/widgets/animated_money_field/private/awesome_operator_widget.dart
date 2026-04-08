@@ -132,7 +132,7 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
 
   void manage({bool animated = true}) {
     if (widget.operator != null) {
-      final string = _buttonToString(widget.operator!);
+      final string = widget.operator!.stringValue;
 
       if (characters.firstOrNull?.character != string) {
         characters.toList().forEach(retireCharacter);
@@ -140,7 +140,7 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
         characters.add(
           AnimatedCharacter(
             animationController: createAnimationController(animate: animated),
-            role: .decimalSeparator,
+            role: .operator,
             character: string,
           ),
         );
@@ -154,30 +154,26 @@ final class _AwesomeOperatorWidgetState extends State<AwesomeOperatorWidget> wit
 
   AnimationController createAnimationController({required bool animate}) {
     final controller = AnimationController(vsync: this, duration: widget.animationDuration);
-
-    if (animate) {
-      controller.forward();
-    } else {
-      controller.value = 1;
-    }
-
+    animate ? controller.forward() : controller.value = 1;
     return controller;
   }
 
   // </Utilities>
 }
 
-String _buttonToString(AwesomeMoneyFieldButton button) {
-  switch (button) {
-    case AwesomeMoneyFieldButton.plus:
-      return '+';
-    case AwesomeMoneyFieldButton.minus:
-      return '-';
-    case AwesomeMoneyFieldButton.multiply:
-      return '×';
-    case AwesomeMoneyFieldButton.divide:
-      return '÷';
-    case AwesomeMoneyFieldButton.equal:
-      return '=';
+extension on AwesomeMoneyFieldButton {
+  String get stringValue {
+    switch (this) {
+      case AwesomeMoneyFieldButton.plus:
+        return '+';
+      case AwesomeMoneyFieldButton.minus:
+        return '-';
+      case AwesomeMoneyFieldButton.multiply:
+        return '×';
+      case AwesomeMoneyFieldButton.divide:
+        return '÷';
+      case AwesomeMoneyFieldButton.equal:
+        return '=';
+    }
   }
 }

@@ -9,6 +9,7 @@ enum AnimatedCharacterRole {
   decimalSeparator,
   fractionalDigit,
   fractionalPlaceholder,
+  operator,
 }
 
 extension AnimatedCharacterRoleExtension on AnimatedCharacterRole {

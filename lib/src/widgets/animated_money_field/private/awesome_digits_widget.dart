@@ -440,13 +440,7 @@ final class _AwesomeDigitsWidgetState extends State<AwesomeDigitsWidget> with Ti
 
   AnimationController createAnimationController({required bool animate}) {
     final controller = AnimationController(vsync: this, duration: widget.animationDuration);
-
-    if (animate) {
-      controller.forward();
-    } else {
-      controller.value = 1;
-    }
-
+    animate ? controller.forward() : controller.value = 1;
     return controller;
   }
 
