@@ -1,17 +1,17 @@
-/// Enum containing different math operators
+/// Enum containing subset of math operators.
 enum MathOperator {
-  /// The plus button.
+  /// The plus operator.
   plus,
 
-  /// The minus button.
+  /// The minus operator.
   minus,
 
-  /// The multiply button.
+  /// The multiply operator.
   multiply,
 
-  /// The divide button.
+  /// The divide operator.
   divide,
 
-  /// The equal button.
+  /// The equal operator.
   equal,
 }
