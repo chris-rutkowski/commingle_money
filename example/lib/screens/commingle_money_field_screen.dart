@@ -50,7 +50,7 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
               children: [
                 CommingleMoneyField(
                   mathOperatorDispatcher: mathOperatorDispatcher,
-                  moneyController: moneyEditingController,
+                  controller: moneyEditingController,
                   focusNode: focusNode,
                   affixesSpacing: 16,
                   textStyle: const TextStyle(

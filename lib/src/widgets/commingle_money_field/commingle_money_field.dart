@@ -42,7 +42,7 @@ final class CommingleMoneyField extends StatefulWidget {
   final MathOperatorDispatcher? mathOperatorDispatcher;
 
   /// [MoneyEditingController] for setting and obtaining value of the field as user types.
-  final MoneyEditingController moneyController;
+  final MoneyEditingController controller;
 
   /// Optional [FocusNode] for managing focus of the field.
   final FocusNode? focusNode;
@@ -63,7 +63,7 @@ final class CommingleMoneyField extends StatefulWidget {
     this.placeholder = '0',
     this.placeholderColor,
     this.mathOperatorDispatcher,
-    required this.moneyController,
+    required this.controller,
     this.focusNode,
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
@@ -91,10 +91,10 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     _operandA = value;
 
     if (value.isEmpty) {
-      widget.moneyController.value = null;
+      widget.controller.value = null;
     } else {
-      widget.moneyController.value = Money(
-        currencyCode: widget.moneyController.currencyCode,
+      widget.controller.value = Money(
+        currencyCode: widget.controller.currencyCode,
         amount: Decimal.parse(value),
       );
     }
@@ -111,7 +111,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     final evaluated = evaluate();
 
     if (evaluated != null) {
-      widget.moneyController.value = evaluated;
+      widget.controller.value = evaluated;
     }
   }
 
@@ -120,19 +120,19 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     super.initState();
 
     widget.mathOperatorDispatcher?.listener = onOperatorInput;
-    effectiveFocusNode.addListener(_handleFocusNodeChanged);
-    widget.moneyController.addListener(_handleControllerChanged);
+    effectiveFocusNode.addListener(handleFocusNodeChanged);
+    widget.controller.addListener(handleControllerChanged);
 
-    operandA = widget.moneyController.value?.amount.toString() ?? '';
+    operandA = widget.controller.value?.amount.toString() ?? '';
   }
 
   @override
   void dispose() {
     widget.mathOperatorDispatcher?.listener = null;
     inputController.dispose();
-    effectiveFocusNode.removeListener(_handleFocusNodeChanged);
+    effectiveFocusNode.removeListener(handleFocusNodeChanged);
     fallbackFocusNode.dispose();
-    widget.moneyController.removeListener(_handleControllerChanged);
+    widget.controller.removeListener(handleControllerChanged);
     super.dispose();
   }
 
@@ -147,8 +147,8 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
     if (oldWidget.focusNode != widget.focusNode) {
       final oldFocusNode = oldWidget.focusNode ?? fallbackFocusNode;
-      oldFocusNode.removeListener(_handleFocusNodeChanged);
-      effectiveFocusNode.addListener(_handleFocusNodeChanged);
+      oldFocusNode.removeListener(handleFocusNodeChanged);
+      effectiveFocusNode.addListener(handleFocusNodeChanged);
     }
   }
 
@@ -159,6 +159,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
     if (operator == .equal && effectiveFocusNode.hasFocus) {
       effectiveFocusNode.unfocus();
+      return;
     }
 
     final operatorADecimal = Decimal.tryParse(operandA);
@@ -172,52 +173,52 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       if (operator == .equal) {
         activeOperator = null;
         operandB = '';
-        operandA = widget.moneyController.value?.amount.toString() ?? '';
+        operandA = widget.controller.value?.amount.toString() ?? '';
       } else if (activeOperator != null) {
         activeOperator = operator;
         operandB = '';
-        operandA = widget.moneyController.value?.amount.toString() ?? '';
+        operandA = widget.controller.value?.amount.toString() ?? '';
       } else {
         activeOperator = operator;
       }
     });
   }
 
-  void _handleFocusNodeChanged() {
+  void handleFocusNodeChanged() {
     setState(() {
-      // setState always executed to update cursor and other widgets
+      // setState always executed to trigger cursor appearance and other widgets
 
       if (!effectiveFocusNode.hasFocus) {
         activeOperator = null;
         operandB = '';
-        operandA = widget.moneyController.value?.amount.toString() ?? '';
+        operandA = widget.controller.value?.amount.toString() ?? '';
       }
     });
   }
 
-  void _handleControllerChanged() {
+  void handleControllerChanged() {
     var reset = false;
 
     final evaluated = evaluate()?.roundedToCurrencyPrecision();
 
-    if (evaluated != null && widget.moneyController.value != evaluated) {
+    if (evaluated != null && widget.controller.value != evaluated) {
       reset = true;
     }
 
-    if (evaluated == null && widget.moneyController.value?.amount != Decimal.tryParse(operandA)) {
+    if (evaluated == null && widget.controller.value?.amount != Decimal.tryParse(operandA)) {
       reset = true;
     }
 
     if (reset) {
       setState(() {
-        operandA = widget.moneyController.value?.amount.toString() ?? '';
+        operandA = widget.controller.value?.amount.toString() ?? '';
         activeOperator = null;
         operandB = '';
       });
     }
   }
 
-  void _onDecimalSignInput() {
+  void onDecimalSignInput() {
     if (activeOperator != null) {
       if (!operandB.contains('.')) {
         setState(() {
@@ -235,7 +236,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     }
   }
 
-  void _onBackspace() {
+  void onBackspace() {
     if (operandB.isNotEmpty) {
       setState(() {
         operandB = operandB.substring(0, operandB.length - 1);
@@ -259,7 +260,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     }
   }
 
-  void _onDigitInput(int digit) {
+  void onDigitInput(int digit) {
     if (activeOperator != null) {
       setState(() {
         if (operandB == '0') {
@@ -273,7 +274,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     }
 
     if (operandA.contains('.')) {
-      final precision = Currency.getPrecision(widget.moneyController.currencyCode);
+      final precision = Currency.getPrecision(widget.controller.currencyCode);
       if (operandA.split('.').last.length >= precision) {
         return;
       }
@@ -292,12 +293,12 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     final payload = nextValue.text.trim();
 
     if (payload.isEmpty) {
-      _onBackspace();
+      onBackspace();
     } else if (payload.length == 1) {
       if (payload == '.' || payload == ',') {
-        _onDecimalSignInput();
+        onDecimalSignInput();
       } else if (int.tryParse(payload) case final parsedDigit?) {
-        _onDigitInput(parsedDigit);
+        onDigitInput(parsedDigit);
       } else {
         debugPrint('Unknown character `$payload`');
       }
@@ -317,7 +318,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     }
 
     final operandAMoney = Money(
-      currencyCode: widget.moneyController.currencyCode,
+      currencyCode: widget.controller.currencyCode,
       amount: operandADecimal,
     );
 
@@ -325,11 +326,13 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       case .plus:
         return operandAMoney + operandBDecimal;
       case .minus:
+        // for going below zero simply sets the value to zero
         final result = operandAMoney - operandBDecimal;
         return result.amount >= Decimal.zero ? result : operandAMoney * Decimal.zero;
       case .multiply:
         return operandAMoney * operandBDecimal;
       case .divide:
+        // for invalid operation simply sets the value to zero
         if (operandBDecimal != Decimal.zero) {
           return operandAMoney / operandBDecimal;
         } else {
@@ -343,7 +346,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = _resolveEffectiveTextStyle(context);
+    final textStyle = resolveEffectiveTextStyle(context);
     final showAffixes = activeOperator == null;
 
     return GestureDetector(
@@ -354,7 +357,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
           FittedBox(
             child: ListenableBuilder(
               // TODO: not sure if it needs to listen
-              listenable: widget.moneyController,
+              listenable: widget.controller,
               builder: (context, child) {
                 return Row(
                   mainAxisSize: MainAxisSize.min,
@@ -375,7 +378,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                     AnimatedNumberWidget(
                       text: operandA.isEmpty ? null : operandA,
                       textStyle: textStyle,
-                      currencyCode: widget.moneyController.currencyCode,
+                      currencyCode: widget.controller.currencyCode,
                       showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
@@ -400,7 +403,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       textStyle: textStyle,
                       placeholder: '',
                       placeholderColor: widget.placeholderColor,
-                      currencyCode: widget.moneyController.currencyCode,
+                      currencyCode: widget.controller.currencyCode,
                       showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
@@ -415,11 +418,11 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       styleTypeOverride: operandB.isEmpty ? .placeholder : .normal,
                     ),
                     AnimatedNumberWidget(
-                      text: operandB.isEmpty ? null : widget.moneyController.value?.amount.toString(),
+                      text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
                       textStyle: textStyle,
                       placeholder: '',
                       placeholderColor: widget.placeholderColor,
-                      currencyCode: widget.moneyController.currencyCode,
+                      currencyCode: widget.controller.currencyCode,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
                     ),
@@ -461,7 +464,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     );
   }
 
-  TextStyle _resolveEffectiveTextStyle(BuildContext context) {
+  TextStyle resolveEffectiveTextStyle(BuildContext context) {
     final base = Theme.of(context).textTheme.headlineLarge ?? DefaultTextStyle.of(context).style;
 
     return base.merge(widget.textStyle);
