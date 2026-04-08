@@ -56,7 +56,17 @@ final class AnimatedCharacterWidget extends StatelessWidget {
                     ),
                   )
                   .value
-            : character.animationController.value;
+            : Tween(
+                    begin: 0.9,
+                    end: 1.0,
+                  )
+                  .animate(
+                    CurvedAnimation(
+                      parent: character.animationController,
+                      curve: Curves.easeOut,
+                    ),
+                  )
+                  .value;
 
         return Transform.scale(
           scale: scale,
