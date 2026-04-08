@@ -3,8 +3,11 @@
 import 'package:flutter/material.dart';
 
 import 'animated_character.dart';
+import 'animated_number_widget.dart';
+import 'awesome_operator_widget.dart';
 import 'style_type_override.dart';
 
+/// Single character widget displayed in [AnimatedNumberWidget] and [AwesomeOperatorWidget]
 final class AnimatedCharacterWidget extends StatelessWidget {
   final AnimatedCharacter character;
   final TextStyle textStyle;
