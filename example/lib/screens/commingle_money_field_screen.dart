@@ -56,7 +56,7 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
   @override
   Widget build(BuildContext context) {
     final textStyle = Theme.of(context).textTheme.headlineLarge?.copyWith(
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w500,
     );
     return Scaffold(
       appBar: AppBar(title: const Text('Commingle Money Field')),
@@ -78,8 +78,7 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                 controller: moneyEditingController,
                 focusNode: focusNode,
                 affixesSpacing: 8,
-                textStyle: const TextStyle(
-                  // overwriting Headline Large properties
+                textStyle: textStyle?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
                 prefix: ListenableBuilder(

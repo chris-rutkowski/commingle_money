@@ -2,6 +2,7 @@ import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../amount_format_separators.dart';
 import '../../controllers/money_editing_controller.dart';
 import '../../currency.dart';
 import '../../money.dart';
@@ -58,6 +59,11 @@ final class CommingleMoneyField extends StatefulWidget {
   /// The type of action button to use for the keyboard, by default [TextInputAction.done].
   final TextInputAction textInputAction;
 
+  /// Separators used to format the amount.
+  /// If omitted, the separators are taken from the [AmountFormatSeparators] inherited widget,
+  /// or fall back to the defaults: 123,456.78.
+  final AmountFormatSeparatorsData? separators;
+
   /// Creates an [CommingleMoneyField] widget.
   const CommingleMoneyField({
     super.key,
@@ -73,6 +79,7 @@ final class CommingleMoneyField extends StatefulWidget {
     this.animationDuration = const Duration(milliseconds: 250),
     this.curve = Curves.easeInOut,
     this.textInputAction = TextInputAction.done,
+    this.separators,
   });
 
   @override
@@ -393,6 +400,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
+                      separators: widget.separators,
                       placeholder: widget.placeholder,
                       placeholderColor: widget.placeholderColor,
                       styleTypeOverride: effectiveFocusNode.hasFocus
@@ -422,6 +430,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
+                      separators: widget.separators,
                       styleTypeOverride: .placeholder,
                     ),
                     AnimatedOperatorWidget(
@@ -440,6 +449,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       currencyCode: widget.controller.currencyCode,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
+                      separators: widget.separators,
                       styleTypeOverride: .normal,
                     ),
                   ],
