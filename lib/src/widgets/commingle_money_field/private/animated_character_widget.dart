@@ -21,7 +21,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
     super.key,
     required this.character,
     required this.textStyle,
-    this.placeholderColor,
+    required this.placeholderColor,
     this.styleTypeOverride,
     required this.curve,
     required this.duration,
