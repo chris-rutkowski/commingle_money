@@ -1,52 +1,51 @@
 part of '../currency.dart';
 
 final Map<String, Currency> _currencyMap = {
-  'AED': const Currency(
-    code: 'AED',
+  CurrencyCodes.aed: const Currency(
+    code: CurrencyCodes.aed,
     englishName: 'United Arab Emirates Dirham',
     precision: 2,
     emojiFlag: '🇦🇪',
     symbol: 'Dh',
     englishCountryNames: {'United Arab Emirates'},
   ),
-  'AFN': const Currency(
-    code: 'AFN',
+  CurrencyCodes.afn: const Currency(
+    code: CurrencyCodes.afn,
     englishName: 'Afghan Afghani',
     precision: 2,
     emojiFlag: '🇦🇫',
     englishCountryNames: {'Afghanistan'},
   ),
-  'ALL': const Currency(
-    code: 'ALL',
+  CurrencyCodes.all: const Currency(
+    code: CurrencyCodes.all,
     englishName: 'Albanian Lek',
     precision: 2,
     emojiFlag: '🇦🇱',
     englishCountryNames: {'Albania'},
   ),
-
-  'AMD': const Currency(
-    code: 'AMD',
+  CurrencyCodes.amd: const Currency(
+    code: CurrencyCodes.amd,
     englishName: 'Armenian Dram',
     precision: 2,
     emojiFlag: '🇦🇲',
     englishCountryNames: {'Armenia'},
   ),
-  'ANG': const Currency(
-    code: 'ANG',
+  CurrencyCodes.ang: const Currency(
+    code: CurrencyCodes.ang,
     englishName: 'Netherlands Antillean Guilder',
     precision: 2,
     emojiFlag: '🇳🇱',
     englishCountryNames: {'Netherlands Antilles'},
   ),
-  'AOA': const Currency(
-    code: 'AOA',
+  CurrencyCodes.aoa: const Currency(
+    code: CurrencyCodes.aoa,
     englishName: 'Angolan Kwanza',
     precision: 2,
     emojiFlag: '🇦🇴',
     englishCountryNames: {'Angola'},
   ),
-  'ARS': const Currency(
-    code: 'ARS',
+  CurrencyCodes.ars: const Currency(
+    code: CurrencyCodes.ars,
     englishName: 'Argentine Peso',
     precision: 2,
     emojiFlag: '🇦🇷',
@@ -59,43 +58,43 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇦🇺',
     englishCountryNames: {'Australia', 'Kiribati', 'Nauru', 'Tuvalu'},
   ),
-  'AWG': const Currency(
-    code: 'AWG',
+  CurrencyCodes.awg: const Currency(
+    code: CurrencyCodes.awg,
     englishName: 'Aruban Florin',
     precision: 2,
     emojiFlag: '🇦🇼',
     englishCountryNames: {'Aruba'},
   ),
-  'AZN': const Currency(
-    code: 'AZN',
+  CurrencyCodes.azn: const Currency(
+    code: CurrencyCodes.azn,
     englishName: 'Azerbaijani Manat',
     precision: 2,
     emojiFlag: '🇦🇿',
     englishCountryNames: {'Azerbaijan'},
   ),
-  'BAM': const Currency(
-    code: 'BAM',
+  CurrencyCodes.bam: const Currency(
+    code: CurrencyCodes.bam,
     englishName: 'Bosnia and Herzegovina Convertible Mark',
     precision: 2,
     emojiFlag: '🇧🇦',
     englishCountryNames: {'Bosnia and Herzegovina'},
   ),
-  'BBD': const Currency(
-    code: 'BBD',
+  CurrencyCodes.bbd: const Currency(
+    code: CurrencyCodes.bbd,
     englishName: 'Barbadian Dollar',
     precision: 2,
     emojiFlag: '🇧🇧',
     englishCountryNames: {'Barbados'},
   ),
-  'BDT': const Currency(
-    code: 'BDT',
+  CurrencyCodes.bdt: const Currency(
+    code: CurrencyCodes.bdt,
     englishName: 'Bangladeshi Taka',
     precision: 2,
     emojiFlag: '🇧🇩',
     englishCountryNames: {'Bangladesh'},
   ),
-  'BGN': const Currency(
-    code: 'BGN',
+  CurrencyCodes.bgn: const Currency(
+    code: CurrencyCodes.bgn,
     englishName: 'Bulgarian Lev',
     precision: 2,
     emojiFlag: '🇧🇬',
@@ -143,36 +142,42 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇧🇷',
     englishCountryNames: {'Brazil'},
   ),
-  'BSD': const Currency(
-    code: 'BSD',
+  CurrencyCodes.bsd: const Currency(
+    code: CurrencyCodes.bsd,
     englishName: 'Bahamian Dollar',
     precision: 2,
     emojiFlag: '🇧🇸',
     englishCountryNames: {'Bahamas'},
   ),
-  'BTN': const Currency(
-    code: 'BTN',
+  CurrencyCodes.btc: const Currency(
+    code: CurrencyCodes.btc,
+    englishName: 'Bitcoin',
+    precision: 8,
+    englishCountryNames: {'Bitcoin'},
+  ),
+  CurrencyCodes.btn: const Currency(
+    code: CurrencyCodes.btn,
     englishName: 'Bhutanese Ngultrum',
     precision: 2,
     emojiFlag: '🇧🇹',
     englishCountryNames: {'Bhutan'},
   ),
-  'BWP': const Currency(
-    code: 'BWP',
+  CurrencyCodes.bwp: const Currency(
+    code: CurrencyCodes.bwp,
     englishName: 'Botswana Pula',
     precision: 2,
     emojiFlag: '🇧🇼',
     englishCountryNames: {'Botswana'},
   ),
-  'BYN': const Currency(
-    code: 'BYN',
+  CurrencyCodes.byn: const Currency(
+    code: CurrencyCodes.byn,
     englishName: 'Belarusian Ruble',
     precision: 2,
     emojiFlag: '🇧🇾',
     englishCountryNames: {'Belarus'},
   ),
-  'BZD': const Currency(
-    code: 'BZD',
+  CurrencyCodes.bzd: const Currency(
+    code: CurrencyCodes.bzd,
     englishName: 'Belize Dollar',
     precision: 2,
     emojiFlag: '🇧🇿',
@@ -185,8 +190,8 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇨🇦',
     englishCountryNames: {'Canada'},
   ),
-  'CDF': const Currency(
-    code: 'CDF',
+  CurrencyCodes.cdf: const Currency(
+    code: CurrencyCodes.cdf,
     englishName: 'Congolese Franc',
     precision: 2,
     emojiFlag: '🇨🇩',
@@ -200,8 +205,8 @@ final Map<String, Currency> _currencyMap = {
     symbol: 'Fr',
     englishCountryNames: {'Switzerland', 'Liechtenstein'},
   ),
-  'CLP': const Currency(
-    code: 'CLP',
+  CurrencyCodes.clp: const Currency(
+    code: CurrencyCodes.clp,
     englishName: 'Chilean Peso',
     precision: 2,
     emojiFlag: '🇨🇱',
@@ -214,85 +219,85 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇨🇳',
     englishCountryNames: {'China'},
   ),
-  'COP': const Currency(
-    code: 'COP',
+  CurrencyCodes.cop: const Currency(
+    code: CurrencyCodes.cop,
     englishName: 'Colombian Peso',
     precision: 2,
     emojiFlag: '🇨🇴',
     englishCountryNames: {'Colombia'},
   ),
-  'CRC': const Currency(
-    code: 'CRC',
+  CurrencyCodes.crc: const Currency(
+    code: CurrencyCodes.crc,
     englishName: 'Costa Rican Colón',
     precision: 2,
     emojiFlag: '🇨🇷',
     englishCountryNames: {'Costa Rica'},
   ),
-  'CUP': const Currency(
-    code: 'CUP',
+  CurrencyCodes.cup: const Currency(
+    code: CurrencyCodes.cup,
     englishName: 'Cuban Peso',
     precision: 2,
     emojiFlag: '🇨🇺',
     englishCountryNames: {'Cuba'},
   ),
-  'CVE': const Currency(
-    code: 'CVE',
+  CurrencyCodes.cve: const Currency(
+    code: CurrencyCodes.cve,
     englishName: 'Cape Verdean Escudo',
     precision: 2,
     emojiFlag: '🇨🇻',
     englishCountryNames: {'Cape Verde'},
   ),
-  'CZK': const Currency(
-    code: 'CZK',
+  CurrencyCodes.czk: const Currency(
+    code: CurrencyCodes.czk,
     englishName: 'Czech Koruna',
     precision: 2,
     emojiFlag: '🇨🇿',
     englishCountryNames: {'Czech Republic'},
   ),
-  'DJF': const Currency(
-    code: 'DJF',
+  CurrencyCodes.djf: const Currency(
+    code: CurrencyCodes.djf,
     englishName: 'Djiboutian Franc',
     precision: 2,
     emojiFlag: '🇩🇯',
     englishCountryNames: {'Djibouti'},
   ),
-  'DKK': const Currency(
-    code: 'DKK',
+  CurrencyCodes.dkk: const Currency(
+    code: CurrencyCodes.dkk,
     englishName: 'Danish Krone',
     precision: 2,
     emojiFlag: '🇩🇰',
     englishCountryNames: {'Denmark'},
   ),
-  'DOP': const Currency(
-    code: 'DOP',
+  CurrencyCodes.dop: const Currency(
+    code: CurrencyCodes.dop,
     englishName: 'Dominican Peso',
     precision: 2,
     emojiFlag: '🇩🇴',
     englishCountryNames: {'Dominican Republic'},
   ),
-  'DZD': const Currency(
-    code: 'DZD',
+  CurrencyCodes.dzd: const Currency(
+    code: CurrencyCodes.dzd,
     englishName: 'Algerian Dinar',
     precision: 2,
     emojiFlag: '🇩🇿',
     englishCountryNames: {'Algeria'},
   ),
-  'EGP': const Currency(
-    code: 'EGP',
+  CurrencyCodes.egp: const Currency(
+    code: CurrencyCodes.egp,
     englishName: 'Egyptian Pound',
     precision: 2,
     emojiFlag: '🇪🇬',
     englishCountryNames: {'Egypt'},
   ),
-  'ERN': const Currency(
-    code: 'ERN',
+  CurrencyCodes.ern: const Currency(
+    code: CurrencyCodes.ern,
     englishName: 'Eritrean Nakfa',
     precision: 2,
     emojiFlag: '🇪🇷',
     englishCountryNames: {'Eritrea'},
   ),
-  'ETB': const Currency(
-    code: 'ETB',
+  CurrencyCodes.etb: const Currency(
+    code: CurrencyCodes.etb,
     englishName: 'Ethiopian Birr',
     precision: 2,
     emojiFlag: '🇪🇹',
@@ -328,15 +333,15 @@ final Map<String, Currency> _currencyMap = {
       'Spain',
     },
   ),
-  'FJD': const Currency(
-    code: 'FJD',
+  CurrencyCodes.fjd: const Currency(
+    code: CurrencyCodes.fjd,
     englishName: 'Fijian Dollar',
     precision: 2,
     emojiFlag: '🇫🇯',
     englishCountryNames: {'Fiji'},
   ),
-  'FKP': const Currency(
-    code: 'FKP',
+  CurrencyCodes.fkp: const Currency(
+    code: CurrencyCodes.fkp,
     englishName: 'Falkland Islands Pound',
     precision: 2,
     emojiFlag: '🇫🇰',
@@ -357,50 +362,50 @@ final Map<String, Currency> _currencyMap = {
       'Guernsey',
     },
   ),
-  'GEL': const Currency(
-    code: 'GEL',
+  CurrencyCodes.gel: const Currency(
+    code: CurrencyCodes.gel,
     englishName: 'Georgian Lari',
     precision: 2,
     emojiFlag: '🇬🇪',
     englishCountryNames: {'Georgia'},
   ),
-  'GHS': const Currency(
-    code: 'GHS',
+  CurrencyCodes.ghs: const Currency(
+    code: CurrencyCodes.ghs,
     englishName: 'Ghanaian Cedi',
     precision: 2,
     emojiFlag: '🇬🇭',
     englishCountryNames: {'Ghana'},
   ),
-  'GIP': const Currency(
-    code: 'GIP',
+  CurrencyCodes.gip: const Currency(
+    code: CurrencyCodes.gip,
     englishName: 'Gibraltar Pound',
     precision: 2,
     emojiFlag: '🇬🇮',
     englishCountryNames: {'Gibraltar'},
   ),
-  'GMD': const Currency(
-    code: 'GMD',
+  CurrencyCodes.gmd: const Currency(
+    code: CurrencyCodes.gmd,
     englishName: 'Gambian Dalasi',
     precision: 2,
     emojiFlag: '🇬🇲',
     englishCountryNames: {'Gambia'},
   ),
-  'GNF': const Currency(
-    code: 'GNF',
+  CurrencyCodes.gnf: const Currency(
+    code: CurrencyCodes.gnf,
     englishName: 'Guinean Franc',
     precision: 2,
     emojiFlag: '🇬🇳',
     englishCountryNames: {'Guinea'},
   ),
-  'GTQ': const Currency(
-    code: 'GTQ',
+  CurrencyCodes.gtq: const Currency(
+    code: CurrencyCodes.gtq,
     englishName: 'Guatemalan Quetzal',
     precision: 2,
     emojiFlag: '🇬🇹',
     englishCountryNames: {'Guatemala'},
   ),
-  'GYD': const Currency(
-    code: 'GYD',
+  CurrencyCodes.gyd: const Currency(
+    code: CurrencyCodes.gyd,
     englishName: 'Guyanese Dollar',
     precision: 2,
     emojiFlag: '🇬🇾',
@@ -413,36 +418,36 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇭🇰',
     englishCountryNames: {'Hong Kong'},
   ),
-  'HNL': const Currency(
-    code: 'HNL',
+  CurrencyCodes.hnl: const Currency(
+    code: CurrencyCodes.hnl,
     englishName: 'Honduran Lempira',
     precision: 2,
     emojiFlag: '🇭🇳',
     englishCountryNames: {'Honduras'},
   ),
-  'HTG': const Currency(
-    code: 'HTG',
+  CurrencyCodes.htg: const Currency(
+    code: CurrencyCodes.htg,
     englishName: 'Haitian Gourde',
     precision: 2,
     emojiFlag: '🇭🇹',
     englishCountryNames: {'Haiti'},
   ),
-  'HUF': const Currency(
-    code: 'HUF',
+  CurrencyCodes.huf: const Currency(
+    code: CurrencyCodes.huf,
     englishName: 'Hungarian Forint',
     precision: 2,
     emojiFlag: '🇭🇺',
     englishCountryNames: {'Hungary'},
   ),
-  'IDR': const Currency(
-    code: 'IDR',
+  CurrencyCodes.idr: const Currency(
+    code: CurrencyCodes.idr,
     englishName: 'Indonesian Rupiah',
     precision: 2,
     emojiFlag: '🇮🇩',
     englishCountryNames: {'Indonesia'},
   ),
-  'ILS': const Currency(
-    code: 'ILS',
+  CurrencyCodes.ils: const Currency(
+    code: CurrencyCodes.ils,
     englishName: 'Israeli New Shekel',
     precision: 2,
     emojiFlag: '🇮🇱',
@@ -457,8 +462,8 @@ final Map<String, Currency> _currencyMap = {
     symbol: '₹',
     englishCountryNames: {'India'},
   ),
-  'IQD': const Currency(
-    code: 'IQD',
+  CurrencyCodes.iqd: const Currency(
+    code: CurrencyCodes.iqd,
     englishName: 'Iraqi Dinar',
     precision: 3,
     emojiFlag: '🇮🇶',
@@ -471,22 +476,22 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇮🇷',
     englishCountryNames: {'Iran'},
   ),
-  'ISK': const Currency(
-    code: 'ISK',
+  CurrencyCodes.isk: const Currency(
+    code: CurrencyCodes.isk,
     englishName: 'Icelandic Króna',
     precision: 2,
     emojiFlag: '🇮🇸',
     englishCountryNames: {'Iceland'},
   ),
-  'JMD': const Currency(
-    code: 'JMD',
+  CurrencyCodes.jmd: const Currency(
+    code: CurrencyCodes.jmd,
     englishName: 'Jamaican Dollar',
     precision: 2,
     emojiFlag: '🇯🇲',
     englishCountryNames: {'Jamaica'},
   ),
-  'JOD': const Currency(
-    code: 'JOD',
+  CurrencyCodes.jod: const Currency(
+    code: CurrencyCodes.jod,
     englishName: 'Jordanian Dinar',
     precision: 2,
     emojiFlag: '🇯🇴',
@@ -499,291 +504,291 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇯🇵',
     englishCountryNames: {'Japan'},
   ),
-  'KES': const Currency(
-    code: 'KES',
+  CurrencyCodes.kes: const Currency(
+    code: CurrencyCodes.kes,
     englishName: 'Kenyan Shilling',
     precision: 2,
     emojiFlag: '🇰🇪',
     englishCountryNames: {'Kenya'},
   ),
-  'KGS': const Currency(
-    code: 'KGS',
+  CurrencyCodes.kgs: const Currency(
+    code: CurrencyCodes.kgs,
     englishName: 'Kyrgyzstani Som',
     precision: 2,
     emojiFlag: '🇰🇬',
     englishCountryNames: {'Kyrgyzstan'},
   ),
-  'KHR': const Currency(
-    code: 'KHR',
+  CurrencyCodes.khr: const Currency(
+    code: CurrencyCodes.khr,
     englishName: 'Cambodian Riel',
     precision: 2,
     emojiFlag: '🇰🇭',
     englishCountryNames: {'Cambodia'},
   ),
-  'KMF': const Currency(
-    code: 'KMF',
+  CurrencyCodes.kmf: const Currency(
+    code: CurrencyCodes.kmf,
     englishName: 'Comorian Franc',
     precision: 2,
     emojiFlag: '🇰🇲',
     englishCountryNames: {'Comoros'},
   ),
-  'KPW': const Currency(
-    code: 'KPW',
+  CurrencyCodes.kpw: const Currency(
+    code: CurrencyCodes.kpw,
     englishName: 'North Korean Won',
     precision: 2,
     emojiFlag: '🇰🇵',
     englishCountryNames: {'North Korea'},
   ),
-  'KRW': const Currency(
-    code: 'KRW',
+  CurrencyCodes.krw: const Currency(
+    code: CurrencyCodes.krw,
     englishName: 'South Korean Won',
     precision: 2,
     emojiFlag: '🇰🇷',
     englishCountryNames: {'South Korea'},
   ),
-  'KWD': const Currency(
-    code: 'KWD',
+  CurrencyCodes.kwd: const Currency(
+    code: CurrencyCodes.kwd,
     englishName: 'Kuwaiti Dinar',
     precision: 3,
     emojiFlag: '🇰🇼',
     englishCountryNames: {'Kuwait'},
   ),
-  'KYD': const Currency(
-    code: 'KYD',
+  CurrencyCodes.kyd: const Currency(
+    code: CurrencyCodes.kyd,
     englishName: 'Cayman Islands Dollar',
     precision: 2,
     emojiFlag: '🇰🇾',
     englishCountryNames: {'Cayman Islands'},
   ),
-  'KZT': const Currency(
-    code: 'KZT',
+  CurrencyCodes.kzt: const Currency(
+    code: CurrencyCodes.kzt,
     englishName: 'Kazakhstani Tenge',
     precision: 2,
     emojiFlag: '🇰🇿',
     englishCountryNames: {'Kazakhstan'},
   ),
-  'LAK': const Currency(
-    code: 'LAK',
+  CurrencyCodes.lak: const Currency(
+    code: CurrencyCodes.lak,
     englishName: 'Lao Kip',
     precision: 2,
     emojiFlag: '🇱🇦',
     englishCountryNames: {'Laos'},
   ),
-  'LBP': const Currency(
-    code: 'LBP',
+  CurrencyCodes.lbp: const Currency(
+    code: CurrencyCodes.lbp,
     englishName: 'Lebanese Pound',
     precision: 2,
     emojiFlag: '🇱🇧',
     englishCountryNames: {'Lebanon'},
   ),
-  'LKR': const Currency(
-    code: 'LKR',
+  CurrencyCodes.lkr: const Currency(
+    code: CurrencyCodes.lkr,
     englishName: 'Sri Lankan Rupee',
     precision: 2,
     emojiFlag: '🇱🇰',
     englishCountryNames: {'Sri Lanka'},
   ),
-  'LRD': const Currency(
-    code: 'LRD',
+  CurrencyCodes.lrd: const Currency(
+    code: CurrencyCodes.lrd,
     englishName: 'Liberian Dollar',
     precision: 2,
     emojiFlag: '🇱🇷',
     englishCountryNames: {'Liberia'},
   ),
-  'LSL': const Currency(
-    code: 'LSL',
+  CurrencyCodes.lsl: const Currency(
+    code: CurrencyCodes.lsl,
     englishName: 'Lesotho Loti',
     precision: 2,
     emojiFlag: '🇱🇸',
     englishCountryNames: {'Lesotho'},
   ),
-  'LYD': const Currency(
-    code: 'LYD',
+  CurrencyCodes.lyd: const Currency(
+    code: CurrencyCodes.lyd,
     englishName: 'Libyan Dinar',
     precision: 3,
     emojiFlag: '🇱🇾',
     englishCountryNames: {'Libya'},
   ),
-  'MAD': const Currency(
-    code: 'MAD',
+  CurrencyCodes.mad: const Currency(
+    code: CurrencyCodes.mad,
     englishName: 'Moroccan Dirham',
     precision: 2,
     emojiFlag: '🇲🇦',
     englishCountryNames: {'Morocco'},
   ),
-  'MDL': const Currency(
-    code: 'MDL',
+  CurrencyCodes.mdl: const Currency(
+    code: CurrencyCodes.mdl,
     englishName: 'Moldovan Leu',
     precision: 2,
     emojiFlag: '🇲🇩',
     englishCountryNames: {'Moldova'},
   ),
-  'MGA': const Currency(
-    code: 'MGA',
+  CurrencyCodes.mga: const Currency(
+    code: CurrencyCodes.mga,
     englishName: 'Malagasy Ariary',
     precision: 1,
     emojiFlag: '🇲🇬',
     englishCountryNames: {'Madagascar'},
   ),
-  'MKD': const Currency(
-    code: 'MKD',
+  CurrencyCodes.mkd: const Currency(
+    code: CurrencyCodes.mkd,
     englishName: 'Macedonian Denar',
     precision: 2,
     emojiFlag: '🇲🇰',
     englishCountryNames: {'North Macedonia'},
   ),
-  'MMK': const Currency(
-    code: 'MMK',
+  CurrencyCodes.mmk: const Currency(
+    code: CurrencyCodes.mmk,
     englishName: 'Myanmar Kyat',
     precision: 2,
     emojiFlag: '🇲🇲',
     englishCountryNames: {'Myanmar'},
   ),
-  'MNT': const Currency(
-    code: 'MNT',
+  CurrencyCodes.mnt: const Currency(
+    code: CurrencyCodes.mnt,
     englishName: 'Mongolian Tögrög',
     precision: 2,
     emojiFlag: '🇲🇳',
     englishCountryNames: {'Mongolia'},
   ),
-  'MOP': const Currency(
-    code: 'MOP',
+  CurrencyCodes.mop: const Currency(
+    code: CurrencyCodes.mop,
     englishName: 'Macanese Pataca',
     precision: 2,
     emojiFlag: '🇲🇴',
     englishCountryNames: {'Macau'},
   ),
-  'MRU': const Currency(
-    code: 'MRU',
+  CurrencyCodes.mru: const Currency(
+    code: CurrencyCodes.mru,
     englishName: 'Mauritanian Ouguiya',
     precision: 1,
     emojiFlag: '🇲🇷',
     englishCountryNames: {'Mauritania'},
   ),
-  'MUR': const Currency(
-    code: 'MUR',
+  CurrencyCodes.mur: const Currency(
+    code: CurrencyCodes.mur,
     englishName: 'Mauritian Rupee',
     precision: 2,
     emojiFlag: '🇲🇺',
     englishCountryNames: {'Mauritius'},
   ),
-  'MVR': const Currency(
-    code: 'MVR',
+  CurrencyCodes.mvr: const Currency(
+    code: CurrencyCodes.mvr,
     englishName: 'Maldivian Rufiyaa',
     precision: 2,
     emojiFlag: '🇲🇻',
     englishCountryNames: {'Maldives'},
   ),
-  'MWK': const Currency(
-    code: 'MWK',
+  CurrencyCodes.mwk: const Currency(
+    code: CurrencyCodes.mwk,
     englishName: 'Malawian Kwacha',
     precision: 2,
     emojiFlag: '🇲🇼',
     englishCountryNames: {'Malawi'},
   ),
-  'MXN': const Currency(
-    code: 'MXN',
+  CurrencyCodes.mxn: const Currency(
+    code: CurrencyCodes.mxn,
     englishName: 'Mexican Peso',
     precision: 2,
     emojiFlag: '🇲🇽',
     englishCountryNames: {'Mexico'},
   ),
-  'MYR': const Currency(
-    code: 'MYR',
+  CurrencyCodes.myr: const Currency(
+    code: CurrencyCodes.myr,
     englishName: 'Malaysian Ringgit',
     precision: 2,
     emojiFlag: '🇲🇾',
     englishCountryNames: {'Malaysia'},
   ),
-  'MZN': const Currency(
-    code: 'MZN',
+  CurrencyCodes.mzn: const Currency(
+    code: CurrencyCodes.mzn,
     englishName: 'Mozambican Metical',
     precision: 2,
     emojiFlag: '🇲🇿',
     englishCountryNames: {'Mozambique'},
   ),
-  'NAD': const Currency(
-    code: 'NAD',
+  CurrencyCodes.nad: const Currency(
+    code: CurrencyCodes.nad,
     englishName: 'Namibian Dollar',
     precision: 2,
     emojiFlag: '🇳🇦',
     englishCountryNames: {'Namibia'},
   ),
-  'NGN': const Currency(
-    code: 'NGN',
+  CurrencyCodes.ngn: const Currency(
+    code: CurrencyCodes.ngn,
     englishName: 'Nigerian Naira',
     precision: 2,
     emojiFlag: '🇳🇬',
     symbol: '₦',
     englishCountryNames: {'Nigeria'},
   ),
-  'NIO': const Currency(
-    code: 'NIO',
+  CurrencyCodes.nio: const Currency(
+    code: CurrencyCodes.nio,
     englishName: 'Nicaraguan Córdoba',
     precision: 2,
     emojiFlag: '🇳🇮',
     englishCountryNames: {'Nicaragua'},
   ),
-  'NOK': const Currency(
-    code: 'NOK',
+  CurrencyCodes.nok: const Currency(
+    code: CurrencyCodes.nok,
     englishName: 'Norwegian Krone',
     precision: 2,
     emojiFlag: '🇳🇴',
     englishCountryNames: {'Norway'},
   ),
-  'NPR': const Currency(
-    code: 'NPR',
+  CurrencyCodes.npr: const Currency(
+    code: CurrencyCodes.npr,
     englishName: 'Nepalese Rupee',
     precision: 2,
     emojiFlag: '🇳🇵',
     englishCountryNames: {'Nepal'},
   ),
-  'NZD': const Currency(
-    code: 'NZD',
+  CurrencyCodes.nzd: const Currency(
+    code: CurrencyCodes.nzd,
     englishName: 'New Zealand Dollar',
     precision: 2,
     emojiFlag: '🇳🇿',
     englishCountryNames: {'New Zealand', 'Cook Islands', 'Niue', 'Pitcairn Islands', 'Tokelau'},
   ),
-  'OMR': const Currency(
-    code: 'OMR',
+  CurrencyCodes.omr: const Currency(
+    code: CurrencyCodes.omr,
     englishName: 'Omani Rial',
     precision: 3,
     emojiFlag: '🇴🇲',
     englishCountryNames: {'Oman'},
   ),
-  'PAB': const Currency(
-    code: 'PAB',
+  CurrencyCodes.pab: const Currency(
+    code: CurrencyCodes.pab,
     englishName: 'Panamanian Balboa',
     precision: 2,
     emojiFlag: '🇵🇦',
     englishCountryNames: {'Panama'},
   ),
-  'PEN': const Currency(
-    code: 'PEN',
+  CurrencyCodes.pen: const Currency(
+    code: CurrencyCodes.pen,
     englishName: 'Peruvian Sol',
     precision: 2,
     emojiFlag: '🇵🇪',
     symbol: 'S/',
     englishCountryNames: {'Peru'},
   ),
-  'PGK': const Currency(
-    code: 'PGK',
+  CurrencyCodes.pgk: const Currency(
+    code: CurrencyCodes.pgk,
     englishName: 'Papua New Guinean Kina',
     precision: 2,
     emojiFlag: '🇵🇬',
     englishCountryNames: {'Papua New Guinea'},
   ),
-  'PHP': const Currency(
-    code: 'PHP',
+  CurrencyCodes.php: const Currency(
+    code: CurrencyCodes.php,
     englishName: 'Philippine Peso',
     precision: 2,
     emojiFlag: '🇵🇭',
     symbol: '₱',
     englishCountryNames: {'Philippines'},
   ),
-  'PKR': const Currency(
-    code: 'PKR',
+  CurrencyCodes.pkr: const Currency(
+    code: CurrencyCodes.pkr,
     englishName: 'Pakistani Rupee',
     precision: 2,
     emojiFlag: '🇵🇰',
@@ -797,81 +802,81 @@ final Map<String, Currency> _currencyMap = {
     symbol: 'zł',
     englishCountryNames: {'Poland'},
   ),
-  'PYG': const Currency(
-    code: 'PYG',
+  CurrencyCodes.pyg: const Currency(
+    code: CurrencyCodes.pyg,
     englishName: 'Paraguayan Guaraní',
     precision: 2,
     emojiFlag: '🇵🇾',
     symbol: '₲',
     englishCountryNames: {'Paraguay'},
   ),
-  'QAR': const Currency(
-    code: 'QAR',
+  CurrencyCodes.qar: const Currency(
+    code: CurrencyCodes.qar,
     englishName: 'Qatari Riyal',
     precision: 2,
     emojiFlag: '🇶🇦',
     symbol: 'QR',
     englishCountryNames: {'Qatar'},
   ),
-  'RON': const Currency(
-    code: 'RON',
+  CurrencyCodes.ron: const Currency(
+    code: CurrencyCodes.ron,
     englishName: 'Romanian Leu',
     precision: 2,
     emojiFlag: '🇷🇴',
     englishCountryNames: {'Romania'},
   ),
-  'RSD': const Currency(
-    code: 'RSD',
+  CurrencyCodes.rsd: const Currency(
+    code: CurrencyCodes.rsd,
     englishName: 'Serbian Dinar',
     precision: 2,
     emojiFlag: '🇷🇸',
     englishCountryNames: {'Serbia'},
   ),
-  'RUB': const Currency(
-    code: 'RUB',
+  CurrencyCodes.rub: const Currency(
+    code: CurrencyCodes.rub,
     englishName: 'Russian Ruble',
     precision: 2,
     emojiFlag: '🇷🇺',
     symbol: '₽',
     englishCountryNames: {'Russia'},
   ),
-  'RWF': const Currency(
-    code: 'RWF',
+  CurrencyCodes.rwf: const Currency(
+    code: CurrencyCodes.rwf,
     englishName: 'Rwandan Franc',
     precision: 2,
     emojiFlag: '🇷🇼',
     englishCountryNames: {'Rwanda'},
   ),
-  'SAR': const Currency(
-    code: 'SAR',
+  CurrencyCodes.sar: const Currency(
+    code: CurrencyCodes.sar,
     englishName: 'Saudi Riyal',
     precision: 2,
     emojiFlag: '🇸🇦',
     englishCountryNames: {'Saudi Arabia'},
   ),
-  'SBD': const Currency(
-    code: 'SBD',
+  CurrencyCodes.sbd: const Currency(
+    code: CurrencyCodes.sbd,
     englishName: 'Solomon Islands Dollar',
     precision: 2,
     emojiFlag: '🇸🇧',
     englishCountryNames: {'Solomon Islands'},
   ),
-  'SCR': const Currency(
-    code: 'SCR',
+  CurrencyCodes.scr: const Currency(
+    code: CurrencyCodes.scr,
     englishName: 'Seychellois Rupee',
     precision: 2,
     emojiFlag: '🇸🇨',
     englishCountryNames: {'Seychelles'},
   ),
-  'SDG': const Currency(
-    code: 'SDG',
+  CurrencyCodes.sdg: const Currency(
+    code: CurrencyCodes.sdg,
     englishName: 'Sudanese Pound',
     precision: 2,
     emojiFlag: '🇸🇩',
     englishCountryNames: {'Sudan'},
   ),
-  'SEK': const Currency(
-    code: 'SEK',
+  CurrencyCodes.sek: const Currency(
+    code: CurrencyCodes.sek,
     englishName: 'Swedish Krona',
     precision: 2,
     emojiFlag: '🇸🇪',
@@ -884,143 +889,143 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇸🇬',
     englishCountryNames: {'Singapore', 'Brunei'},
   ),
-  'SHP': const Currency(
-    code: 'SHP',
+  CurrencyCodes.shp: const Currency(
+    code: CurrencyCodes.shp,
     englishName: 'Saint Helena Pound',
     precision: 2,
     emojiFlag: '🇸🇭',
     englishCountryNames: {'Saint Helena'},
   ),
-  'SLE': const Currency(
-    code: 'SLE',
+  CurrencyCodes.sle: const Currency(
+    code: CurrencyCodes.sle,
     englishName: 'Sierra Leonean Leone',
     precision: 2,
     emojiFlag: '🇸🇱',
     englishCountryNames: {'Sierra Leone'},
   ),
-  'SOS': const Currency(
-    code: 'SOS',
+  CurrencyCodes.sos: const Currency(
+    code: CurrencyCodes.sos,
     englishName: 'Somali Shilling',
     precision: 2,
     emojiFlag: '🇸🇴',
     englishCountryNames: {'Somalia'},
   ),
-  'SRD': const Currency(
-    code: 'SRD',
+  CurrencyCodes.srd: const Currency(
+    code: CurrencyCodes.srd,
     englishName: 'Surinamese Dollar',
     precision: 2,
     emojiFlag: '🇸🇷',
     englishCountryNames: {'Suriname'},
   ),
-  'SSP': const Currency(
-    code: 'SSP',
+  CurrencyCodes.ssp: const Currency(
+    code: CurrencyCodes.ssp,
     englishName: 'South Sudanese Pound',
     precision: 2,
     emojiFlag: '🇸🇸',
     englishCountryNames: {'South Sudan'},
   ),
-  'STN': const Currency(
-    code: 'STN',
+  CurrencyCodes.stn: const Currency(
+    code: CurrencyCodes.stn,
     englishName: 'São Tomé and Príncipe Dobra',
     precision: 2,
     emojiFlag: '🇸🇹',
     englishCountryNames: {'São Tomé and Príncipe'},
   ),
-  'SVC': const Currency(
-    code: 'SVC',
+  CurrencyCodes.svc: const Currency(
+    code: CurrencyCodes.svc,
     englishName: 'Salvadoran Colón',
     precision: 2,
     emojiFlag: '🇸🇻',
     englishCountryNames: {'El Salvador'},
   ),
-  'SYP': const Currency(
-    code: 'SYP',
+  CurrencyCodes.syp: const Currency(
+    code: CurrencyCodes.syp,
     englishName: 'Syrian Pound',
     precision: 2,
     emojiFlag: '🇸🇾',
     englishCountryNames: {'Syria'},
   ),
-  'SZL': const Currency(
-    code: 'SZL',
+  CurrencyCodes.szl: const Currency(
+    code: CurrencyCodes.szl,
     englishName: 'Eswatini Lilangeni',
     precision: 2,
     emojiFlag: '🇸🇿',
     englishCountryNames: {'Eswatini'},
   ),
-  'THB': const Currency(
-    code: 'THB',
+  CurrencyCodes.thb: const Currency(
+    code: CurrencyCodes.thb,
     englishName: 'Thai Baht',
     precision: 2,
     emojiFlag: '🇹🇭',
     symbol: '฿',
     englishCountryNames: {'Thailand'},
   ),
-  'TJS': const Currency(
-    code: 'TJS',
+  CurrencyCodes.tjs: const Currency(
+    code: CurrencyCodes.tjs,
     englishName: 'Tajikistani Somoni',
     precision: 2,
     emojiFlag: '🇹🇯',
     englishCountryNames: {'Tajikistan'},
   ),
-  'TMT': const Currency(
-    code: 'TMT',
+  CurrencyCodes.tmt: const Currency(
+    code: CurrencyCodes.tmt,
     englishName: 'Turkmenistani Manat',
     precision: 2,
     emojiFlag: '🇹🇲',
     englishCountryNames: {'Turkmenistan'},
   ),
-  'TND': const Currency(
-    code: 'TND',
+  CurrencyCodes.tnd: const Currency(
+    code: CurrencyCodes.tnd,
     englishName: 'Tunisian Dinar',
     precision: 3,
     emojiFlag: '🇹🇳',
     englishCountryNames: {'Tunisia'},
   ),
-  'TOP': const Currency(
-    code: 'TOP',
+  CurrencyCodes.top: const Currency(
+    code: CurrencyCodes.top,
     englishName: 'Tongan Paʻanga',
     precision: 2,
     emojiFlag: '🇹🇴',
     englishCountryNames: {'Tonga'},
   ),
-  'TRY': const Currency(
-    code: 'TRY',
+  CurrencyCodes.tryCode: const Currency(
+    code: CurrencyCodes.tryCode,
     englishName: 'Turkish Lira',
     precision: 2,
     emojiFlag: '🇹🇷',
     symbol: '₺',
     englishCountryNames: {'Turkey'},
   ),
-  'TTD': const Currency(
-    code: 'TTD',
+  CurrencyCodes.ttd: const Currency(
+    code: CurrencyCodes.ttd,
     englishName: 'Trinidad and Tobago Dollar',
     precision: 2,
     emojiFlag: '🇹🇹',
     englishCountryNames: {'Trinidad and Tobago'},
   ),
-  'TWD': const Currency(
-    code: 'TWD',
+  CurrencyCodes.twd: const Currency(
+    code: CurrencyCodes.twd,
     englishName: 'New Taiwan Dollar',
     precision: 2,
     emojiFlag: '🇹🇼',
     englishCountryNames: {'Taiwan'},
   ),
-  'TZS': const Currency(
-    code: 'TZS',
+  CurrencyCodes.tzs: const Currency(
+    code: CurrencyCodes.tzs,
     englishName: 'Tanzanian Shilling',
     precision: 2,
     emojiFlag: '🇹🇿',
     englishCountryNames: {'Tanzania'},
   ),
-  'UAH': const Currency(
-    code: 'UAH',
+  CurrencyCodes.uah: const Currency(
+    code: CurrencyCodes.uah,
     englishName: 'Ukrainian Hryvnia',
     precision: 2,
     emojiFlag: '🇺🇦',
     englishCountryNames: {'Ukraine'},
   ),
-  'UGX': const Currency(
-    code: 'UGX',
+  CurrencyCodes.ugx: const Currency(
+    code: CurrencyCodes.ugx,
     englishName: 'Ugandan Shilling',
     precision: 2,
     emojiFlag: '🇺🇬',
@@ -1047,58 +1052,58 @@ final Map<String, Currency> _currencyMap = {
       'British Virgin Islands',
     },
   ),
-  'UYU': const Currency(
-    code: 'UYU',
+  CurrencyCodes.uyu: const Currency(
+    code: CurrencyCodes.uyu,
     englishName: 'Uruguayan Peso',
     precision: 2,
     emojiFlag: '🇺🇾',
     englishCountryNames: {'Uruguay'},
   ),
-  'UZS': const Currency(
-    code: 'UZS',
+  CurrencyCodes.uzs: const Currency(
+    code: CurrencyCodes.uzs,
     englishName: 'Uzbekistani Som',
     precision: 2,
     emojiFlag: '🇺🇿',
     englishCountryNames: {'Uzbekistan'},
   ),
-  'VED': const Currency(
-    code: 'VED',
+  CurrencyCodes.ved: const Currency(
+    code: CurrencyCodes.ved,
     englishName: 'Venezuelan Bolívar Digital',
     precision: 2,
     emojiFlag: '🇻🇪',
     englishCountryNames: {'Venezuela'},
   ),
-  'VES': const Currency(
-    code: 'VES',
+  CurrencyCodes.ves: const Currency(
+    code: CurrencyCodes.ves,
     englishName: 'Venezuelan Bolívar Soberano',
     precision: 0,
     emojiFlag: '🇻🇪',
     englishCountryNames: {'Venezuela'},
   ),
-  'VND': const Currency(
-    code: 'VND',
+  CurrencyCodes.vnd: const Currency(
+    code: CurrencyCodes.vnd,
     englishName: 'Vietnamese Đồng',
     precision: 2,
     emojiFlag: '🇻🇳',
     symbol: '₫',
     englishCountryNames: {'Vietnam'},
   ),
-  'VUV': const Currency(
-    code: 'VUV',
+  CurrencyCodes.vuv: const Currency(
+    code: CurrencyCodes.vuv,
     englishName: 'Vanuatu Vatu',
     precision: 2,
     emojiFlag: '🇻🇺',
     englishCountryNames: {'Vanuatu'},
   ),
-  'WST': const Currency(
-    code: 'WST',
+  CurrencyCodes.wst: const Currency(
+    code: CurrencyCodes.wst,
     englishName: 'Samoan Tala',
     precision: 2,
     emojiFlag: '🇼🇸',
     englishCountryNames: {'Samoa'},
   ),
-  'XAF': const Currency(
-    code: 'XAF',
+  CurrencyCodes.xaf: const Currency(
+    code: CurrencyCodes.xaf,
     englishName: 'Central African CFA Franc',
     precision: 2,
     emojiFlag: '🇨🇲',
@@ -1111,8 +1116,8 @@ final Map<String, Currency> _currencyMap = {
       'Gabon',
     },
   ),
-  'XCD': const Currency(
-    code: 'XCD',
+  CurrencyCodes.xcd: const Currency(
+    code: CurrencyCodes.xcd,
     englishName: 'East Caribbean Dollar',
     precision: 2,
     emojiFlag: '🇦🇮',
@@ -1127,8 +1132,8 @@ final Map<String, Currency> _currencyMap = {
       'Montserrat',
     },
   ),
-  'XOF': const Currency(
-    code: 'XOF',
+  CurrencyCodes.xof: const Currency(
+    code: CurrencyCodes.xof,
     englishName: 'West African CFA Franc',
     precision: 2,
     emojiFlag: '🇧🇯',
@@ -1143,15 +1148,15 @@ final Map<String, Currency> _currencyMap = {
       'Togo',
     },
   ),
-  'XPF': const Currency(
-    code: 'XPF',
+  CurrencyCodes.xpf: const Currency(
+    code: CurrencyCodes.xpf,
     englishName: 'CFP Franc',
     precision: 2,
     emojiFlag: '🇵🇫',
     englishCountryNames: {'French Polynesia', 'New Caledonia', 'Wallis and Futuna'},
   ),
-  'YER': const Currency(
-    code: 'YER',
+  CurrencyCodes.yer: const Currency(
+    code: CurrencyCodes.yer,
     englishName: 'Yemeni Rial',
     precision: 2,
     emojiFlag: '🇾🇪',
@@ -1164,8 +1169,8 @@ final Map<String, Currency> _currencyMap = {
     emojiFlag: '🇿🇦',
     englishCountryNames: {'South Africa'},
   ),
-  'ZMW': const Currency(
-    code: 'ZMW',
+  CurrencyCodes.zmw: const Currency(
+    code: CurrencyCodes.zmw,
     englishName: 'Zambian Kwacha',
     precision: 2,
     emojiFlag: '🇿🇲',

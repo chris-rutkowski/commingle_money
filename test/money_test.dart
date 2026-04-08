@@ -117,6 +117,20 @@ void main() {
           expect(() => usd4 / 0, throwsA(anything));
         });
       });
+
+      group('truncating division', () {
+        test('normal', () {
+          expect(usd10 ~/ usd3, Money(currencyCode: CurrencyCodes.usd, amount: Decimal.parse('3')));
+          expect(usd10 ~/ 4, Money(currencyCode: CurrencyCodes.usd, amount: Decimal.parse('2')));
+          expect(usd10 ~/ 2.5, Money(currencyCode: CurrencyCodes.usd, amount: Decimal.parse('4')));
+        });
+
+        test('exceptions', () {
+          expect(() => usd4 ~/ aed4, throwsA(anything));
+          expect(() => usd4 ~/ 'text', throwsA(anything));
+          expect(() => usd4 ~/ 0, throwsA(anything));
+        });
+      });
     });
   });
 }

@@ -191,6 +191,12 @@ Contributions are very welcome! If you spot a bug, want to improve something, or
 - 📱 [Commingle App](https://commingle.app)
 - 🧑‍💻 [My Linked In](https://www.linkedin.com/in/chris-rutkowski/)
 
+## 🤝 Support Commingle Money
+
+If you find **Commingle Money** valuable, consider supporting its continued development:
+
+<a href="https://www.buymeacoffee.com/chrisrkw" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60"></a>
+
 ## 📄 Copyright and License
 
 **Commingle Money** is maintained by Chris Rutkowski as part of the [Commingle](https://commingle.app) app, and open-sourced under the MIT License.

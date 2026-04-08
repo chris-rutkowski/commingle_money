@@ -125,6 +125,21 @@ final class Money extends Equatable {
       amount: (amount / decimalDivisor).toDecimal(scaleOnInfinitePrecision: precision),
     ).roundedToCurrencyPrecision();
   }
+
+  /// Returns truncated quotient of this [Money] and [other].
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  Money operator ~/(dynamic other) {
+    final decimalDivisor = _getDecimal(other, currencyCode);
+
+    if (decimalDivisor == Decimal.zero) {
+      throw ArgumentError('Division by zero is not allowed');
+    }
+
+    return Money(
+      currencyCode: currencyCode,
+      amount: Decimal.fromBigInt(amount ~/ decimalDivisor),
+    );
+  }
 }
 
 Decimal _getDecimal(dynamic value, CurrencyCode currencyCode) {

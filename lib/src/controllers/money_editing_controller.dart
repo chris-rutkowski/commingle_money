@@ -65,6 +65,7 @@ final class MoneyEditingController extends ChangeNotifier {
     }
 
     _currencyCode = newValue.currencyCode;
+    _amountController.precision = Currency.fromCode(newValue.currencyCode)?.precision;
     _amountController.value = newValue.amount;
   }
 

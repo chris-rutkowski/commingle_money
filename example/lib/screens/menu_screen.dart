@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'amount_editing_controller_screen.dart';
+import 'commingle_money_field_screen.dart';
 import 'money_editing_controller_screen.dart';
 import 'money_label_screen.dart';
 
@@ -15,6 +16,12 @@ final class MenuScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('Example Menu')),
       body: ListView(
         children: [
+          ListTile(
+            title: const Text('Commingle Money Field'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const CommingleMoneyFieldScreen()));
+            },
+          ),
           ListTile(
             title: const Text('Amount Editing Controller'),
             onTap: () {
