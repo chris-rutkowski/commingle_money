@@ -215,13 +215,18 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       reset = true;
     }
 
-    if (reset) {
-      setState(() {
-        operandA = widget.controller.value?.amount.toString() ?? '';
-        activeOperator = null;
-        operandB = '';
-      });
-    }
+    setState(() {
+      // setState always executed in case user changed the currency without changing the amount
+      // it may have different precision
+
+      if (reset) {
+        setState(() {
+          operandA = widget.controller.value?.amount.toString() ?? '';
+          activeOperator = null;
+          operandB = '';
+        });
+      }
+    });
   }
 
   void onDecimalSignInput() {
@@ -396,6 +401,8 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                                       ? .normal
                                       : .placeholder
                                 : null
+                          : widget.controller.value == null
+                          ? null
                           : .normal,
                     ),
                     AnimatedOperatorWidget(
