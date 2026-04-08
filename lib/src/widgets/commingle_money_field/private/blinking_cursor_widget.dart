@@ -37,7 +37,7 @@ final class BlinkingCursorWidget extends StatelessWidget {
     final painter = TextPainter(
       text: TextSpan(text: '0', style: textStyle),
       textDirection: TextDirection.ltr,
-      textHeightBehavior: DefaultTextHeightBehavior.of(context),
+      textHeightBehavior: DefaultTextHeightBehavior.maybeOf(context),
     )..layout();
 
     return FadeTransition(

@@ -123,7 +123,7 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                 ),
                 ElevatedButton(
                   onPressed: () => mathOperatorDispatcher.handle(MathOperator.minus),
-                  child: const Text('-'),
+                  child: const Text('−'),
                 ),
                 ElevatedButton(
                   onPressed: () => mathOperatorDispatcher.handle(MathOperator.multiply),

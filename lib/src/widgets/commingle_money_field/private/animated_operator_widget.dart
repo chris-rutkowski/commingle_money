@@ -57,7 +57,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
     final painter = TextPainter(
       text: TextSpan(text: '0', style: widget.textStyle),
       textDirection: TextDirection.ltr,
-      textHeightBehavior: DefaultTextHeightBehavior.of(context),
+      textHeightBehavior: DefaultTextHeightBehavior.maybeOf(context),
     )..layout();
 
     final children = <Widget>[];
@@ -67,7 +67,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
       final painter = TextPainter(
         text: TextSpan(text: character.character, style: widget.textStyle),
         textDirection: TextDirection.ltr,
-        textHeightBehavior: DefaultTextHeightBehavior.of(context),
+        textHeightBehavior: DefaultTextHeightBehavior.maybeOf(context),
       )..layout();
 
       children.add(
@@ -176,7 +176,7 @@ extension on MathOperator {
       case .plus:
         return '+';
       case .minus:
-        return '-';
+        return '−';
       case .multiply:
         return '×';
       case .divide:
