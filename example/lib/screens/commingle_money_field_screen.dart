@@ -59,8 +59,6 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                 ListenableBuilder(
                   listenable: moneyEditingController,
                   builder: (context, child) {
-                    // return Text('Current value: ${moneyEditingController.value.toString()}');
-
                     if (moneyEditingController.value == null) {
                       return Text(
                         'Current value: ${moneyEditingController.currencyCode} null',
@@ -100,12 +98,24 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                       onPressed: () => mathOperatorDispatcher.handle(MathOperator.equal),
                       child: const Text('='),
                     ),
-                    OutlinedButton(
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                Wrap(
+                  alignment: WrapAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    ElevatedButton(
                       onPressed: focusNode.unfocus,
                       child: const Text('Unfocus'),
                     ),
                   ],
                 ),
+                const SizedBox(height: 16),
+
                 Wrap(
                   alignment: WrapAlignment.center,
                   spacing: 8,
