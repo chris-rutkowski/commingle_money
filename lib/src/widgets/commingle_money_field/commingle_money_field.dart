@@ -440,6 +440,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                       currencyCode: widget.controller.currencyCode,
                       animationDuration: widget.animationDuration,
                       curve: widget.curve,
+                      styleTypeOverride: .normal,
                     ),
                   ],
                 ),
