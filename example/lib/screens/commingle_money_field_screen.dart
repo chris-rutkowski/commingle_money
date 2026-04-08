@@ -52,22 +52,22 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                   mathOperatorDispatcher: mathOperatorDispatcher,
                   moneyController: moneyEditingController,
                   focusNode: focusNode,
-                  prefix: const Text('Prefix '),
-                  suffix: const Text(' Suffix'),
+                  affixesSpacing: 16,
+                  prefix: const Text('Prefix'),
+                  suffix: const Text('Suffix'),
                 ),
+
+                const SizedBox(height: 4),
 
                 ListenableBuilder(
                   listenable: moneyEditingController,
                   builder: (context, child) {
-                    if (moneyEditingController.value == null) {
-                      return Text(
-                        'Current value: ${moneyEditingController.currencyCode} null',
-                      );
-                    } else {
-                      return Text(
-                        'Current value: ${moneyEditingController.value.toString()}',
-                      );
-                    }
+                    return Text(
+                      moneyEditingController.value == null
+                          ? 'Current value: ${moneyEditingController.currencyCode} null'
+                          : 'Current value: ${moneyEditingController.value.toString()}',
+                      textAlign: TextAlign.center,
+                    );
                   },
                 ),
 

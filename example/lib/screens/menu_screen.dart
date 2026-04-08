@@ -17,6 +17,12 @@ final class MenuScreen extends StatelessWidget {
       body: ListView(
         children: [
           ListTile(
+            title: const Text('Commingle Money Field'),
+            onTap: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const CommingleMoneyFieldScreen()));
+            },
+          ),
+          ListTile(
             title: const Text('Amount Editing Controller'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const AmountEditingControllerScreen()));
@@ -33,12 +39,6 @@ final class MenuScreen extends StatelessWidget {
             subtitle: const Text('and MoneyFormatter'),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) => const MoneyLabelScreen()));
-            },
-          ),
-          ListTile(
-            title: const Text('Animated Money Field'),
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const CommingleMoneyFieldScreen()));
             },
           ),
         ],

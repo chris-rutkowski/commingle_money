@@ -24,6 +24,9 @@ final class CommingleMoneyField extends StatefulWidget {
   /// Optional [Widget] to display after the field value, hidden during arithmetic operation.
   final Widget? suffix;
 
+  /// Space between the numeric presentation and any visible prefix or suffix.
+  final double affixesSpacing;
+
   /// Placeholder text to display when the field is empty.
   final String placeholder;
 
@@ -51,6 +54,7 @@ final class CommingleMoneyField extends StatefulWidget {
     super.key,
     this.prefix,
     this.suffix,
+    this.affixesSpacing = 0,
     this.placeholder = '0',
     this.placeholderColor,
     this.mathOperatorDispatcher,
@@ -355,7 +359,12 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                         duration: widget.animationDuration,
                         curve: widget.curve,
                         alignment: .centerLeft,
-                        child: prefix,
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.only(
+                            end: widget.affixesSpacing,
+                          ),
+                          child: prefix,
+                        ),
                       ),
                     AnimatedNumberWidget(
                       text: operandA.isEmpty ? null : operandA,
@@ -409,7 +418,12 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                         duration: widget.animationDuration,
                         curve: widget.curve,
                         alignment: .centerRight,
-                        child: suffix,
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.only(
+                            start: widget.affixesSpacing,
+                          ),
+                          child: suffix,
+                        ),
                       ),
                   ],
                 );
