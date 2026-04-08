@@ -112,9 +112,14 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    ElevatedButton(
-                      onPressed: focusNode.unfocus,
-                      child: const Text('Unfocus'),
+                    ListenableBuilder(
+                      listenable: focusNode,
+                      builder: (context, _) {
+                        return ElevatedButton(
+                          onPressed: () => focusNode.hasFocus ? focusNode.unfocus() : focusNode.requestFocus(),
+                          child: Text(focusNode.hasFocus ? 'Unfocus' : 'Focus'),
+                        );
+                      },
                     ),
                   ],
                 ),
