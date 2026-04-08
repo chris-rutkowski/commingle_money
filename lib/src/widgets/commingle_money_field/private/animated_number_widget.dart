@@ -163,7 +163,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final effectiveSeparators = _resolveEffectiveSeparators(context);
+    final effectiveSeparators = resolveEffectiveSeparators(context);
 
     managePlaceholder();
     addPendingDigits(animated: false);
@@ -185,9 +185,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
   @override
   void didUpdateWidget(covariant AnimatedNumberWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    final effectiveSeparators = _resolveEffectiveSeparators(context);
-
-    // TODO consider that abs or something here
+    final effectiveSeparators = resolveEffectiveSeparators(context);
 
     managePlaceholder();
     addPendingDigits();
@@ -200,17 +198,9 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
 
     cursorController.value = 0;
     cursorController.repeat(reverse: true);
-
-    // TODO adjusting decimal separators
-
-    // TODO: Edge case when entering dot after having only 0
-
-    // TODO: Edge case for negative number
-
-    // TODO: edge case when new change happens while previous is still animating maybe
   }
 
-  AmountFormatSeparatorsData _resolveEffectiveSeparators(BuildContext context) {
+  AmountFormatSeparatorsData resolveEffectiveSeparators(BuildContext context) {
     return widget.separators ?? AmountFormatSeparators.of(context);
   }
 
@@ -349,7 +339,6 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
   }
 
   void manageFractional({bool animated = true, required String separator}) {
-    // or if money has that part
     final show = widget.text != null && widget.text!.contains('.');
 
     if (show) {
