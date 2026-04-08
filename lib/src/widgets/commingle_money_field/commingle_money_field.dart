@@ -13,9 +13,9 @@ import 'private/animated_operator_widget.dart';
 import 'private/sentinel.dart';
 
 // To improve:
-// - AnimatedPositionedDirectional for RTL
+// - AnimatedPositionedDirectional and overall RTL support
 
-/// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders and reach animations.
+/// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders matching currency precision and reach animations.
 /// When provided with [mathOperatorDispatcher] also supports basic arithmetic operations.
 final class CommingleMoneyField extends StatefulWidget {
   /// Optional [Widget] to display before the field value, hidden during arithmetic operation.
@@ -74,7 +74,7 @@ final class CommingleMoneyField extends StatefulWidget {
 }
 
 final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
-  late final TextEditingController inputController;
+  final inputController = TextEditingController.fromValue(sentinelValue);
 
   final fallbackFocusNode = FocusNode();
   FocusNode get effectiveFocusNode => widget.focusNode ?? fallbackFocusNode;
@@ -118,12 +118,22 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
   @override
   void initState() {
     super.initState();
-    inputController = TextEditingController.fromValue(sentinelValue);
+
     widget.mathOperatorDispatcher?.listener = onOperatorInput;
     effectiveFocusNode.addListener(_handleFocusNodeChanged);
     widget.moneyController.addListener(_handleControllerChanged);
 
     operandA = widget.moneyController.value?.amount.toString() ?? '';
+  }
+
+  @override
+  void dispose() {
+    widget.mathOperatorDispatcher?.listener = null;
+    inputController.dispose();
+    effectiveFocusNode.removeListener(_handleFocusNodeChanged);
+    fallbackFocusNode.dispose();
+    widget.moneyController.removeListener(_handleControllerChanged);
+    super.dispose();
   }
 
   @override
@@ -171,16 +181,6 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
         activeOperator = operator;
       }
     });
-  }
-
-  @override
-  void dispose() {
-    widget.mathOperatorDispatcher?.listener = null;
-    inputController.dispose();
-    effectiveFocusNode.removeListener(_handleFocusNodeChanged);
-    fallbackFocusNode.dispose();
-    widget.moneyController.removeListener(_handleControllerChanged);
-    super.dispose();
   }
 
   void _handleFocusNodeChanged() {
