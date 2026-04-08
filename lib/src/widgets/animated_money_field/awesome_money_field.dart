@@ -85,10 +85,6 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
   }
 
   void onOperationInput(AwesomeMoneyFieldButton button) {
-    if (activeButton == button) {
-      return;
-    }
-
     if (button != .equal && !widget.focusNode.hasFocus) {
       widget.focusNode.requestFocus();
     }
@@ -107,6 +103,10 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
     setState(() {
       if (button == AwesomeMoneyFieldButton.equal) {
         activeButton = null;
+        operandB = '';
+        operandA = widget.moneyController.value?.amount.toString() ?? '';
+      } else if (activeButton != null) {
+        activeButton = button;
         operandB = '';
         operandA = widget.moneyController.value?.amount.toString() ?? '';
       } else {
@@ -278,7 +278,6 @@ final class _AwesomeMoneyFieldState extends State<AwesomeMoneyField> {
       case null:
         return null;
     }
-    return null;
   }
 
   @override

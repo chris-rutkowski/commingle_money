@@ -40,8 +40,6 @@ final class _AnimatedMoneyFieldScreenState extends State<AnimatedMoneyFieldScree
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       appBar: AppBar(title: const Text('Animated Money Field')),
       body: SafeArea(
