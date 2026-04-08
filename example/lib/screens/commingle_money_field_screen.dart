@@ -64,7 +64,7 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
           children: [
             const SizedBox(height: 16),
             const Text(
-              'This sample showcases the Commingle Money Field. Tap the amount to bring up the keyboard and edit the value with extra arithmetic operators.\n\nTap “USD” to change the currency. The label and picker are demo implementations built using the prefix.',
+              'This sample showcases the Commingle Money Field. Tap the amount to bring up the keyboard and edit the value with extra arithmetic operators.\n\nTap “USD” to change the currency. The label and picker are sample implementations injected via field’s prefix.',
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 24),
