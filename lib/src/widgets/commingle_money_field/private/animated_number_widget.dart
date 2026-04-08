@@ -82,6 +82,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
     final painter = TextPainter(
       text: TextSpan(text: '0', style: widget.textStyle),
       textDirection: TextDirection.ltr,
+      textHeightBehavior: DefaultTextHeightBehavior.of(context),
     )..layout();
 
     final children = <Widget>[];
@@ -93,6 +94,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
       final painter = TextPainter(
         text: TextSpan(text: character.character, style: widget.textStyle),
         textDirection: TextDirection.ltr,
+        textHeightBehavior: DefaultTextHeightBehavior.of(context),
       )..layout();
 
       children.add(

@@ -57,6 +57,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
     final painter = TextPainter(
       text: TextSpan(text: '0', style: widget.textStyle),
       textDirection: TextDirection.ltr,
+      textHeightBehavior: DefaultTextHeightBehavior.of(context),
     )..layout();
 
     final children = <Widget>[];
@@ -66,6 +67,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
       final painter = TextPainter(
         text: TextSpan(text: character.character, style: widget.textStyle),
         textDirection: TextDirection.ltr,
+        textHeightBehavior: DefaultTextHeightBehavior.of(context),
       )..layout();
 
       children.add(
