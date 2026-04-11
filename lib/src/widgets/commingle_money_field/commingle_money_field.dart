@@ -485,7 +485,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                         curve: widget.curve,
                         placeholderColor: widget.placeholderColor,
                         symbolResolver: widget.symbolResolver,
-                        styleTypeOverride: operandB.isEmpty ? .placeholder : .normal,
+                        styleTypeOverride: .placeholder,
                       ),
                       AnimatedNumberWidget(
                         text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
