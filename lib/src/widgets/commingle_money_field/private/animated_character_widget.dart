@@ -10,7 +10,7 @@ import 'style_type_override.dart';
 
 /// Single character widget displayed in [AnimatedNumberWidget] and [AnimatedOperatorWidget]
 final class AnimatedCharacterWidget extends StatelessWidget {
-  final double left;
+  final double start;
   final AnimatedCharacter character;
   final TextStyle textStyle;
   final Color? placeholderColor;
@@ -20,7 +20,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
 
   const AnimatedCharacterWidget({
     super.key,
-    required this.left,
+    required this.start,
     required this.character,
     required this.textStyle,
     required this.placeholderColor,
@@ -37,8 +37,8 @@ final class AnimatedCharacterWidget extends StatelessWidget {
           : null,
     );
 
-    return AnimatedPositioned(
-      left: left,
+    return AnimatedPositionedDirectional(
+      start: start,
       duration: duration,
       curve: curve,
       child: ListenableBuilder(
@@ -73,7 +73,7 @@ final class AnimatedCharacterWidget extends StatelessWidget {
                       ),
                     )
                     .value;
-      
+
           return Transform.scale(
             scale: scale,
             child: Opacity(

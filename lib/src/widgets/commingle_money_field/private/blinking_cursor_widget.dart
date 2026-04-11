@@ -36,7 +36,7 @@ final class BlinkingCursorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final painter = TextPainter(
       text: TextSpan(text: '0', style: textStyle),
-      textDirection: TextDirection.ltr,
+      textDirection: Directionality.of(context),
       textHeightBehavior: DefaultTextHeightBehavior.maybeOf(context),
     )..layout();
 

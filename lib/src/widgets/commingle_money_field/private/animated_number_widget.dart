@@ -15,6 +15,7 @@ import 'animated_character.dart';
 import 'animated_character_role.dart';
 import 'animated_character_widget.dart';
 import 'blinking_cursor_widget.dart';
+import 'display_numeral_system.dart';
 import 'style_type_override.dart';
 
 final class AnimatedNumberWidget extends StatefulWidget {
@@ -29,6 +30,7 @@ final class AnimatedNumberWidget extends StatefulWidget {
   final String placeholder;
   final Color? placeholderColor;
   final StyleTypeOverride? styleTypeOverride;
+  final DisplayNumeralSystem numeralSystem;
 
   const AnimatedNumberWidget({
     super.key,
@@ -43,6 +45,7 @@ final class AnimatedNumberWidget extends StatefulWidget {
     required this.placeholder,
     required this.placeholderColor,
     this.styleTypeOverride,
+    this.numeralSystem = DisplayNumeralSystem.latin,
   });
 
   @override
@@ -81,7 +84,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
   Widget build(BuildContext context) {
     final painter = TextPainter(
       text: TextSpan(text: '0', style: widget.textStyle),
-      textDirection: TextDirection.ltr,
+      textDirection: Directionality.of(context),
       textHeightBehavior: DefaultTextHeightBehavior.maybeOf(context),
     )..layout();
 
@@ -93,14 +96,14 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
     for (final character in characters) {
       final painter = TextPainter(
         text: TextSpan(text: character.character, style: widget.textStyle),
-        textDirection: TextDirection.ltr,
+        textDirection: Directionality.of(context),
         textHeightBehavior: DefaultTextHeightBehavior.maybeOf(context),
       )..layout();
 
       children.add(
         AnimatedCharacterWidget(
           key: character.key,
-          left: leading,
+          start: leading,
           character: character,
           textStyle: widget.textStyle,
           placeholderColor: widget.placeholderColor,
@@ -123,7 +126,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
       children.add(
         AnimatedCharacterWidget(
           key: character.key,
-          left: character.retiredLeading,
+          start: character.retiredLeading,
           character: character,
           textStyle: widget.textStyle,
           placeholderColor: widget.placeholderColor,
@@ -144,12 +147,12 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
         children: [
           ...children,
           if (widget.showCursor)
-            AnimatedPositioned(
+            AnimatedPositionedDirectional(
               key: const ValueKey('cursor'),
               duration: widget.animationDuration,
               curve: widget.curve,
               top: 0,
-              left: cursorLeading,
+              start: cursorLeading,
               child: BlinkingCursorWidget(
                 controller: cursorController,
                 textStyle: widget.textStyle,
@@ -209,8 +212,10 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
   void managePlaceholder() {
     final existingPlaceholder = characters.firstWhereOrNull((e) => e.role == .placeholder);
 
-    if (existingPlaceholder != null && existingPlaceholder.character != widget.placeholder) {
-      existingPlaceholder.character = widget.placeholder;
+    final localizedPlaceholder = widget.numeralSystem.localizeText(widget.placeholder);
+
+    if (existingPlaceholder != null && existingPlaceholder.character != localizedPlaceholder) {
+      existingPlaceholder.character = localizedPlaceholder;
     }
 
     if (widget.text == null && existingPlaceholder == null) {
@@ -218,7 +223,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
         AnimatedCharacter(
           animationController: createAnimationController(animate: false),
           role: .placeholder,
-          character: widget.placeholder,
+          character: localizedPlaceholder,
         ),
       );
     } else if (widget.text != null && existingPlaceholder != null) {
@@ -231,7 +236,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
       return;
     }
 
-    final rawCharacters = getMainDigits();
+    final rawCharacters = getDisplayedMainDigits();
     final digitsCharactersLength = characters.where((e) => e.role == .digit).length;
 
     var index = characters.lastIndexWhere((e) => e.role == .digit); // -1 if null, so as intended
@@ -249,7 +254,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
   }
 
   void removeExcessDigits() {
-    final keepCount = widget.text == null ? 0 : getMainDigits().length;
+    final keepCount = widget.text == null ? 0 : getDisplayedMainDigits().length;
     final digitsCharactersIndexes = characters.allIndexesWhere((e) => e.role == .digit);
     final charactersToRetire = digitsCharactersIndexes
         .sublist(keepCount)
@@ -266,7 +271,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
       return;
     }
 
-    final rawCharacters = getMainDigits();
+    final rawCharacters = getDisplayedMainDigits();
     final digitsCharactersIndexes = characters.allIndexesWhere((e) => e.role == .digit);
 
     for (var i = 0; i < rawCharacters.length; i++) {
@@ -283,7 +288,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
       return;
     }
 
-    final components = DecimalComponents.fromDigits(getMainDigitsAsInt());
+    final components = DecimalComponents.fromDigits(getRawMainDigitsAsInt());
     final formatted = AmountFormatter.formattedMain(components.main, separator);
     final needed = formatted.split('').where((e) => e == separator).length;
 
@@ -305,7 +310,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
     final needed = widget.text == null
         ? 0
         : AmountFormatter.formattedMain(
-            DecimalComponents.fromDigits(getMainDigitsAsInt()).main,
+            DecimalComponents.fromDigits(getRawMainDigitsAsInt()).main,
             separator,
           ).split('').where((e) => e == separator).length;
 
@@ -323,7 +328,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
       return;
     }
 
-    final components = DecimalComponents.fromDigits(getMainDigitsAsInt());
+    final components = DecimalComponents.fromDigits(getRawMainDigitsAsInt());
     final formatted = AmountFormatter.formattedMain(components.main, separator);
     final indexes = formatted.split('').allIndexesOf(separator);
 
@@ -354,7 +359,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
         );
       }
 
-      final rawCharacters = getFractionalDigits();
+      final rawCharacters = getDisplayedFractionalDigits();
 
       addPendingFractionalDigits(rawCharacters: rawCharacters, animated: animated);
       removeExcessFractionalDigits(rawCharacters: rawCharacters, animated: animated);
@@ -400,7 +405,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
         AnimatedCharacter(
           animationController: createAnimationController(animate: animated),
           role: .fractionalPlaceholder,
-          character: '0',
+          character: widget.numeralSystem.localizeCharacter('0'),
         ),
       );
     }
@@ -446,7 +451,7 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
     return controller;
   }
 
-  List<String> getMainDigits() {
+  List<String> getRawMainDigits() {
     if (widget.text == null) {
       return [];
     }
@@ -454,9 +459,11 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
     return widget.text!.split('.')[0].split('');
   }
 
-  List<int> getMainDigitsAsInt() => getMainDigits().map(int.parse).toList();
+  List<String> getDisplayedMainDigits() => widget.numeralSystem.localizeText(getRawMainDigits().join()).split('');
 
-  List<String> getFractionalDigits() {
+  List<int> getRawMainDigitsAsInt() => getRawMainDigits().map(int.parse).toList();
+
+  List<String> getRawFractionalDigits() {
     if (widget.text == null || !widget.text!.contains('.')) {
       return [];
     }
@@ -464,7 +471,8 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
     return widget.text!.split('.')[1].split('');
   }
 
-  List<int> getFractionalDigitsAsInt() => getFractionalDigits().map(int.parse).toList();
+  List<String> getDisplayedFractionalDigits() =>
+      widget.numeralSystem.localizeText(getRawFractionalDigits().join()).split('');
 
   // </Utilities>
 }

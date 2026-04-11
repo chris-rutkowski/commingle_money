@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:commingle_money/commingle_money.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
@@ -78,6 +77,36 @@ void main() {
         Decimal.parse('154'),
         reason: 'Equal should commit the result back into operand A and clear math mode.',
       );
+    });
+
+    testWidgets('accepts Arabic-Indic digits and decimal separator', (tester) async {
+      final controller = createController();
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(
+        controller: controller,
+        direction: TextDirection.rtl,
+      );
+      await tester.tap(find.byType(CommingleMoneyField));
+      await tester.pump();
+
+      await tester.typeSequentially('١٢٣٫٤٥');
+
+      expect(controller.value?.currencyCode, CurrencyCodes.usd);
+      expect(controller.value?.amount, Decimal.parse('123.45'));
+    });
+
+    testWidgets('Arabic locale renders Arabic-Indic digits', (tester) async {
+      final controller = createController(amount: Decimal.parse('1234.56'));
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(
+        controller: controller,
+        direction: TextDirection.rtl,
+        locale: const Locale('ar'),
+      );
+
+      await tester.snapshot();
     });
 
     testWidgets('changing operator mid-expression carries evaluated result into operand A', (tester) async {
@@ -311,6 +340,22 @@ void main() {
       await tester.snapshot();
     });
 
+    testWidgets('rtl with Arabic affixes', (tester) async {
+      final controller = createController();
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(
+        controller: controller,
+        prefix: const Text('ر.س'),
+        suffix: const Text('المبلغ'),
+        affixesSpacing: 8,
+        placeholder: 'صفر',
+        direction: TextDirection.rtl,
+      );
+
+      await tester.snapshot();
+    });
+
     testWidgets('filled with affixes', (tester) async {
       final controller = createController(amount: Decimal.parse('1234.56'));
       addTearDown(controller.dispose);
@@ -342,6 +387,33 @@ void main() {
       dispatcher.handle(MathOperator.plus);
       await tester.settleField();
       await tester.typeSequentially('3');
+      await tester.snapshot();
+    });
+
+    testWidgets('rtl arithmetic with Arabic input', (tester) async {
+      final controller = createController(amount: Decimal.parse('12'));
+      final dispatcher = MathOperatorDispatcher();
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(
+        controller: controller,
+        dispatcher: dispatcher,
+        prefix: const Text('ر.س'),
+        suffix: const Text('المبلغ'),
+        affixesSpacing: 8,
+        direction: TextDirection.rtl,
+      );
+
+      dispatcher.handle(MathOperator.plus);
+      await tester.settleField();
+      await tester.typeSequentially('٣');
+
+      expect(controller.value?.amount, Decimal.parse('15'));
+
+      dispatcher.handle(MathOperator.equal);
+      await tester.settleField();
+      expect(controller.value?.amount, Decimal.parse('15'));
+
       await tester.snapshot();
     });
 
@@ -422,10 +494,15 @@ extension _WidgetTester on WidgetTester {
     Widget? suffix,
     double affixesSpacing = 0,
     TextStyle? textStyle,
+    String placeholder = '0',
+    TextDirection direction = TextDirection.ltr,
+    Locale? locale,
     MathOperatorSymbolResolver mathOperatorSymbolBuilder = defaultMathOperatorSymbolResolver,
   }) async {
     await pumpWidget(
       SnapshotWrapper(
+        direction: direction,
+        locale: locale,
         child: CommingleMoneyField(
           controller: controller,
           mathOperatorDispatcher: dispatcher,
@@ -434,6 +511,7 @@ extension _WidgetTester on WidgetTester {
           suffix: suffix,
           affixesSpacing: affixesSpacing,
           textStyle: textStyle,
+          placeholder: placeholder,
         ),
       ),
     );
@@ -477,16 +555,21 @@ extension _WidgetTester on WidgetTester {
 
 final class SnapshotWrapper extends StatelessWidget {
   final Widget child;
+  final TextDirection direction;
+  final Locale? locale;
 
   const SnapshotWrapper({
     super.key,
     required this.child,
+    this.direction = TextDirection.ltr,
+    this.locale,
   });
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      locale: locale,
       home: AmountFormatSeparators(
         data: AmountFormatSeparatorsData.pl,
         child: MoneyPresentationDefaults(
@@ -507,7 +590,7 @@ final class SnapshotWrapper extends StatelessWidget {
             ),
             child: Scaffold(
               body: Directionality(
-                textDirection: TextDirection.ltr,
+                textDirection: direction,
                 child: DefaultTextHeightBehavior(
                   textHeightBehavior: const TextHeightBehavior(),
                   child: Center(

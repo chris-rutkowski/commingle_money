@@ -59,7 +59,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
   Widget build(BuildContext context) {
     final painter = TextPainter(
       text: TextSpan(text: '0', style: widget.textStyle),
-      textDirection: TextDirection.ltr,
+      textDirection: Directionality.of(context),
       textHeightBehavior: DefaultTextHeightBehavior.maybeOf(context),
     )..layout();
 
@@ -69,14 +69,14 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
     for (final character in characters) {
       final painter = TextPainter(
         text: TextSpan(text: character.character, style: widget.textStyle),
-        textDirection: TextDirection.ltr,
+        textDirection: Directionality.of(context),
         textHeightBehavior: DefaultTextHeightBehavior.maybeOf(context),
       )..layout();
 
       children.add(
         AnimatedCharacterWidget(
           key: character.key,
-          left: 0,
+          start: 0,
           character: character,
           textStyle: widget.textStyle,
           placeholderColor: widget.placeholderColor,
@@ -93,7 +93,7 @@ final class _AnimatedOperatorWidgetState extends State<AnimatedOperatorWidget> w
       children.add(
         AnimatedCharacterWidget(
           key: character.key,
-          left: 0,
+          start: 0,
           character: character,
           textStyle: widget.textStyle,
           placeholderColor: widget.placeholderColor,

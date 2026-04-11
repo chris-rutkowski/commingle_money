@@ -12,10 +12,10 @@ import 'math_operator_symbol_resolver.dart';
 import 'private/animated_appearance_wrapper.dart';
 import 'private/animated_number_widget.dart';
 import 'private/animated_operator_widget.dart';
+import 'private/display_numeral_system.dart';
 import 'private/sentinel.dart';
 
 // To improve:
-// - AnimatedPositionedDirectional and overall RTL support
 // - Support cut, copy and paste
 // - Support for negative numbers
 
@@ -92,6 +92,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
   FocusNode get effectiveFocusNode => widget.controller.focusNode;
 
+  DisplayNumeralSystem? inputNumeralSystemOverride;
   MathOperator? activeOperator;
 
   var _operandA = '';
@@ -156,6 +157,10 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       oldWidget.mathOperatorDispatcher?.listener = null;
       widget.mathOperatorDispatcher?.listener = onOperatorInput;
     }
+  }
+
+  DisplayNumeralSystem get effectiveNumeralSystem {
+    return inputNumeralSystemOverride ?? DisplayNumeralSystem.fromLocale(Localizations.localeOf(context));
   }
 
   void onOperatorInput(MathOperator operator) {
@@ -301,7 +306,12 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
   }
 
   TextEditingValue handleInput(TextEditingValue previousValue, TextEditingValue nextValue) {
-    final payload = nextValue.text.trim();
+    final requestedNumeralSystem = DisplayNumeralSystem.fromInput(nextValue.text);
+    if (requestedNumeralSystem != null && requestedNumeralSystem != inputNumeralSystemOverride) {
+      inputNumeralSystemOverride = requestedNumeralSystem;
+    }
+
+    final payload = _normalizeInput(nextValue.text).trim();
 
     if (payload.isEmpty) {
       onBackspace();
@@ -318,6 +328,43 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     }
 
     return sentinelValue;
+  }
+
+  String _normalizeInput(String value) {
+    const digitMap = {
+      '٠': '0',
+      '١': '1',
+      '٢': '2',
+      '٣': '3',
+      '٤': '4',
+      '٥': '5',
+      '٦': '6',
+      '٧': '7',
+      '٨': '8',
+      '٩': '9',
+      '۰': '0',
+      '۱': '1',
+      '۲': '2',
+      '۳': '3',
+      '۴': '4',
+      '۵': '5',
+      '۶': '6',
+      '۷': '7',
+      '۸': '8',
+      '۹': '9',
+    };
+
+    return value.split('').map((character) {
+      if (digitMap.containsKey(character)) {
+        return digitMap[character]!;
+      }
+
+      return switch (character) {
+        '٫' => '.',
+        '٬' => '',
+        _ => character,
+      };
+    }).join();
   }
 
   Money? evaluate() {
@@ -383,71 +430,77 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
               GestureDetector(
                 behavior: HitTestBehavior.translucent,
                 onTap: effectiveFocusNode.requestFocus,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    AnimatedNumberWidget(
-                      text: operandA.isEmpty ? null : operandA,
-                      textStyle: textStyle,
-                      currencyCode: widget.controller.currencyCode,
-                      showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
-                      animationDuration: widget.animationDuration,
-                      curve: widget.curve,
-                      separators: widget.separators,
-                      placeholder: widget.placeholder,
-                      placeholderColor: widget.placeholderColor,
-                      styleTypeOverride: effectiveFocusNode.hasFocus
-                          ? activeOperator != null
-                                ? operandB.isEmpty
-                                      ? .normal
-                                      : .placeholder
-                                : null
-                          : widget.controller.value == null
-                          ? null
-                          : .normal,
-                    ),
-                    AnimatedOperatorWidget(
-                      operator: activeOperator,
-                      textStyle: textStyle,
-                      animationDuration: widget.animationDuration,
-                      curve: widget.curve,
-                      placeholderColor: widget.placeholderColor,
-                      symbolResolver: widget.symbolResolver,
-                      styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
-                    ),
-                    AnimatedNumberWidget(
-                      text: operandB.isEmpty ? null : operandB,
-                      textStyle: textStyle,
-                      placeholder: '',
-                      placeholderColor: widget.placeholderColor,
-                      currencyCode: widget.controller.currencyCode,
-                      showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
-                      animationDuration: widget.animationDuration,
-                      curve: widget.curve,
-                      separators: widget.separators,
-                      styleTypeOverride: .placeholder,
-                    ),
-                    AnimatedOperatorWidget(
-                      operator: operandB.isEmpty ? null : .equal,
-                      textStyle: textStyle,
-                      animationDuration: widget.animationDuration,
-                      curve: widget.curve,
-                      placeholderColor: widget.placeholderColor,
-                      symbolResolver: widget.symbolResolver,
-                      styleTypeOverride: operandB.isEmpty ? .placeholder : .normal,
-                    ),
-                    AnimatedNumberWidget(
-                      text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
-                      textStyle: textStyle,
-                      placeholder: '',
-                      placeholderColor: widget.placeholderColor,
-                      currencyCode: widget.controller.currencyCode,
-                      animationDuration: widget.animationDuration,
-                      curve: widget.curve,
-                      separators: widget.separators,
-                      styleTypeOverride: .normal,
-                    ),
-                  ],
+                child: Directionality(
+                  textDirection: TextDirection.ltr,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      AnimatedNumberWidget(
+                        text: operandA.isEmpty ? null : operandA,
+                        textStyle: textStyle,
+                        currencyCode: widget.controller.currencyCode,
+                        showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
+                        animationDuration: widget.animationDuration,
+                        curve: widget.curve,
+                        separators: widget.separators,
+                        placeholder: widget.placeholder,
+                        placeholderColor: widget.placeholderColor,
+                        numeralSystem: effectiveNumeralSystem,
+                        styleTypeOverride: effectiveFocusNode.hasFocus
+                            ? activeOperator != null
+                                  ? operandB.isEmpty
+                                        ? .normal
+                                        : .placeholder
+                                  : null
+                            : widget.controller.value == null
+                            ? null
+                            : .normal,
+                      ),
+                      AnimatedOperatorWidget(
+                        operator: activeOperator,
+                        textStyle: textStyle,
+                        animationDuration: widget.animationDuration,
+                        curve: widget.curve,
+                        placeholderColor: widget.placeholderColor,
+                        symbolResolver: widget.symbolResolver,
+                        styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
+                      ),
+                      AnimatedNumberWidget(
+                        text: operandB.isEmpty ? null : operandB,
+                        textStyle: textStyle,
+                        placeholder: '',
+                        placeholderColor: widget.placeholderColor,
+                        currencyCode: widget.controller.currencyCode,
+                        showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
+                        animationDuration: widget.animationDuration,
+                        curve: widget.curve,
+                        separators: widget.separators,
+                        numeralSystem: effectiveNumeralSystem,
+                        styleTypeOverride: .placeholder,
+                      ),
+                      AnimatedOperatorWidget(
+                        operator: operandB.isEmpty ? null : .equal,
+                        textStyle: textStyle,
+                        animationDuration: widget.animationDuration,
+                        curve: widget.curve,
+                        placeholderColor: widget.placeholderColor,
+                        symbolResolver: widget.symbolResolver,
+                        styleTypeOverride: operandB.isEmpty ? .placeholder : .normal,
+                      ),
+                      AnimatedNumberWidget(
+                        text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
+                        textStyle: textStyle,
+                        placeholder: '',
+                        placeholderColor: widget.placeholderColor,
+                        currencyCode: widget.controller.currencyCode,
+                        animationDuration: widget.animationDuration,
+                        curve: widget.curve,
+                        separators: widget.separators,
+                        numeralSystem: effectiveNumeralSystem,
+                        styleTypeOverride: .normal,
+                      ),
+                    ],
+                  ),
                 ),
               ),
 
