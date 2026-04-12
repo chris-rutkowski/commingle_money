@@ -2,12 +2,14 @@
 
 A Flutter package for working with monetary values, open sourced from the [**Commingle**](https://commingle.app) app available for [**iOS**](https://apps.apple.com/us/app/commingle/id6499095807) and [**Android**](https://play.google.com/store/apps/details?id=com.commingle.android). It includes global currency definitions, widgets for displaying amounts, input controllers for smooth, user-friendly editing and other monetary utilities.
 
-<a href="https://apps.apple.com/us/app/commingle/id6499095807">
-  <img src="readme_assets/download-on-the-app-store.svg" height="56" alt="Download on the App Store"/>
-</a>
-<a href="https://play.google.com/store/apps/details?id=com.commingle.android">
-  <img src="readme_assets/get-it-on-google-play.png" height="56" alt="Get it on Google Play"/>
-</a>
+<p>
+  <a href="https://apps.apple.com/us/app/commingle/id6499095807">
+    <img src="readme_assets/download-on-the-app-store.png" height="56" alt="Download on the App Store"/>
+  </a>&nbsp;&nbsp;&nbsp;
+  <a href="https://play.google.com/store/apps/details?id=com.commingle.android">
+    <img src="readme_assets/get-it-on-google-play.png" height="56" alt="Get it on Google Play"/>
+  </a>
+</p>
 
 ##  Explore the Example App
 
