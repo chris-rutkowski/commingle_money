@@ -11,7 +11,6 @@ export 'src/money_formatter.dart';
 export 'src/money_presentation_defaults.dart';
 export 'src/widgets/commingle_money_field/commingle_money_field.dart';
 export 'src/widgets/commingle_money_field/math_operator.dart';
-export 'src/widgets/commingle_money_field/math_operator_dispatcher.dart';
 export 'src/widgets/commingle_money_field/math_operator_symbol_resolver.dart';
 export 'src/widgets/money_label/money_label.dart';
 export 'src/widgets/money_label/money_label_animation.dart';

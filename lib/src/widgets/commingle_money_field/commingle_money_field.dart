@@ -7,7 +7,6 @@ import '../../controllers/money_editing_controller.dart';
 import '../../currency.dart';
 import '../../money.dart';
 import 'math_operator.dart';
-import 'math_operator_dispatcher.dart';
 import 'math_operator_symbol_resolver.dart';
 import 'private/animated_appearance_wrapper.dart';
 import 'private/animated_number_widget.dart';
@@ -20,7 +19,7 @@ import 'private/sentinel.dart';
 // - Support for negative numbers
 
 /// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders matching currency precision and reach animations.
-/// When provided with [mathOperatorDispatcher] also supports basic arithmetic operations.
+/// Supports basic arithmetic operations through [MoneyEditingController.mathOperatorDispatcher].
 final class CommingleMoneyField extends StatefulWidget {
   /// Optional [Widget] to display before the field value, hidden during arithmetic operation.
   final Widget? prefix;
@@ -41,9 +40,6 @@ final class CommingleMoneyField extends StatefulWidget {
   /// Placeholder color to use when the field is empty or to differentiate arithmetic operation from its result.
   /// If not provided the [ThemeData.inputDecorationTheme]'s [InputDecorationThemeData.hintStyle]'s [TextStyle.color] is used, or Colors.grey if that is not defined.
   final Color? placeholderColor;
-
-  /// Optional [MathOperatorDispatcher] for providing user input for arithmetic operations.
-  final MathOperatorDispatcher? mathOperatorDispatcher;
 
   /// Builds the display symbol for each arithmetic operator.
   final MathOperatorSymbolResolver symbolResolver;
@@ -74,7 +70,6 @@ final class CommingleMoneyField extends StatefulWidget {
     this.textStyle,
     this.placeholder = '0',
     this.placeholderColor,
-    this.mathOperatorDispatcher,
     this.symbolResolver = defaultMathOperatorSymbolResolver,
     required this.controller,
     this.animationDuration = const Duration(milliseconds: 250),
@@ -133,7 +128,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
   void initState() {
     super.initState();
 
-    widget.mathOperatorDispatcher?.listener = onOperatorInput;
+    widget.controller.mathOperatorDispatcher.listener = onOperatorInput;
     effectiveFocusNode.addListener(handleFocusNodeChanged);
     widget.controller.addListener(handleControllerChanged);
 
@@ -142,21 +137,11 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
   @override
   void dispose() {
-    widget.mathOperatorDispatcher?.listener = null;
+    widget.controller.mathOperatorDispatcher.listener = null;
     inputController.dispose();
     effectiveFocusNode.removeListener(handleFocusNodeChanged);
     widget.controller.removeListener(handleControllerChanged);
     super.dispose();
-  }
-
-  @override
-  void didUpdateWidget(covariant CommingleMoneyField oldWidget) {
-    super.didUpdateWidget(oldWidget);
-
-    if (oldWidget.mathOperatorDispatcher != widget.mathOperatorDispatcher) {
-      oldWidget.mathOperatorDispatcher?.listener = null;
-      widget.mathOperatorDispatcher?.listener = onOperatorInput;
-    }
   }
 
   DisplayNumeralSystem get effectiveNumeralSystem {

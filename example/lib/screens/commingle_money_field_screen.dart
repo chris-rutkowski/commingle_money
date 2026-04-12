@@ -17,7 +17,6 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
     CurrencyCodes.bhd,
   ];
 
-  final mathOperatorDispatcher = MathOperatorDispatcher();
   final moneyEditingController = MoneyEditingController(
     currencyCode: CurrencyCodes.usd,
   );
@@ -72,7 +71,6 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
             Center(
               child: CommingleMoneyField(
                 placeholder: 'amount',
-                mathOperatorDispatcher: mathOperatorDispatcher,
                 controller: moneyEditingController,
                 affixesSpacing: 8,
                 textStyle: textStyle?.copyWith(
@@ -118,7 +116,7 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
               runSpacing: 8,
               children: MathOperator.values.map((operator) {
                 return ElevatedButton(
-                  onPressed: () => mathOperatorDispatcher.handle(operator),
+                  onPressed: () => moneyEditingController.mathOperatorDispatcher.dispatch(operator),
                   child: Text(defaultMathOperatorSymbolResolver(operator)),
                 );
               }).toList(),

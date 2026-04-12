@@ -52,21 +52,17 @@ void main() {
 
     testWidgets('arithmetic updates controller with evaluated result and equal commits it', (tester) async {
       final controller = createController(amount: Decimal.parse('12'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
-      await tester.pumpField(
-        controller: controller,
-        dispatcher: dispatcher,
-      );
+      await tester.pumpField(controller: controller);
 
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
 
       await tester.typeSequentially('3');
       expect(controller.value?.amount, Decimal.parse('15'));
 
-      dispatcher.handle(MathOperator.equal);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
 
       expect(controller.value?.amount, Decimal.parse('15'));
@@ -111,20 +107,16 @@ void main() {
 
     testWidgets('changing operator mid-expression carries evaluated result into operand A', (tester) async {
       final controller = createController(amount: Decimal.parse('12'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
-      await tester.pumpField(
-        controller: controller,
-        dispatcher: dispatcher,
-      );
+      await tester.pumpField(controller: controller);
 
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
       await tester.typeSequentially('3');
       expect(controller.value?.amount, Decimal.parse('15'));
 
-      dispatcher.handle(MathOperator.multiply);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.multiply);
       await tester.settleField();
       await tester.typeSequentially('2');
 
@@ -133,15 +125,11 @@ void main() {
 
     testWidgets('unfocus during pending arithmetic keeps evaluated controller value', (tester) async {
       final controller = createController(amount: Decimal.parse('25'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
-      await tester.pumpField(
-        controller: controller,
-        dispatcher: dispatcher,
-      );
+      await tester.pumpField(controller: controller);
 
-      dispatcher.handle(MathOperator.minus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.minus);
       await tester.settleField();
       await tester.typeSequentially('5');
       expect(controller.value?.amount, Decimal.parse('20'));
@@ -159,15 +147,11 @@ void main() {
 
     testWidgets('external controller change resets pending arithmetic state', (tester) async {
       final controller = createController(amount: Decimal.parse('50'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
-      await tester.pumpField(
-        controller: controller,
-        dispatcher: dispatcher,
-      );
+      await tester.pumpField(controller: controller);
 
-      dispatcher.handle(MathOperator.divide);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.divide);
       await tester.settleField();
       await tester.typeSequentially('2');
       expect(controller.value?.amount, Decimal.parse('25'));
@@ -188,15 +172,11 @@ void main() {
 
     testWidgets('minus below zero clamps controller to zero', (tester) async {
       final controller = createController(amount: Decimal.parse('10'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
-      await tester.pumpField(
-        controller: controller,
-        dispatcher: dispatcher,
-      );
+      await tester.pumpField(controller: controller);
 
-      dispatcher.handle(MathOperator.minus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.minus);
       await tester.settleField();
       await tester.typeSequentially('99');
 
@@ -205,15 +185,11 @@ void main() {
 
     testWidgets('divide by zero clamps controller to zero', (tester) async {
       final controller = createController(amount: Decimal.parse('10'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
-      await tester.pumpField(
-        controller: controller,
-        dispatcher: dispatcher,
-      );
+      await tester.pumpField(controller: controller);
 
-      dispatcher.handle(MathOperator.divide);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.divide);
       await tester.settleField();
       await tester.typeSequentially('0');
 
@@ -222,12 +198,10 @@ void main() {
 
     testWidgets('end to end flow handles multiple operators equal and currency changes', (tester) async {
       final controller = createController(amount: Decimal.parse('12'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
       await tester.pumpField(
         controller: controller,
-        dispatcher: dispatcher,
         prefix: const Text('USD'),
         suffix: const Text('value'),
         affixesSpacing: 8,
@@ -235,20 +209,20 @@ void main() {
 
       await tester.snapshotNamed('end_to_end_flow_step_1_initial');
 
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
       await tester.typeSequentially('3');
       expect(controller.value?.currencyCode, CurrencyCodes.usd);
       expect(controller.value?.amount, Decimal.parse('15'));
       await tester.snapshotNamed('end_to_end_flow_step_2_after_plus');
 
-      dispatcher.handle(MathOperator.multiply);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.multiply);
       await tester.settleField();
       await tester.typeSequentially('2');
       expect(controller.value?.amount, Decimal.parse('30'));
       await tester.snapshotNamed('end_to_end_flow_step_3_after_multiply');
 
-      dispatcher.handle(MathOperator.equal);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
       expect(controller.value?.currencyCode, CurrencyCodes.usd);
       expect(controller.value?.amount, Decimal.parse('30'));
@@ -264,27 +238,27 @@ void main() {
       expect(controller.value?.amount, Decimal.parse('1.2345'));
       await tester.snapshotNamed('end_to_end_flow_step_5_after_currency_change');
 
-      dispatcher.handle(MathOperator.divide);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.divide);
       await tester.settleField();
       await tester.typeSequentially('2');
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
       expect(controller.value?.amount, Decimal.parse('0.61725'));
       await tester.snapshotNamed('end_to_end_flow_step_6_after_divide');
 
-      dispatcher.handle(MathOperator.equal);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
       expect(controller.value?.amount, Decimal.parse('0.61725'));
       await tester.snapshotNamed('end_to_end_flow_step_7_after_second_equal');
 
-      dispatcher.handle(MathOperator.minus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.minus);
       await tester.settleField();
       await tester.typeSequentially('9');
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
       expect(controller.value?.amount, Decimal.zero);
       await tester.snapshotNamed('end_to_end_flow_step_8_after_clamp_to_zero');
 
-      dispatcher.handle(MathOperator.equal);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
       expect(controller.value?.amount, Decimal.zero);
@@ -292,7 +266,7 @@ void main() {
 
       await tester.tap(find.byType(CommingleMoneyField));
       await tester.pump();
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
       await tester.typeSequentially('5');
 
@@ -307,15 +281,11 @@ void main() {
 
     testWidgets('operators are ignored when value is empty', (tester) async {
       final controller = createController();
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
-      await tester.pumpField(
-        controller: controller,
-        dispatcher: dispatcher,
-      );
+      await tester.pumpField(controller: controller);
 
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
       await tester.typeSequentially('7');
 
@@ -373,18 +343,16 @@ void main() {
 
     testWidgets('arithmetic hides affixes and shows expression', (tester) async {
       final controller = createController(amount: Decimal.parse('12'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
       await tester.pumpField(
         controller: controller,
-        dispatcher: dispatcher,
         prefix: const Text('USD'),
         suffix: const Text('value'),
         affixesSpacing: 8,
       );
 
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
       await tester.typeSequentially('3');
       await tester.snapshot();
@@ -392,25 +360,23 @@ void main() {
 
     testWidgets('rtl arithmetic with Arabic input', (tester) async {
       final controller = createController(amount: Decimal.parse('12'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
       await tester.pumpField(
         controller: controller,
-        dispatcher: dispatcher,
         prefix: const Text('ر.س'),
         suffix: const Text('المبلغ'),
         affixesSpacing: 8,
         direction: TextDirection.rtl,
       );
 
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
       await tester.typeSequentially('٣');
 
       expect(controller.value?.amount, Decimal.parse('15'));
 
-      dispatcher.handle(MathOperator.equal);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
       expect(controller.value?.amount, Decimal.parse('15'));
 
@@ -419,15 +385,11 @@ void main() {
 
     testWidgets('uses default operator symbols', (tester) async {
       final controller = createController(amount: Decimal.parse('12'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
-      await tester.pumpField(
-        controller: controller,
-        dispatcher: dispatcher,
-      );
+      await tester.pumpField(controller: controller);
 
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
 
       expect(find.text('+'), findsOneWidget);
@@ -435,12 +397,10 @@ void main() {
 
     testWidgets('uses custom operator symbols', (tester) async {
       final controller = createController(amount: Decimal.parse('12'));
-      final dispatcher = MathOperatorDispatcher();
       addTearDown(controller.dispose);
 
       await tester.pumpField(
         controller: controller,
-        dispatcher: dispatcher,
         mathOperatorSymbolBuilder: (operator) => switch (operator) {
           MathOperator.plus => 'plus',
           MathOperator.equal => 'equals',
@@ -448,7 +408,7 @@ void main() {
         },
       );
 
-      dispatcher.handle(MathOperator.plus);
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
       expect(find.text('plus'), findsOneWidget);
 
@@ -489,7 +449,6 @@ MoneyEditingController createController({
 extension _WidgetTester on WidgetTester {
   Future<void> pumpField({
     required MoneyEditingController controller,
-    MathOperatorDispatcher? dispatcher,
     Widget? prefix,
     Widget? suffix,
     double affixesSpacing = 0,
@@ -505,7 +464,6 @@ extension _WidgetTester on WidgetTester {
         locale: locale,
         child: CommingleMoneyField(
           controller: controller,
-          mathOperatorDispatcher: dispatcher,
           symbolResolver: mathOperatorSymbolBuilder,
           prefix: prefix,
           suffix: suffix,

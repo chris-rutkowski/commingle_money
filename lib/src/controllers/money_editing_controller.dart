@@ -5,6 +5,7 @@ import '../amount_format_separators.dart';
 import '../currency.dart';
 import '../currency_code.dart';
 import '../money.dart';
+import '../widgets/commingle_money_field/private/math_operator_dispatcher.dart';
 import 'amount_editing_controller.dart';
 import 'amount_editing_state.dart';
 
@@ -24,6 +25,9 @@ final class MoneyEditingController extends ChangeNotifier {
 
   /// A notifier that reflects the current semantic state of the user's input.
   ValueNotifier<AmountEditingState> get state => _amountController.state;
+
+  /// Dispatcher used by money fields and related controls to trigger arithmetic operations.
+  final mathOperatorDispatcher = MathOperatorDispatcher();
 
   /// Current value or [Money.zero] if `null`.
   Money get valueOrZero => Money(
