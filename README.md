@@ -1,6 +1,6 @@
 # Commingle Money
 
-A Flutter package for working with monetary values, open sourced from the [Commingle](https://commingle.app) app. It includes global currency definitions, widgets for displaying amounts, input controllers for smooth, user-friendly editing and other monetary utilities.
+A Flutter package for working with monetary values, open sourced from the [**Commingle**](https://commingle.app) app available for [**iOS**](https://apps.apple.com/app/commingle/id1234567890) and [**Android**](https://play.google.com/store/apps/details?id=com.commingle.app). It includes global currency definitions, widgets for displaying amounts, input controllers for smooth, user-friendly editing and other monetary utilities.
 
 ##  Explore the Example App
 
@@ -199,4 +199,4 @@ If you find **Commingle Money** valuable, consider supporting its continued deve
 
 ## 📄 Copyright and License
 
-**Commingle Money** is maintained by Chris Rutkowski as part of the [Commingle](https://commingle.app) app, and open-sourced under the MIT License.
+**Commingle Money** is maintained by Chris Rutkowski as part of the [**Commingle**](https://commingle.app) app, and open-sourced under the MIT License.
