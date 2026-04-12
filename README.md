@@ -6,7 +6,7 @@ A Flutter package for working with monetary values, open sourced from the [**Com
   <img src="readme_assets/download-on-the-app-store.svg" height="56" alt="Download on the App Store"/>
 </a>
 <a href="https://play.google.com/store/apps/details?id=com.commingle.android">
-  <img src="readme_assets/get-it-on-google-play.png" height="56" alt="Get it on Google Play" style="margin-left: 12px;"/>
+  <img src="readme_assets/get-it-on-google-play.png" height="56" alt="Get it on Google Play"/>
 </a>
 
 ##  Explore the Example App
