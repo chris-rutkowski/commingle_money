@@ -303,6 +303,8 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     } else if (payload.length == 1) {
       if (payload == '.' || payload == ',') {
         onDecimalSignInput();
+      } else if (_parseOperator(payload) case final operator?) {
+        onOperatorInput(operator);
       } else if (int.tryParse(payload) case final parsedDigit?) {
         onDigitInput(parsedDigit);
       } else {
@@ -313,6 +315,17 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     }
 
     return sentinelValue;
+  }
+
+  MathOperator? _parseOperator(String value) {
+    return switch (value) {
+      '+' => MathOperator.plus,
+      '-' || '−' => MathOperator.minus,
+      '*' || '×' => MathOperator.multiply,
+      '/' || '÷' => MathOperator.divide,
+      '=' => MathOperator.equal,
+      _ => null,
+    };
   }
 
   String _normalizeInput(String value) {

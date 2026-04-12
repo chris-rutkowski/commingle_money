@@ -75,6 +75,31 @@ void main() {
       );
     });
 
+    testWidgets('physical keyboard operators map to arithmetic actions', (tester) async {
+      final controller = createController(amount: Decimal.parse('12'));
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(controller: controller);
+      await tester.tap(find.byType(CommingleMoneyField));
+      await tester.pump();
+
+      await tester.typeSequentially('+');
+      await tester.typeSequentially('3');
+      expect(controller.value?.amount, Decimal.parse('15'));
+
+      await tester.typeSequentially('*');
+      await tester.typeSequentially('2');
+      expect(controller.value?.amount, Decimal.parse('30'));
+
+      await tester.typeSequentially('-');
+      await tester.typeSequentially('4');
+      expect(controller.value?.amount, Decimal.parse('26'));
+
+      await tester.typeSequentially('/');
+      await tester.typeSequentially('2');
+      expect(controller.value?.amount, Decimal.parse('13'));
+    });
+
     testWidgets('accepts Arabic-Indic digits and decimal separator', (tester) async {
       final controller = createController();
       addTearDown(controller.dispose);
