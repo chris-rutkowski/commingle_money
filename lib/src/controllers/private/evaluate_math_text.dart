@@ -22,13 +22,16 @@ Decimal? evaluateMathText(String text) {
   ];
 
   final processed = text
-      .replaceAll(RegExp(r'^[\s.,]+|[\s.,]+$'), '')
+      .trim()
       .replaceAll(RegExp('(${validOperators.join('|')})+\$'), '')
       .replaceAll(plusSign, '+')
       .replaceAll(multiplicationSign, '*')
       .replaceAll(minusSign, '-')
       .replaceAll(divisionSign, '/')
       .replaceAll('%', '*0.01')
+      // supports lazy decimals like `.01` or `1+.01`
+      .replaceAllMapped(RegExp(r'(^|[+\-*/(])\.(\d)'), (match) => '${match[1]}0.${match[2]}')
+      .replaceAll(RegExp(r'(?<=\d)\.(?=$|[+\-*/)])'), '')
       // adds `*` before `(` if there is a number before `(`
       .replaceAllMapped(RegExp(r'(\d)\s*\('), (match) => '${match[1]}*(')
       // adds * after `(` if there is a `)` before `(`

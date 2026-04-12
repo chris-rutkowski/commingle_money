@@ -205,6 +205,35 @@ void main() {
 
       controller.dispose();
     });
+
+    testWidgets('leading decimal lazy input evaluates as fractional amount', (WidgetTester tester) async {
+      final controller = AmountEditingController(precision: 2);
+
+      await tester.pumpWidget(
+        _Wrapper(
+          child: TextField(
+            controller: controller.textController,
+            focusNode: controller.focusNode,
+            style: const TextStyle(
+              fontFamily: 'Noto',
+              fontSize: 24,
+            ),
+          ),
+        ),
+      );
+
+      await tester.type('.01');
+      expect(controller.textController.text, '.01');
+      expect(controller.value, Decimal.parse('0.01'));
+      expect(controller.state.value, AmountEditingState.value);
+
+      await tester.type('1+.01');
+      expect(controller.textController.text, '1+.01');
+      expect(controller.value, Decimal.parse('1.01'));
+      expect(controller.state.value, AmountEditingState.value);
+
+      controller.dispose();
+    });
   });
 }
 

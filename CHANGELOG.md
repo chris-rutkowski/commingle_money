@@ -5,6 +5,7 @@
 * Introduces Bitcoin currency
 * Completes the list of `CurrencyCodes` for all available currencies
 * Bug fix: Correctly updates precision of `AmountEditingController` if the currency is changed
+* Bug fix: Leading-decimal lazy input like `.01` is now parsed correctly by amount and money editing controllers
 
 ## 1.1.0
 
