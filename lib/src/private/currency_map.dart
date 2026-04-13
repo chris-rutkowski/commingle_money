@@ -153,6 +153,7 @@ final Map<String, Currency> _currencyMap = {
     code: CurrencyCodes.btc,
     englishName: 'Bitcoin',
     precision: 8,
+    emojiFlag: '💻',
     englishCountryNames: {'Bitcoin'},
   ),
   CurrencyCodes.btn: const Currency(

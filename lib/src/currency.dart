@@ -50,10 +50,14 @@ final class Currency extends Equatable {
     return fromCode(code)?.precision ?? 2;
   }
 
-  /// Returns a list of all available currencies, sorted by [code] by default.
+  /// Returns a list of available currencies, sorted by [code] by default.
+  /// If an [include] function is provided, only matching currencies are returned.
   /// If a [compare] function is provided, it will be used instead.
-  static List<Currency> list({int Function(Currency a, Currency b)? compare}) {
-    final items = _currencyMap.values.toList();
+  static List<Currency> list({
+    bool Function(Currency currency)? include,
+    int Function(Currency a, Currency b)? compare,
+  }) {
+    final items = _currencyMap.values.where(include ?? (_) => true).toList();
     items.sort(compare ?? (a, b) => a.code.compareTo(b.code));
     return items;
   }
