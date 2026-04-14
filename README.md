@@ -4,10 +4,10 @@ A Flutter package for working with monetary values, open sourced from the [**Com
 
 <p>
   <a href="https://apps.apple.com/us/app/commingle/id6499095807">
-    <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/download-on-the-app-store.png" height="56" alt="Download on the App Store"/>
+    <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/download-on-the-app-store.png" width="167" height="56" alt="Download on the App Store"/>
   </a>&nbsp;&nbsp;&nbsp;
   <a href="https://play.google.com/store/apps/details?id=com.commingle.android">
-    <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/get-it-on-google-play.png" height="56" alt="Get it on Google Play"/>
+    <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/get-it-on-google-play.png" width="188" height="56" alt="Get it on Google Play"/>
   </a>
 </p>
 
@@ -240,7 +240,7 @@ Contributions are very welcome! If you spot a bug, want to improve something, or
 
 If you find **Commingle Money** valuable, consider supporting its continued development:
 
-<a href="https://www.buymeacoffee.com/chrisrkw" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="60"></a>
+<a href="https://www.buymeacoffee.com/chrisrkw" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" width="214" height="60"></a>
 
 ## 📄 Copyright and License
 

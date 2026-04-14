@@ -1,3 +1,7 @@
+## 2.0.2
+
+* Fix README rendering on pub.dev
+
 ## 2.0.1
 
 * Fix README rendering on pub.dev
