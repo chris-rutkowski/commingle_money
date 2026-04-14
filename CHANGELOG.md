@@ -1,3 +1,7 @@
+## 2.0.4
+
+* README additions.
+
 ## 2.0.3
 
 * Example app: use locale-based separator detection on web and keep `LocalePlus` on non-web platforms
