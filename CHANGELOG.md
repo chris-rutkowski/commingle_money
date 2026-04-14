@@ -1,3 +1,7 @@
+## 2.0.5
+
+* README additions.
+
 ## 2.0.4
 
 * README additions.

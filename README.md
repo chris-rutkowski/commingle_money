@@ -47,6 +47,8 @@ ElevatedButton(
 
 Customise the field with your own prefix/suffix, animation style and duration, and text styling to match your use case.
 
+More details, implementation notes, and practical tips are available in this [Medium article about CommingleMoneyField](https://medium.com/@chrisrkw/comminglemoneyfield-the-best-money-field-for-flutter-apps-ed83fee1112f?postPublishedType=repub).
+
 ##  Explore the Example App
 
 Clone the repository and run the included Example app to see the library in action. The interactive demos let you explore features, validate their usefulness, and inspect the underlying implementation. A [web sample](https://commingle-money.web.app) is also available for quick exploration, but the package is primarily intended for mobile apps.
