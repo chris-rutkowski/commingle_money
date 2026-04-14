@@ -4,10 +4,10 @@ A Flutter package for working with monetary values, open sourced from the [**Com
 
 <p>
   <a href="https://apps.apple.com/us/app/commingle/id6499095807">
-    <img src="readme_assets/download-on-the-app-store.png" height="56" alt="Download on the App Store"/>
+    <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/download-on-the-app-store.png" height="56" alt="Download on the App Store"/>
   </a>&nbsp;&nbsp;&nbsp;
   <a href="https://play.google.com/store/apps/details?id=com.commingle.android">
-    <img src="readme_assets/get-it-on-google-play.png" height="56" alt="Get it on Google Play"/>
+    <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/get-it-on-google-play.png" height="56" alt="Get it on Google Play"/>
   </a>
 </p>
 
