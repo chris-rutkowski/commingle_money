@@ -1,3 +1,7 @@
+## 2.0.3
+
+* Example app: use locale-based separator detection on web and keep `LocalePlus` on non-web platforms
+
 ## 2.0.2
 
 * Fix README rendering on pub.dev
