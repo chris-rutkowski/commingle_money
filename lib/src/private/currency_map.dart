@@ -124,7 +124,7 @@ final Map<String, Currency> _currencyMap = {
   CurrencyCodes.bnd: const Currency(
     code: CurrencyCodes.bnd,
     englishName: 'Brunei Dollar',
-    precision: 1,
+    precision: 2,
     emojiFlag: '🇧🇳',
     englishCountryNames: {'Brunei', 'Singapore'},
   ),
@@ -216,7 +216,7 @@ final Map<String, Currency> _currencyMap = {
   CurrencyCodes.cny: const Currency(
     code: CurrencyCodes.cny,
     englishName: 'Chinese Yuan',
-    precision: 1,
+    precision: 2,
     emojiFlag: '🇨🇳',
     englishCountryNames: {'China'},
   ),
@@ -473,7 +473,7 @@ final Map<String, Currency> _currencyMap = {
   CurrencyCodes.irr: const Currency(
     code: CurrencyCodes.irr,
     englishName: 'Iranian Rial',
-    precision: 0,
+    precision: 2,
     emojiFlag: '🇮🇷',
     englishCountryNames: {'Iran'},
   ),
@@ -627,7 +627,7 @@ final Map<String, Currency> _currencyMap = {
   CurrencyCodes.mga: const Currency(
     code: CurrencyCodes.mga,
     englishName: 'Malagasy Ariary',
-    precision: 1,
+    precision: 2,
     emojiFlag: '🇲🇬',
     englishCountryNames: {'Madagascar'},
   ),
@@ -662,7 +662,7 @@ final Map<String, Currency> _currencyMap = {
   CurrencyCodes.mru: const Currency(
     code: CurrencyCodes.mru,
     englishName: 'Mauritanian Ouguiya',
-    precision: 1,
+    precision: 2,
     emojiFlag: '🇲🇷',
     englishCountryNames: {'Mauritania'},
   ),
@@ -886,7 +886,7 @@ final Map<String, Currency> _currencyMap = {
   CurrencyCodes.sgd: const Currency(
     code: CurrencyCodes.sgd,
     englishName: 'Singapore Dollar',
-    precision: 1,
+    precision: 2,
     emojiFlag: '🇸🇬',
     englishCountryNames: {'Singapore', 'Brunei'},
   ),
@@ -1077,7 +1077,7 @@ final Map<String, Currency> _currencyMap = {
   CurrencyCodes.ves: const Currency(
     code: CurrencyCodes.ves,
     englishName: 'Venezuelan Bolívar Soberano',
-    precision: 0,
+    precision: 2,
     emojiFlag: '🇻🇪',
     englishCountryNames: {'Venezuela'},
   ),

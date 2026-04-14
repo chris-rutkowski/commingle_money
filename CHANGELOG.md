@@ -7,6 +7,7 @@
 * Adds `include` filtering to `Currency.list`, making it possible to include or exclude currencies before sorting
 * Bug fix: Correctly updates precision of `AmountEditingController` if the currency is changed
 * Bug fix: Leading-decimal lazy input like `.01` is now parsed correctly by amount and money editing controllers
+* Bug fix: Corrects currency precision for BND, CNY, IRR, MGA, MRU, SGD, and VES
 
 ## 1.1.0
 
