@@ -13,14 +13,13 @@ A Flutter package for working with monetary values, open sourced from the [**Com
 
 ## Commingle Money Field
 
+A highly polished monetary input field with support for grouping separators, rounding, and basic arithmetic operations.
+
 <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/commingle_money_field.gif" width="480" height="150" title="Commingle Money Field demo"/>
 
 Watch the high-quality demo on [🎬 **YouTube** ](https://www.youtube.com/shorts/M9rzUIVGEg4) (1 min).
 
-A highly polished monetary input field with support for grouping separators, rounding, and basic arithmetic operations.
-
 ```dart
-
 // Create a controller with currency and optional initial amount.
 final controller = MoneyEditingController(
   currencyCode: CurrencyCodes.usd,
