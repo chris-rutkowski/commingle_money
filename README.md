@@ -11,6 +11,43 @@ A Flutter package for working with monetary values, open sourced from the [**Com
   </a>
 </p>
 
+## Commingle Money Field
+
+<img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/commingle_money_field.gif" width="480" height="150" title="Commingle Money Field demo"/>
+
+Watch the high-quality demo on [🎬 **YouTube** ](https://www.youtube.com/shorts/M9rzUIVGEg4) (1 min).
+
+A highly polished monetary input field with support for grouping separators, rounding, and basic arithmetic operations.
+
+```dart
+
+// Create a controller with currency and optional initial amount.
+final controller = MoneyEditingController(
+  currencyCode: CurrencyCodes.usd,
+  amount: Decimal.parse('123.45'), // optional
+);
+
+// Add Commingle Money Field to your widget tree
+CommingleMoneyField(
+  placeholder: 'amount',
+  controller: controller,
+  prefix: CurrencyButton( // Your custom button widget
+    currencyCode: controller.currencyCode,
+    onTap: (currencyCode) {
+      controller.currencyCode = currencyCode;
+    },
+  ),
+),
+
+// And optionally provide your arithmetic functions UI
+ElevatedButton(
+  onPressed: () => controller.mathOperatorDispatcher.dispatch(.plus),
+  child: Text('+'),
+),
+```
+
+Customise the field with your own prefix/suffix, animation style and duration, and text styling to match your use case.
+
 ##  Explore the Example App
 
 Clone the repository and run the included Example app to see the library in action. The interactive demos let you explore features, validate their usefulness, and inspect the underlying implementation.
