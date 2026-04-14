@@ -17,7 +17,7 @@ A highly polished monetary input field with support for grouping separators, rou
 
 <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/commingle_money_field.gif" width="480" height="150" title="Commingle Money Field demo"/>
 
-Watch the high-quality demo on [🎬 **YouTube** ](https://www.youtube.com/shorts/M9rzUIVGEg4) (1 min).
+Watch the high-quality demo on [🎬 **YouTube** ](https://www.youtube.com/shorts/M9rzUIVGEg4) (1 min) or interact with the [web sample](https://commingle-money.web.app).
 
 ```dart
 // Create a controller with currency and optional initial amount.
@@ -49,7 +49,7 @@ Customise the field with your own prefix/suffix, animation style and duration, a
 
 ##  Explore the Example App
 
-Clone the repository and run the included Example app to see the library in action. The interactive demos let you explore features, validate their usefulness, and inspect the underlying implementation.
+Clone the repository and run the included Example app to see the library in action. The interactive demos let you explore features, validate their usefulness, and inspect the underlying implementation. A [web sample](https://commingle-money.web.app) is also available for quick exploration, but the package is primarily intended for mobile apps.
 
 <img src="https://github.com/chris-rutkowski/commingle_money/raw/main/readme_assets/example_app.webp" width="830" height="434" title="MoneyLabel demo"/>
 
