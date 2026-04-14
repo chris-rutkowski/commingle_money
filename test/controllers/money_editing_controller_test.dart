@@ -93,15 +93,15 @@ void main() {
       controller.currencyCode = CurrencyCodes.sgd;
       await tester.pump();
       expectState(
-        text: '6,543.2',
-        value: Decimal.parse('6543.2'),
+        text: '6,543.21',
+        value: Decimal.parse('6543.21'),
         currency: CurrencyCodes.sgd,
         quiet: false,
         state: AmountEditingState.value,
       );
       controller.currencyCode = CurrencyCodes.usd;
       await tester.pump();
-      expectState(text: '6,543.20', value: Decimal.parse('6543.2'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '6,543.21', value: Decimal.parse('6543.21'), quiet: false, state: AmountEditingState.value);
 
       // App changes value as user types
       await tester.type('4');
