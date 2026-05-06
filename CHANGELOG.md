@@ -1,3 +1,7 @@
+## 2.1.1
+
+* `CommingleMoneyField`: fix affix appearance so prefix/suffix content does not animate on initial render and only animates on later visibility changes
+
 ## 2.1.0
 
 * `CommingleMoneyField`: add `fieldBuilder` for wrapping the field content with custom widgets such as borders, containers, or decorators

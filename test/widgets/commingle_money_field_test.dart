@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:commingle_money/commingle_money.dart';
+import 'package:commingle_money/src/widgets/commingle_money_field/private/animated_appearance_wrapper.dart';
 import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -366,6 +367,28 @@ void main() {
       await tester.snapshot();
     });
 
+    testWidgets('affix wrapper does not animate on first build but animates later changes', (tester) async {
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: _AnimatedAppearanceWrapperHarness(visible: true),
+          ),
+        ),
+      );
+
+      expect(tester.hasRunningAnimations, isFalse);
+
+      await tester.pumpWidget(
+        const MaterialApp(
+          home: Scaffold(
+            body: _AnimatedAppearanceWrapperHarness(visible: false),
+          ),
+        ),
+      );
+
+      expect(tester.hasRunningAnimations, isTrue);
+    });
+
     testWidgets('arithmetic hides affixes and shows expression', (tester) async {
       final controller = createController(amount: Decimal.parse('12'));
       addTearDown(controller.dispose);
@@ -485,6 +508,27 @@ void main() {
       expect(FocusManager.instance.primaryFocus, controller.focusNode);
     });
   });
+}
+
+final class _AnimatedAppearanceWrapperHarness extends StatelessWidget {
+  final bool visible;
+
+  const _AnimatedAppearanceWrapperHarness({
+    required this.visible,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: AnimatedAppearanceWrapper(
+        visible: visible,
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOut,
+        alignment: Alignment.centerLeft,
+        child: const Text('Affix'),
+      ),
+    );
+  }
 }
 
 MoneyEditingController createController({
