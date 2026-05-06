@@ -457,6 +457,33 @@ void main() {
 
       await tester.snapshot();
     });
+
+    testWidgets('builder can wrap the field content', (tester) async {
+      final controller = createController(amount: Decimal.parse('12'));
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(
+        controller: controller,
+        prefix: const Text(r'$'),
+        suffix: const Text('USD'),
+        affixesSpacing: 4,
+        fieldBuilder: (context, child) {
+          return Container(
+            key: const Key('field-wrapper'),
+            color: Colors.yellow,
+            padding: const EdgeInsets.all(8),
+            child: child,
+          );
+        },
+      );
+
+      expect(find.byKey(const Key('field-wrapper')), findsOneWidget);
+      await tester.snapshot();
+
+      await tester.tap(find.byType(CommingleMoneyField));
+      await tester.pump();
+      expect(FocusManager.instance.primaryFocus, controller.focusNode);
+    });
   });
 }
 
@@ -482,20 +509,34 @@ extension _WidgetTester on WidgetTester {
     TextDirection direction = TextDirection.ltr,
     Locale? locale,
     MathOperatorSymbolResolver mathOperatorSymbolBuilder = defaultMathOperatorSymbolResolver,
+    Widget Function(BuildContext context, Widget child)? fieldBuilder,
   }) async {
+    final field = fieldBuilder == null
+        ? CommingleMoneyField(
+            controller: controller,
+            symbolResolver: mathOperatorSymbolBuilder,
+            prefix: prefix,
+            suffix: suffix,
+            affixesSpacing: affixesSpacing,
+            textStyle: textStyle,
+            placeholder: placeholder,
+          )
+        : CommingleMoneyField(
+            controller: controller,
+            symbolResolver: mathOperatorSymbolBuilder,
+            prefix: prefix,
+            suffix: suffix,
+            affixesSpacing: affixesSpacing,
+            textStyle: textStyle,
+            placeholder: placeholder,
+            fieldBuilder: fieldBuilder,
+          );
+
     await pumpWidget(
       SnapshotWrapper(
         direction: direction,
         locale: locale,
-        child: CommingleMoneyField(
-          controller: controller,
-          symbolResolver: mathOperatorSymbolBuilder,
-          prefix: prefix,
-          suffix: suffix,
-          affixesSpacing: affixesSpacing,
-          textStyle: textStyle,
-          placeholder: placeholder,
-        ),
+        child: field,
       ),
     );
 

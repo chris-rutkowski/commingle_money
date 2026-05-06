@@ -18,8 +18,11 @@ import 'private/sentinel.dart';
 // - Support cut, copy and paste
 // - Support for negative numbers
 
+Widget _defaultFieldBuilder(BuildContext context, Widget child) => child;
+
 /// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders matching currency precision and reach animations.
 /// Supports basic arithmetic operations through [MoneyEditingController.mathOperatorDispatcher].
+
 final class CommingleMoneyField extends StatefulWidget {
   /// Optional [Widget] to display before the field value, hidden during arithmetic operation.
   final Widget? prefix;
@@ -61,6 +64,10 @@ final class CommingleMoneyField extends StatefulWidget {
   /// or fall back to the defaults: 123,456.78.
   final AmountFormatSeparatorsData? separators;
 
+  /// Wraps the money field content.
+  /// The child passed to this builder is the inner row displaying the amount and arithmetic expression.
+  final Widget Function(BuildContext context, Widget child) fieldBuilder;
+
   /// Creates an [CommingleMoneyField] widget.
   const CommingleMoneyField({
     super.key,
@@ -76,6 +83,7 @@ final class CommingleMoneyField extends StatefulWidget {
     this.curve = Curves.easeInOut,
     this.textInputAction = TextInputAction.done,
     this.separators,
+    this.fieldBuilder = _defaultFieldBuilder,
   });
 
   @override
@@ -430,74 +438,77 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                 onTap: effectiveFocusNode.requestFocus,
                 child: Directionality(
                   textDirection: TextDirection.ltr,
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      AnimatedNumberWidget(
-                        text: operandA.isEmpty ? null : operandA,
-                        textStyle: textStyle,
-                        currencyCode: widget.controller.currencyCode,
-                        showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
-                        animationDuration: widget.animationDuration,
-                        curve: widget.curve,
-                        separators: widget.separators,
-                        placeholder: widget.placeholder,
-                        placeholderColor: widget.placeholderColor,
-                        numeralSystem: effectiveNumeralSystem,
-                        styleTypeOverride: effectiveFocusNode.hasFocus
-                            ? activeOperator != null
-                                  ? operandB.isEmpty
-                                        ? .normal
-                                        : .placeholder
-                                  : null
-                            : widget.controller.value == null
-                            ? null
-                            : .normal,
-                      ),
-                      AnimatedOperatorWidget(
-                        operator: activeOperator,
-                        textStyle: textStyle,
-                        animationDuration: widget.animationDuration,
-                        curve: widget.curve,
-                        placeholderColor: widget.placeholderColor,
-                        symbolResolver: widget.symbolResolver,
-                        styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
-                      ),
-                      AnimatedNumberWidget(
-                        text: operandB.isEmpty ? null : operandB,
-                        textStyle: textStyle,
-                        placeholder: '',
-                        placeholderColor: widget.placeholderColor,
-                        currencyCode: widget.controller.currencyCode,
-                        showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
-                        animationDuration: widget.animationDuration,
-                        curve: widget.curve,
-                        separators: widget.separators,
-                        numeralSystem: effectiveNumeralSystem,
-                        styleTypeOverride: .placeholder,
-                      ),
-                      AnimatedOperatorWidget(
-                        operator: operandB.isEmpty ? null : .equal,
-                        textStyle: textStyle,
-                        animationDuration: widget.animationDuration,
-                        curve: widget.curve,
-                        placeholderColor: widget.placeholderColor,
-                        symbolResolver: widget.symbolResolver,
-                        styleTypeOverride: .placeholder,
-                      ),
-                      AnimatedNumberWidget(
-                        text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
-                        textStyle: textStyle,
-                        placeholder: '',
-                        placeholderColor: widget.placeholderColor,
-                        currencyCode: widget.controller.currencyCode,
-                        animationDuration: widget.animationDuration,
-                        curve: widget.curve,
-                        separators: widget.separators,
-                        numeralSystem: effectiveNumeralSystem,
-                        styleTypeOverride: .normal,
-                      ),
-                    ],
+                  child: widget.fieldBuilder(
+                    context,
+                    Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        AnimatedNumberWidget(
+                          text: operandA.isEmpty ? null : operandA,
+                          textStyle: textStyle,
+                          currencyCode: widget.controller.currencyCode,
+                          showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
+                          animationDuration: widget.animationDuration,
+                          curve: widget.curve,
+                          separators: widget.separators,
+                          placeholder: widget.placeholder,
+                          placeholderColor: widget.placeholderColor,
+                          numeralSystem: effectiveNumeralSystem,
+                          styleTypeOverride: effectiveFocusNode.hasFocus
+                              ? activeOperator != null
+                                    ? operandB.isEmpty
+                                          ? .normal
+                                          : .placeholder
+                                    : null
+                              : widget.controller.value == null
+                              ? null
+                              : .normal,
+                        ),
+                        AnimatedOperatorWidget(
+                          operator: activeOperator,
+                          textStyle: textStyle,
+                          animationDuration: widget.animationDuration,
+                          curve: widget.curve,
+                          placeholderColor: widget.placeholderColor,
+                          symbolResolver: widget.symbolResolver,
+                          styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
+                        ),
+                        AnimatedNumberWidget(
+                          text: operandB.isEmpty ? null : operandB,
+                          textStyle: textStyle,
+                          placeholder: '',
+                          placeholderColor: widget.placeholderColor,
+                          currencyCode: widget.controller.currencyCode,
+                          showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
+                          animationDuration: widget.animationDuration,
+                          curve: widget.curve,
+                          separators: widget.separators,
+                          numeralSystem: effectiveNumeralSystem,
+                          styleTypeOverride: .placeholder,
+                        ),
+                        AnimatedOperatorWidget(
+                          operator: operandB.isEmpty ? null : .equal,
+                          textStyle: textStyle,
+                          animationDuration: widget.animationDuration,
+                          curve: widget.curve,
+                          placeholderColor: widget.placeholderColor,
+                          symbolResolver: widget.symbolResolver,
+                          styleTypeOverride: .placeholder,
+                        ),
+                        AnimatedNumberWidget(
+                          text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
+                          textStyle: textStyle,
+                          placeholder: '',
+                          placeholderColor: widget.placeholderColor,
+                          currencyCode: widget.controller.currencyCode,
+                          animationDuration: widget.animationDuration,
+                          curve: widget.curve,
+                          separators: widget.separators,
+                          numeralSystem: effectiveNumeralSystem,
+                          styleTypeOverride: .normal,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

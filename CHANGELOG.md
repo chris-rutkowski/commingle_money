@@ -1,3 +1,7 @@
+## 2.1.0
+
+* `CommingleMoneyField`: add `fieldBuilder` for wrapping the field content with custom widgets such as borders, containers, or decorators
+
 ## 2.0.5
 
 * README additions.
