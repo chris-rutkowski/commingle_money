@@ -299,10 +299,23 @@ void main() {
       expect(
         controller.value?.amount,
         Decimal.parse('5'),
-        reason: 'Operators should be ignored when the current output is zero, so typing resumes plain editing.',
+        reason: 'A zero operand should still be allowed to enter arithmetic mode.',
       );
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
-      await tester.snapshotNamed('end_to_end_flow_step_10_zero_operator_ignored');
+      await tester.snapshotNamed('end_to_end_flow_step_10_zero_arithmetic');
+    });
+
+    testWidgets('operators are accepted when value is zero', (tester) async {
+      final controller = createController(amount: Decimal.zero);
+      addTearDown(controller.dispose);
+
+      await tester.pumpField(controller: controller);
+
+      controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
+      await tester.settleField();
+      await tester.typeSequentially('7');
+
+      expect(controller.value?.amount, Decimal.parse('7'));
     });
 
     testWidgets('operators are ignored when value is empty', (tester) async {

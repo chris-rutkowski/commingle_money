@@ -1,3 +1,7 @@
+## 2.1.2
+
+* `CommingleMoneyField`: allow arithmetic operators when the current value is zero while still ignoring operators for empty values
+
 ## 2.1.1
 
 * `CommingleMoneyField`: fix affix appearance so prefix/suffix content does not animate on initial render and only animates on later visibility changes

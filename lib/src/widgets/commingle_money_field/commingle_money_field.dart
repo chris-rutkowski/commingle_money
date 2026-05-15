@@ -168,8 +168,8 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
     final operatorADecimal = Decimal.tryParse(operandA);
 
-    // ignoring operation if operandA is 0 or null
-    if (operatorADecimal == null || operatorADecimal == Decimal.zero) {
+    // Ignore operation if operandA is empty or otherwise not parseable.
+    if (operatorADecimal == null) {
       return;
     }
 
