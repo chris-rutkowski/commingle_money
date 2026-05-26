@@ -20,6 +20,17 @@ import 'private/sentinel.dart';
 
 Widget _defaultFieldBuilder(BuildContext context, Widget child) => child;
 
+/// Layout modes for [CommingleMoneyField].
+enum CommingleMoneyFieldLayout {
+  /// Places the prefix, amount and suffix directly next to each other.
+  ///
+  /// Perfect for center-aligned fields.
+  compact,
+
+  /// Expands the field horizontally and pins the suffix to the trailing edge.
+  expandedWithTrailingSuffix,
+}
+
 /// Money input field with very intuitive user input such as automatic grouping separators, fractional placeholders matching currency precision and reach animations.
 /// Supports basic arithmetic operations through [MoneyEditingController.mathOperatorDispatcher].
 
@@ -29,6 +40,12 @@ final class CommingleMoneyField extends StatefulWidget {
 
   /// Optional [Widget] to display after the field value, hidden during arithmetic operation.
   final Widget? suffix;
+
+  /// How the field lays out its prefix, amount and suffix.
+  ///
+  /// Defaults to [CommingleMoneyFieldLayout.compact], which keeps the field
+  /// content naturally sized and works well for center-aligned fields.
+  final CommingleMoneyFieldLayout layout;
 
   /// Space between the numeric presentation and any visible prefix or suffix.
   final double affixesSpacing;
@@ -65,7 +82,11 @@ final class CommingleMoneyField extends StatefulWidget {
   final AmountFormatSeparatorsData? separators;
 
   /// Wraps the money field content.
-  /// The child passed to this builder is the inner row displaying the amount and arithmetic expression.
+  ///
+  /// The child passed to this builder is the inner row displaying the amount
+  /// and arithmetic expression. This is useful for adding custom padding,
+  /// borders, or background decoration around the editable amount without
+  /// wrapping the prefix or suffix.
   final Widget Function(BuildContext context, Widget child) fieldBuilder;
 
   /// Creates an [CommingleMoneyField] widget.
@@ -73,6 +94,7 @@ final class CommingleMoneyField extends StatefulWidget {
     super.key,
     this.prefix,
     this.suffix,
+    this.layout = CommingleMoneyFieldLayout.compact,
     this.affixesSpacing = 0,
     this.textStyle,
     this.placeholder = '0',
@@ -412,123 +434,155 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
   Widget build(BuildContext context) {
     final textStyle = resolveEffectiveTextStyle(context);
     final showAffixes = activeOperator == null;
+    final prefix = widget.prefix;
+    final suffix = widget.suffix;
 
-    return Stack(
-      children: [
-        FittedBox(
-          child: Row(
+    final prefixWidget = prefix == null
+        ? null
+        : AnimatedAppearanceWrapper(
+            visible: showAffixes,
+            duration: widget.animationDuration,
+            curve: widget.curve,
+            alignment: .centerLeft,
+            child: Padding(
+              padding: EdgeInsetsDirectional.only(
+                end: widget.affixesSpacing,
+              ),
+              child: prefix,
+            ),
+          );
+
+    final fieldWidget = GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: effectiveFocusNode.requestFocus,
+      child: Directionality(
+        textDirection: TextDirection.ltr,
+        child: widget.fieldBuilder(
+          context,
+          Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (widget.prefix case final prefix?)
-                AnimatedAppearanceWrapper(
-                  visible: showAffixes,
-                  duration: widget.animationDuration,
-                  curve: widget.curve,
-                  alignment: .centerLeft,
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.only(
-                      end: widget.affixesSpacing,
-                    ),
-                    child: prefix,
-                  ),
-                ),
+              AnimatedNumberWidget(
+                text: operandA.isEmpty ? null : operandA,
+                textStyle: textStyle,
+                currencyCode: widget.controller.currencyCode,
+                showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
+                animationDuration: widget.animationDuration,
+                curve: widget.curve,
+                separators: widget.separators,
+                placeholder: widget.placeholder,
+                placeholderColor: widget.placeholderColor,
+                numeralSystem: effectiveNumeralSystem,
+                styleTypeOverride: effectiveFocusNode.hasFocus
+                    ? activeOperator != null
+                          ? operandB.isEmpty
+                                ? .normal
+                                : .placeholder
+                          : null
+                    : widget.controller.value == null
+                    ? null
+                    : .normal,
+              ),
+              AnimatedOperatorWidget(
+                operator: activeOperator,
+                textStyle: textStyle,
+                animationDuration: widget.animationDuration,
+                curve: widget.curve,
+                placeholderColor: widget.placeholderColor,
+                symbolResolver: widget.symbolResolver,
+                styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
+              ),
+              AnimatedNumberWidget(
+                text: operandB.isEmpty ? null : operandB,
+                textStyle: textStyle,
+                placeholder: '',
+                placeholderColor: widget.placeholderColor,
+                currencyCode: widget.controller.currencyCode,
+                showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
+                animationDuration: widget.animationDuration,
+                curve: widget.curve,
+                separators: widget.separators,
+                numeralSystem: effectiveNumeralSystem,
+                styleTypeOverride: .placeholder,
+              ),
+              AnimatedOperatorWidget(
+                operator: operandB.isEmpty ? null : .equal,
+                textStyle: textStyle,
+                animationDuration: widget.animationDuration,
+                curve: widget.curve,
+                placeholderColor: widget.placeholderColor,
+                symbolResolver: widget.symbolResolver,
+                styleTypeOverride: .placeholder,
+              ),
+              AnimatedNumberWidget(
+                text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
+                textStyle: textStyle,
+                placeholder: '',
+                placeholderColor: widget.placeholderColor,
+                currencyCode: widget.controller.currencyCode,
+                animationDuration: widget.animationDuration,
+                curve: widget.curve,
+                separators: widget.separators,
+                numeralSystem: effectiveNumeralSystem,
+                styleTypeOverride: .normal,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
 
-              GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onTap: effectiveFocusNode.requestFocus,
-                child: Directionality(
-                  textDirection: TextDirection.ltr,
-                  child: widget.fieldBuilder(
-                    context,
-                    Row(
+    final suffixWidget = suffix == null
+        ? null
+        : AnimatedAppearanceWrapper(
+            visible: showAffixes,
+            duration: widget.animationDuration,
+            curve: widget.curve,
+            alignment: .centerRight,
+            child: Padding(
+              padding: EdgeInsetsDirectional.only(
+                start: widget.affixesSpacing,
+              ),
+              child: suffix,
+            ),
+          );
+
+    final visibleField = widget.layout == CommingleMoneyFieldLayout.expandedWithTrailingSuffix && suffixWidget != null
+        ? Row(
+            children: [
+              Flexible(
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        AnimatedNumberWidget(
-                          text: operandA.isEmpty ? null : operandA,
-                          textStyle: textStyle,
-                          currencyCode: widget.controller.currencyCode,
-                          showCursor: effectiveFocusNode.hasFocus && activeOperator == null,
-                          animationDuration: widget.animationDuration,
-                          curve: widget.curve,
-                          separators: widget.separators,
-                          placeholder: widget.placeholder,
-                          placeholderColor: widget.placeholderColor,
-                          numeralSystem: effectiveNumeralSystem,
-                          styleTypeOverride: effectiveFocusNode.hasFocus
-                              ? activeOperator != null
-                                    ? operandB.isEmpty
-                                          ? .normal
-                                          : .placeholder
-                                    : null
-                              : widget.controller.value == null
-                              ? null
-                              : .normal,
-                        ),
-                        AnimatedOperatorWidget(
-                          operator: activeOperator,
-                          textStyle: textStyle,
-                          animationDuration: widget.animationDuration,
-                          curve: widget.curve,
-                          placeholderColor: widget.placeholderColor,
-                          symbolResolver: widget.symbolResolver,
-                          styleTypeOverride: operandB.isEmpty ? .normal : .placeholder,
-                        ),
-                        AnimatedNumberWidget(
-                          text: operandB.isEmpty ? null : operandB,
-                          textStyle: textStyle,
-                          placeholder: '',
-                          placeholderColor: widget.placeholderColor,
-                          currencyCode: widget.controller.currencyCode,
-                          showCursor: effectiveFocusNode.hasFocus && activeOperator != null,
-                          animationDuration: widget.animationDuration,
-                          curve: widget.curve,
-                          separators: widget.separators,
-                          numeralSystem: effectiveNumeralSystem,
-                          styleTypeOverride: .placeholder,
-                        ),
-                        AnimatedOperatorWidget(
-                          operator: operandB.isEmpty ? null : .equal,
-                          textStyle: textStyle,
-                          animationDuration: widget.animationDuration,
-                          curve: widget.curve,
-                          placeholderColor: widget.placeholderColor,
-                          symbolResolver: widget.symbolResolver,
-                          styleTypeOverride: .placeholder,
-                        ),
-                        AnimatedNumberWidget(
-                          text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
-                          textStyle: textStyle,
-                          placeholder: '',
-                          placeholderColor: widget.placeholderColor,
-                          currencyCode: widget.controller.currencyCode,
-                          animationDuration: widget.animationDuration,
-                          curve: widget.curve,
-                          separators: widget.separators,
-                          numeralSystem: effectiveNumeralSystem,
-                          styleTypeOverride: .normal,
-                        ),
+                        ?prefixWidget,
+                        fieldWidget,
                       ],
                     ),
                   ),
                 ),
               ),
-
-              if (widget.suffix case final suffix?)
-                AnimatedAppearanceWrapper(
-                  visible: showAffixes,
-                  duration: widget.animationDuration,
-                  curve: widget.curve,
-                  alignment: .centerRight,
-                  child: Padding(
-                    padding: EdgeInsetsDirectional.only(
-                      start: widget.affixesSpacing,
-                    ),
-                    child: suffix,
-                  ),
-                ),
+              suffixWidget,
             ],
-          ),
-        ),
+          )
+        : FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ?prefixWidget,
+                fieldWidget,
+                ?suffixWidget,
+              ],
+            ),
+          );
+
+    return Stack(
+      children: [
+        visibleField,
         SizedBox(
           width: 0,
           height: 0,

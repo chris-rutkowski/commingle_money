@@ -1,6 +1,11 @@
 import 'package:commingle_money/commingle_money.dart';
 import 'package:flutter/material.dart';
 
+enum _FieldBuilderMode {
+  defaultBuilder,
+  decorated,
+}
+
 final class CommingleMoneyFieldScreen extends StatefulWidget {
   const CommingleMoneyFieldScreen({super.key});
 
@@ -20,6 +25,9 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
   final moneyEditingController = MoneyEditingController(
     currencyCode: CurrencyCodes.usd,
   );
+
+  var layout = CommingleMoneyFieldLayout.compact;
+  var fieldBuilderMode = _FieldBuilderMode.defaultBuilder;
 
   @override
   void dispose() {
@@ -48,6 +56,32 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
 
     if (selectedCurrency == null) return;
     moneyEditingController.currencyCode = selectedCurrency;
+  }
+
+  Widget _buildField(BuildContext context, Widget child) {
+    return switch (fieldBuilderMode) {
+      _FieldBuilderMode.defaultBuilder => child,
+      _FieldBuilderMode.decorated => DecoratedBox(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.35),
+          border: Border.all(
+            color: Theme.of(context).colorScheme.primary,
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+          child: child,
+        ),
+      ),
+    };
+  }
+
+  String _fieldBuilderModeLabel(_FieldBuilderMode mode) {
+    return switch (mode) {
+      _FieldBuilderMode.defaultBuilder => 'default',
+      _FieldBuilderMode.decorated => 'decorated',
+    };
   }
 
   @override
@@ -91,6 +125,14 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                     );
                   },
                 ),
+                suffix: ElevatedButton(
+                  onPressed: () {
+                    moneyEditingController.value = null;
+                  },
+                  child: const Icon(Icons.clear),
+                ),
+                layout: layout,
+                fieldBuilder: _buildField,
               ),
             ),
 
@@ -141,6 +183,42 @@ final class _CommingleMoneyFieldScreenState extends State<CommingleMoneyFieldScr
                   },
                 ),
               ],
+            ),
+            const SizedBox(height: 16),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: DropdownButtonFormField<CommingleMoneyFieldLayout>(
+                initialValue: layout,
+                decoration: const InputDecoration(
+                  labelText: 'Layout',
+                ),
+                items: CommingleMoneyFieldLayout.values
+                    .map((e) => DropdownMenuItem(value: e, child: Text(e.name)))
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) return;
+                  setState(() => layout = value);
+                },
+              ),
+            ),
+            const SizedBox(height: 16),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: DropdownButtonFormField<_FieldBuilderMode>(
+                initialValue: fieldBuilderMode,
+                decoration: const InputDecoration(
+                  labelText: 'Field builder',
+                ),
+                items: _FieldBuilderMode.values
+                    .map((e) => DropdownMenuItem(value: e, child: Text(_fieldBuilderModeLabel(e))))
+                    .toList(),
+                onChanged: (value) {
+                  if (value == null) return;
+                  setState(() => fieldBuilderMode = value);
+                },
+              ),
             ),
             const SizedBox(height: 16),
           ],

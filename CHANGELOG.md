@@ -1,3 +1,8 @@
+## 2.2.0
+
+* `CommingleMoneyField`: add `CommingleMoneyFieldLayout` with compact and expanded trailing-suffix layouts
+* Example app: add controls for switching `CommingleMoneyField` layout and field builder decoration
+
 ## 2.1.2
 
 * `CommingleMoneyField`: allow arithmetic operators when the current value is zero while still ignoring operators for empty values

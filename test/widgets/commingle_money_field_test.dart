@@ -380,6 +380,27 @@ void main() {
       await tester.snapshot();
     });
 
+    testWidgets('can pin suffix to the trailing edge', (tester) async {
+      final controller = createController(amount: Decimal.parse('1234.56'));
+      addTearDown(controller.dispose);
+
+      await tester.binding.setSurfaceSize(const Size(380, 140));
+      await tester.pumpField(
+        controller: controller,
+        prefix: const Text('USD'),
+        suffix: const Text('value'),
+        layout: CommingleMoneyFieldLayout.expandedWithTrailingSuffix,
+        affixesSpacing: 8,
+      );
+
+      expect(tester.takeException(), isNull);
+
+      final fieldRight = tester.getTopRight(find.byType(CommingleMoneyField)).dx;
+      final suffixRight = tester.getTopRight(find.text('value')).dx;
+
+      expect((fieldRight - suffixRight).abs(), lessThan(1));
+    });
+
     testWidgets('affix wrapper does not animate on first build but animates later changes', (tester) async {
       await tester.pumpWidget(
         const MaterialApp(
@@ -560,6 +581,7 @@ extension _WidgetTester on WidgetTester {
     required MoneyEditingController controller,
     Widget? prefix,
     Widget? suffix,
+    CommingleMoneyFieldLayout layout = CommingleMoneyFieldLayout.compact,
     double affixesSpacing = 0,
     TextStyle? textStyle,
     String placeholder = '0',
@@ -574,6 +596,7 @@ extension _WidgetTester on WidgetTester {
             symbolResolver: mathOperatorSymbolBuilder,
             prefix: prefix,
             suffix: suffix,
+            layout: layout,
             affixesSpacing: affixesSpacing,
             textStyle: textStyle,
             placeholder: placeholder,
@@ -583,6 +606,7 @@ extension _WidgetTester on WidgetTester {
             symbolResolver: mathOperatorSymbolBuilder,
             prefix: prefix,
             suffix: suffix,
+            layout: layout,
             affixesSpacing: affixesSpacing,
             textStyle: textStyle,
             placeholder: placeholder,

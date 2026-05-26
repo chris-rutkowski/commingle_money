@@ -46,6 +46,9 @@ ElevatedButton(
 ```
 
 Customise the field with your own prefix/suffix, animation style and duration, and text styling to match your use case.
+Use `layout: CommingleMoneyFieldLayout.compact` for center-aligned fields, or
+`CommingleMoneyFieldLayout.expandedWithTrailingSuffix` when the suffix should sit at the trailing edge of the available width.
+The `fieldBuilder` callback can wrap the amount content with your own decoration, padding, or border while leaving prefix and suffix behavior intact.
 
 More details, implementation notes, and practical tips are available in this [Medium article about CommingleMoneyField](https://medium.com/@chrisrkw/comminglemoneyfield-the-best-money-field-for-flutter-apps-ed83fee1112f?postPublishedType=repub).
 
