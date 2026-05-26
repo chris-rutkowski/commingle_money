@@ -95,7 +95,7 @@ final class _AmountEditingControllerScreenState extends State<AmountEditingContr
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: DropdownButtonFormField<int?>(
-              value: controller.precision,
+              initialValue: controller.precision,
               decoration: const InputDecoration(
                 labelText: 'Precision digits',
               ),
@@ -110,7 +110,7 @@ final class _AmountEditingControllerScreenState extends State<AmountEditingContr
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: DropdownButtonFormField<SeparatorsType>(
-              value: separatorsType,
+              initialValue: separatorsType,
               decoration: const InputDecoration(
                 labelText: 'Separators',
               ),

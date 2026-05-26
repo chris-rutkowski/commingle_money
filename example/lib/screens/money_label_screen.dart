@@ -141,7 +141,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: DropdownButtonFormField<CurrencyCode>(
-                    value: currency,
+                    initialValue: currency,
                     decoration: const InputDecoration(
                       labelText: 'Currency',
                     ),
@@ -161,7 +161,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: DropdownButtonFormField<FractionalMode>(
-                    value: fractionalMode,
+                    initialValue: fractionalMode,
                     decoration: const InputDecoration(
                       labelText: 'Fractional mode',
                     ),
@@ -181,7 +181,7 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: DropdownButtonFormField<SeparatorsType>(
-                    value: separatorsType,
+                    initialValue: separatorsType,
                     decoration: const InputDecoration(
                       labelText: 'Separators',
                     ),

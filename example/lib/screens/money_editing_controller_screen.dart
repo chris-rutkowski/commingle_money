@@ -127,7 +127,7 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: DropdownButtonFormField<CurrencyCode>(
-              value: controller.currencyCode,
+              initialValue: controller.currencyCode,
               decoration: const InputDecoration(
                 labelText: 'Currency (each has different precision)',
               ),
@@ -148,7 +148,7 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: DropdownButtonFormField<SeparatorsType>(
-              value: separatorsType,
+              initialValue: separatorsType,
               decoration: const InputDecoration(
                 labelText: 'Separators',
               ),
