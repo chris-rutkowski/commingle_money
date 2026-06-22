@@ -61,8 +61,8 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
   void initState() {
     super.initState();
 
-    cursorController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500))
-      ..repeat(reverse: true);
+    cursorController = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    syncCursorAnimation();
   }
 
   @override
@@ -201,7 +201,19 @@ final class _AnimatedNumberWidgetState extends State<AnimatedNumberWidget> with 
     rearrangeGroupingSeparators(separator: effectiveSeparators.grouping);
     manageFractional(separator: effectiveSeparators.decimal);
 
-    cursorController.value = 0;
+    syncCursorAnimation(resetPhase: true);
+  }
+
+  void syncCursorAnimation({bool resetPhase = false}) {
+    if (!widget.showCursor) {
+      cursorController.stop();
+      return;
+    }
+
+    if (resetPhase) {
+      cursorController.value = 0;
+    }
+
     cursorController.repeat(reverse: true);
   }
 

@@ -1,3 +1,7 @@
+## 2.2.1
+
+* `CommingleMoneyField`: stopped and invisible cursor no longer triggers continuous rebuilds, improving performance when the field is not focused
+
 ## 2.2.0
 
 * `CommingleMoneyField`: add `CommingleMoneyFieldLayout` with compact and expanded trailing-suffix layouts
