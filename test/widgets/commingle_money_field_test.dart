@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:big_decimal/big_decimal.dart';
 import 'package:commingle_money/commingle_money.dart';
 import 'package:commingle_money/src/widgets/commingle_money_field/private/animated_appearance_wrapper.dart';
 import 'package:flutter/material.dart';

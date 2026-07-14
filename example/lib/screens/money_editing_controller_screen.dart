@@ -1,6 +1,5 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:big_decimal/big_decimal.dart';
 import 'package:commingle_money/commingle_money.dart';
 import 'package:flutter/material.dart';
 

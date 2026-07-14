@@ -1,4 +1,3 @@
-import 'package:big_decimal/big_decimal.dart';
 import 'package:commingle_money/commingle_money.dart';
 import 'package:commingle_money/src/controllers/private/format_decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
