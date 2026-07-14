@@ -226,7 +226,7 @@ You can also use constants like `CurrencyCodes.chf` for quick access to a curate
 
 This library wouldn’t be possible without the excellent work of the Flutter community.
 
-[big_decimal](https://pub.dev/packages/big_decimal), [equatable](https://pub.dev/packages/equatable), [expressions](https://pub.dev/packages/expressions), [animated_flip_counter](animated_flip_counter)
+[big_decimal](https://pub.dev/packages/big_decimal), [equatable](https://pub.dev/packages/equatable), [expressions](https://pub.dev/packages/expressions), [animated_flip_counter](https://pub.dev/packages/animated_flip_counter)
 
 While not part of the core library, I recommend using [locale_plus](https://pub.dev/packages/locale_plus) like demonstrated in Example app.
 
