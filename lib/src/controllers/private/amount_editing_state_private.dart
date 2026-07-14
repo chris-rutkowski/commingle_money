@@ -1,14 +1,14 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 
 import '../amount_editing_state.dart';
 
 extension AmountEditingStatePrivate on AmountEditingState {
-  static AmountEditingState fromValue(Decimal? value) {
+  static AmountEditingState fromValue(BigDecimal? value) {
     if (value == null) return AmountEditingState.empty;
 
-    if (value == Decimal.zero) return AmountEditingState.zero;
+    if (value == BigDecimal.zero) return AmountEditingState.zero;
 
     return AmountEditingState.value;
   }

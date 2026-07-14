@@ -1,4 +1,4 @@
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../amount_format_separators.dart';
@@ -89,7 +89,7 @@ final class MoneyEditingController extends ChangeNotifier {
   /// of [separators] using `AmountFormatSeparators.read(context)`.
   MoneyEditingController({
     required CurrencyCode currencyCode,
-    Decimal? amount,
+    BigDecimal? amount,
     AmountFormatSeparatorsData separators = const AmountFormatSeparatorsData(),
   }) : _currencyCode = currencyCode,
        _amountController = AmountEditingController(

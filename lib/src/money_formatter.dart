@@ -1,7 +1,8 @@
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:flutter/material.dart';
 
 import 'amount_format_separators.dart';
+import 'big_decimal_utils.dart';
 import 'currency.dart';
 import 'fractional_mode.dart';
 import 'money.dart';
@@ -79,7 +80,7 @@ final class MoneyFormatter {
       buffer.write('-');
     }
 
-    if (effectiveMoney.amount == Decimal.zero && zeroText != null) {
+    if (effectiveMoney.amount == BigDecimal.zero && zeroText != null) {
       buffer.write(zeroText);
     } else {
       buffer.write(
@@ -105,7 +106,7 @@ final class MoneyFormatter {
       case FractionalMode.always:
         return money.roundedToCurrencyPrecision();
       case FractionalMode.compact:
-        return money.amount.abs() < Decimal.fromInt(100) ? money.roundedToCurrencyPrecision() : money.rounded();
+        return money.amount.abs() < BigDecimalUtils.fromInt(100) ? money.roundedToCurrencyPrecision() : money.rounded();
       case FractionalMode.round:
         return money.rounded();
       case FractionalMode.accurate:

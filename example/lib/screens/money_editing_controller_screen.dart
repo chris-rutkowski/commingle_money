@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs
 
+import 'package:big_decimal/big_decimal.dart';
 import 'package:commingle_money/commingle_money.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/separators_type.dart';
@@ -16,7 +16,7 @@ final class MoneyEditingControllerScreen extends StatefulWidget {
 final class _MoneyEditingControllerScreenState extends State<MoneyEditingControllerScreen> {
   var separatorsType = SeparatorsType.fromLocalePlus;
 
-  final controller = MoneyEditingController(currencyCode: CurrencyCodes.usd, amount: Decimal.parse('15.99'));
+  final controller = MoneyEditingController(currencyCode: CurrencyCodes.usd, amount: BigDecimal.parse('15.99'));
 
   @override
   void initState() {
@@ -114,13 +114,13 @@ final class _MoneyEditingControllerScreenState extends State<MoneyEditingControl
           ListTile(
             title: const Text('Set value: 25.15'),
             onTap: () {
-              controller.value = Money(currencyCode: controller.currencyCode, amount: Decimal.parse('25.15'));
+              controller.value = Money(currencyCode: controller.currencyCode, amount: BigDecimal.parse('25.15'));
             },
           ),
           ListTile(
             title: const Text('Set value: 123456.789'),
             onTap: () {
-              controller.value = Money(currencyCode: controller.currencyCode, amount: Decimal.parse('123456.789'));
+              controller.value = Money(currencyCode: controller.currencyCode, amount: BigDecimal.parse('123456.789'));
             },
           ),
 

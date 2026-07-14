@@ -1,3 +1,25 @@
+## 3.0.0
+
+* **Breaking:** Replaced `package:decimal` with `package:big_decimal` throughout the library (models, controllers, widgets, and utilities).
+
+This change was made after observing performance bottlenecks with `package:decimal` while processing large datasets in the Commingle app. In my benchmarks, some arithmetic operations, such as rounding, were measured to be up to 400× slower than their `BigDecimal` equivalents. For more details, see: https://github.com/a14n/dart-decimal/issues/122.
+
+If your application still uses `package:decimal`, you can make the migration incrementally with the following conversion helpers:
+
+```dart
+import 'package:big_decimal/big_decimal.dart';
+import 'package:decimal/decimal.dart';
+
+BigDecimal decimalToBigDecimal(Decimal value) => BigDecimal.parse(value.toString());
+
+Decimal bigDecimalToDecimal(BigDecimal value) {
+  if (value is BigDecimalInfinity) {
+    throw UnsupportedError('Cannot convert infinite BigDecimal to Decimal');
+  }
+  return Decimal.parse(value.toPlainString());
+}
+```
+
 ## 2.2.1
 
 * `CommingleMoneyField`: stopped and invisible cursor no longer triggers continuous rebuilds, improving performance when the field is not focused

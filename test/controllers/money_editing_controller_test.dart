@@ -1,7 +1,7 @@
 import 'dart:io';
 
+import 'package:big_decimal/big_decimal.dart';
 import 'package:commingle_money/commingle_money.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,7 +19,7 @@ void main() {
 
   group('MoneyEditingController', () {
     testWidgets('standard', (WidgetTester tester) async {
-      final controller = MoneyEditingController(currencyCode: CurrencyCodes.usd, amount: Decimal.parse('1234.56'));
+      final controller = MoneyEditingController(currencyCode: CurrencyCodes.usd, amount: BigDecimal.parse('1234.56'));
 
       Money? listenerValue;
       controller.addListener(() {
@@ -28,7 +28,7 @@ void main() {
 
       void expectState({
         required String text,
-        required Decimal? value,
+        required BigDecimal? value,
         CurrencyCode? currency,
         required bool quiet,
         required AmountEditingState state,
@@ -69,23 +69,23 @@ void main() {
       );
 
       // Initial state
-      expectState(text: '1,234.56', value: Decimal.parse('1234.56'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '1,234.56', value: BigDecimal.parse('1234.56'), quiet: true, state: AmountEditingState.value);
       expect(controller.currencyCode, CurrencyCodes.usd);
 
       // User modifies
       await tester.type('6543.21');
-      expectState(text: '6543.21', value: Decimal.parse('6543.21'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '6543.21', value: BigDecimal.parse('6543.21'), quiet: false, state: AmountEditingState.value);
 
       // Users dismisses keyboard - value should be formatted
       await tester.dismissKeyboard(controller);
-      expectState(text: '6,543.21', value: Decimal.parse('6543.21'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '6,543.21', value: BigDecimal.parse('6543.21'), quiet: true, state: AmountEditingState.value);
 
       // App changes currency
       controller.currencyCode = CurrencyCodes.bhd;
       await tester.pump();
       expectState(
         text: '6,543.210',
-        value: Decimal.parse('6543.21'),
+        value: BigDecimal.parse('6543.21'),
         currency: CurrencyCodes.bhd,
         quiet: false,
         state: AmountEditingState.value,
@@ -94,23 +94,23 @@ void main() {
       await tester.pump();
       expectState(
         text: '6,543.21',
-        value: Decimal.parse('6543.21'),
+        value: BigDecimal.parse('6543.21'),
         currency: CurrencyCodes.sgd,
         quiet: false,
         state: AmountEditingState.value,
       );
       controller.currencyCode = CurrencyCodes.usd;
       await tester.pump();
-      expectState(text: '6,543.21', value: Decimal.parse('6543.21'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '6,543.21', value: BigDecimal.parse('6543.21'), quiet: false, state: AmountEditingState.value);
 
       // App changes value as user types
       await tester.type('4');
-      expectState(text: '4', value: Decimal.parse('4'), quiet: false, state: AmountEditingState.value);
-      controller.value = Money(amount: Decimal.parse('5'), currencyCode: CurrencyCodes.usd);
+      expectState(text: '4', value: BigDecimal.parse('4'), quiet: false, state: AmountEditingState.value);
+      controller.value = Money(amount: BigDecimal.parse('5'), currencyCode: CurrencyCodes.usd);
       await tester.pump();
-      expectState(text: '4', value: Decimal.parse('5'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '4', value: BigDecimal.parse('5'), quiet: false, state: AmountEditingState.value);
       await tester.dismissKeyboard(controller);
-      expectState(text: '5', value: Decimal.parse('5'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '5', value: BigDecimal.parse('5'), quiet: true, state: AmountEditingState.value);
 
       // App erases value
       controller.value = null;
@@ -119,7 +119,7 @@ void main() {
 
       // User erases value
       await tester.type('1234.56');
-      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '1234.56', value: BigDecimal.parse('1234.56'), quiet: false, state: AmountEditingState.value);
       await tester.type('');
       expectState(text: '', value: null, quiet: false, state: AmountEditingState.empty);
 
@@ -127,14 +127,14 @@ void main() {
       await tester.type('2(5-1)*3×4/1.5÷3‒1');
       expectState(
         text: '2(5-1)*3×4/1.5÷3‒1',
-        value: Decimal.parse('20.33'),
+        value: BigDecimal.parse('20.33'),
         quiet: false,
         state: AmountEditingState.value,
       );
       await tester.dismissKeyboard(controller);
       expectState(
         text: '20.33',
-        value: Decimal.parse('20.33'),
+        value: BigDecimal.parse('20.33'),
         quiet: true,
         state: AmountEditingState.value,
       );
@@ -143,29 +143,29 @@ void main() {
       await tester.type('2/0');
       expectState(
         text: '2/0',
-        value: Decimal.parse('20.33'), // previous legal value
+        value: BigDecimal.parse('20.33'), // previous legal value
         quiet: true,
         state: AmountEditingState.error,
       );
       await tester.dismissKeyboard(controller);
-      expectState(text: '20.33', value: Decimal.parse('20.33'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '20.33', value: BigDecimal.parse('20.33'), quiet: true, state: AmountEditingState.value);
 
       // User enters invalid formula
       await tester.type('2)');
       expectState(
         text: '2)',
-        value: Decimal.parse('20.33'), // previous legal value
+        value: BigDecimal.parse('20.33'), // previous legal value
         quiet: true,
         state: AmountEditingState.error,
       );
       await tester.dismissKeyboard(controller);
-      expectState(text: '20.33', value: Decimal.parse('20.33'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '20.33', value: BigDecimal.parse('20.33'), quiet: true, state: AmountEditingState.value);
 
       // User types zero
       await tester.type('0');
       expectState(
         text: '0',
-        value: Decimal.zero,
+        value: BigDecimal.zero,
         quiet: false,
         state: AmountEditingState.zero,
       );
@@ -178,7 +178,7 @@ void main() {
       await tester.pump();
       expectState(
         text: '1 234,56',
-        value: Decimal.parse('1234.56'),
+        value: BigDecimal.parse('1234.56'),
         quiet: false,
         state: AmountEditingState.value,
       );
@@ -204,12 +204,12 @@ void main() {
 
       await tester.type('.01');
       expect(controller.textController.text, '.01');
-      expect(controller.value, Money(amount: Decimal.parse('0.01'), currencyCode: CurrencyCodes.usd));
+      expect(controller.value, Money(amount: BigDecimal.parse('0.01'), currencyCode: CurrencyCodes.usd));
       expect(controller.state.value, AmountEditingState.value);
 
       await tester.type('1+.01');
       expect(controller.textController.text, '1+.01');
-      expect(controller.value, Money(amount: Decimal.parse('1.01'), currencyCode: CurrencyCodes.usd));
+      expect(controller.value, Money(amount: BigDecimal.parse('1.01'), currencyCode: CurrencyCodes.usd));
       expect(controller.state.value, AmountEditingState.value);
 
       controller.dispose();

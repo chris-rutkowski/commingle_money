@@ -1,6 +1,6 @@
 name: commingle_money
 description: "Open-source utilities from the Commingle app (https://commingle.app) for handling, formatting, and displaying monetary values in Flutter."
-version: 2.2.1
+version: 3.0.0
 homepage: https://commingle.app
 repository: https://github.com/chris-rutkowski/commingle_money
 
@@ -10,8 +10,8 @@ environment:
 
 dependencies:
   animated_flip_counter: ^0.3.4
+  big_decimal: ^0.7.0
   collection: ^1.15.0
-  decimal: ^3.2.4
   equatable: ^2.0.8
   expressions: ^0.2.5+3
   flutter:

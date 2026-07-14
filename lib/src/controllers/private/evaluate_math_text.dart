@@ -1,11 +1,11 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:expressions/expressions.dart';
 
-import '../../decimal_utils.dart';
+import '../../big_decimal_utils.dart';
 
-Decimal? evaluateMathText(String text) {
+BigDecimal? evaluateMathText(String text) {
   const plusSign = '+'; // standard plus sign
   const minusSign = '‒'; // fancy minus sign
   const multiplicationSign = '×'; // fancy multiplication sign
@@ -44,11 +44,14 @@ Decimal? evaluateMathText(String text) {
     final result = evaluator.eval(parsed, {});
 
     if (result is int) {
-      return Decimal.fromInt(result);
+      return BigDecimalUtils.fromInt(result);
     }
 
     if (result is double) {
-      return DecimalUtils.fromDouble(result);
+      if (result.isNaN || result.isInfinite) {
+        return null;
+      }
+      return BigDecimalUtils.fromDouble(result);
     }
 
     return null;

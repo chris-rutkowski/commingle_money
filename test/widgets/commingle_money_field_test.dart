@@ -1,7 +1,8 @@
 import 'dart:io';
+
+import 'package:big_decimal/big_decimal.dart';
 import 'package:commingle_money/commingle_money.dart';
 import 'package:commingle_money/src/widgets/commingle_money_field/private/animated_appearance_wrapper.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -27,7 +28,7 @@ void main() {
       await tester.typeSequentially('1234.567');
 
       expect(controller.value?.currencyCode, CurrencyCodes.usd);
-      expect(controller.value?.amount, Decimal.parse('1234.56'));
+      expect(controller.value?.amount, BigDecimal.parse('1234.56'));
     });
 
     testWidgets('backspace removes digits and eventually clears controller', (tester) async {
@@ -39,20 +40,20 @@ void main() {
       await tester.pump();
 
       await tester.typeSequentially('123');
-      expect(controller.value?.amount, Decimal.parse('123'));
+      expect(controller.value?.amount, BigDecimal.parse('123'));
 
       await tester.pressBackspace();
-      expect(controller.value?.amount, Decimal.parse('12'));
+      expect(controller.value?.amount, BigDecimal.parse('12'));
 
       await tester.pressBackspace();
-      expect(controller.value?.amount, Decimal.parse('1'));
+      expect(controller.value?.amount, BigDecimal.parse('1'));
 
       await tester.pressBackspace();
       expect(controller.value, isNull);
     });
 
     testWidgets('arithmetic updates controller with evaluated result and equal commits it', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -61,23 +62,23 @@ void main() {
       await tester.settleField();
 
       await tester.typeSequentially('3');
-      expect(controller.value?.amount, Decimal.parse('15'));
+      expect(controller.value?.amount, BigDecimal.parse('15'));
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
 
-      expect(controller.value?.amount, Decimal.parse('15'));
+      expect(controller.value?.amount, BigDecimal.parse('15'));
 
       await tester.typeSequentially('4');
       expect(
         controller.value?.amount,
-        Decimal.parse('154'),
+        BigDecimal.parse('154'),
         reason: 'Equal should commit the result back into operand A and clear math mode.',
       );
     });
 
     testWidgets('physical keyboard operators map to arithmetic actions', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -86,19 +87,19 @@ void main() {
 
       await tester.typeSequentially('+');
       await tester.typeSequentially('3');
-      expect(controller.value?.amount, Decimal.parse('15'));
+      expect(controller.value?.amount, BigDecimal.parse('15'));
 
       await tester.typeSequentially('*');
       await tester.typeSequentially('2');
-      expect(controller.value?.amount, Decimal.parse('30'));
+      expect(controller.value?.amount, BigDecimal.parse('30'));
 
       await tester.typeSequentially('-');
       await tester.typeSequentially('4');
-      expect(controller.value?.amount, Decimal.parse('26'));
+      expect(controller.value?.amount, BigDecimal.parse('26'));
 
       await tester.typeSequentially('/');
       await tester.typeSequentially('2');
-      expect(controller.value?.amount, Decimal.parse('13'));
+      expect(controller.value?.amount, BigDecimal.parse('13'));
     });
 
     testWidgets('accepts Arabic-Indic digits and decimal separator', (tester) async {
@@ -115,11 +116,11 @@ void main() {
       await tester.typeSequentially('١٢٣٫٤٥');
 
       expect(controller.value?.currencyCode, CurrencyCodes.usd);
-      expect(controller.value?.amount, Decimal.parse('123.45'));
+      expect(controller.value?.amount, BigDecimal.parse('123.45'));
     });
 
     testWidgets('Arabic locale renders Arabic-Indic digits', (tester) async {
-      final controller = createController(amount: Decimal.parse('1234.56'));
+      final controller = createController(amount: BigDecimal.parse('1234.56'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(
@@ -132,7 +133,7 @@ void main() {
     });
 
     testWidgets('changing operator mid-expression carries evaluated result into operand A', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -140,17 +141,17 @@ void main() {
       controller.mathOperatorDispatcher.dispatch(MathOperator.plus);
       await tester.settleField();
       await tester.typeSequentially('3');
-      expect(controller.value?.amount, Decimal.parse('15'));
+      expect(controller.value?.amount, BigDecimal.parse('15'));
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.multiply);
       await tester.settleField();
       await tester.typeSequentially('2');
 
-      expect(controller.value?.amount, Decimal.parse('30'));
+      expect(controller.value?.amount, BigDecimal.parse('30'));
     });
 
     testWidgets('unfocus during pending arithmetic keeps evaluated controller value', (tester) async {
-      final controller = createController(amount: Decimal.parse('25'));
+      final controller = createController(amount: BigDecimal.parse('25'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -158,7 +159,7 @@ void main() {
       controller.mathOperatorDispatcher.dispatch(MathOperator.minus);
       await tester.settleField();
       await tester.typeSequentially('5');
-      expect(controller.value?.amount, Decimal.parse('20'));
+      expect(controller.value?.amount, BigDecimal.parse('20'));
 
       FocusManager.instance.primaryFocus?.unfocus();
       await tester.settleField();
@@ -166,13 +167,13 @@ void main() {
       await tester.typeSequentially('1');
       expect(
         controller.value?.amount,
-        Decimal.parse('201'),
+        BigDecimal.parse('201'),
         reason: 'Unfocus should clear the pending operator and keep the current output.',
       );
     });
 
     testWidgets('external controller change resets pending arithmetic state', (tester) async {
-      final controller = createController(amount: Decimal.parse('50'));
+      final controller = createController(amount: BigDecimal.parse('50'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -180,24 +181,24 @@ void main() {
       controller.mathOperatorDispatcher.dispatch(MathOperator.divide);
       await tester.settleField();
       await tester.typeSequentially('2');
-      expect(controller.value?.amount, Decimal.parse('25'));
+      expect(controller.value?.amount, BigDecimal.parse('25'));
 
       controller.value = Money(
         currencyCode: CurrencyCodes.usd,
-        amount: Decimal.parse('7'),
+        amount: BigDecimal.parse('7'),
       );
       await tester.settleField();
 
       await tester.typeSequentially('3');
       expect(
         controller.value?.amount,
-        Decimal.parse('73'),
+        BigDecimal.parse('73'),
         reason: 'A programmatic controller update should reset math mode back to plain editing.',
       );
     });
 
     testWidgets('minus below zero clamps controller to zero', (tester) async {
-      final controller = createController(amount: Decimal.parse('10'));
+      final controller = createController(amount: BigDecimal.parse('10'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -206,11 +207,11 @@ void main() {
       await tester.settleField();
       await tester.typeSequentially('99');
 
-      expect(controller.value?.amount, Decimal.zero);
+      expect(controller.value?.amount, BigDecimal.zero);
     });
 
     testWidgets('divide by zero clamps controller to zero', (tester) async {
-      final controller = createController(amount: Decimal.parse('10'));
+      final controller = createController(amount: BigDecimal.parse('10'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -219,11 +220,11 @@ void main() {
       await tester.settleField();
       await tester.typeSequentially('0');
 
-      expect(controller.value?.amount, Decimal.zero);
+      expect(controller.value?.amount, BigDecimal.zero);
     });
 
     testWidgets('end to end flow handles multiple operators equal and currency changes', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(
@@ -239,55 +240,55 @@ void main() {
       await tester.settleField();
       await tester.typeSequentially('3');
       expect(controller.value?.currencyCode, CurrencyCodes.usd);
-      expect(controller.value?.amount, Decimal.parse('15'));
+      expect(controller.value?.amount, BigDecimal.parse('15'));
       await tester.snapshotNamed('end_to_end_flow_step_2_after_plus');
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.multiply);
       await tester.settleField();
       await tester.typeSequentially('2');
-      expect(controller.value?.amount, Decimal.parse('30'));
+      expect(controller.value?.amount, BigDecimal.parse('30'));
       await tester.snapshotNamed('end_to_end_flow_step_3_after_multiply');
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
       expect(controller.value?.currencyCode, CurrencyCodes.usd);
-      expect(controller.value?.amount, Decimal.parse('30'));
+      expect(controller.value?.amount, BigDecimal.parse('30'));
       await tester.snapshotNamed('end_to_end_flow_step_4_after_equal');
 
       controller.value = Money(
         currencyCode: CurrencyCodes.btc,
-        amount: Decimal.parse('1.2345'),
+        amount: BigDecimal.parse('1.2345'),
       );
       await tester.settleField();
 
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
-      expect(controller.value?.amount, Decimal.parse('1.2345'));
+      expect(controller.value?.amount, BigDecimal.parse('1.2345'));
       await tester.snapshotNamed('end_to_end_flow_step_5_after_currency_change');
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.divide);
       await tester.settleField();
       await tester.typeSequentially('2');
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
-      expect(controller.value?.amount, Decimal.parse('0.61725'));
+      expect(controller.value?.amount, BigDecimal.parse('0.61725'));
       await tester.snapshotNamed('end_to_end_flow_step_6_after_divide');
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
-      expect(controller.value?.amount, Decimal.parse('0.61725'));
+      expect(controller.value?.amount, BigDecimal.parse('0.61725'));
       await tester.snapshotNamed('end_to_end_flow_step_7_after_second_equal');
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.minus);
       await tester.settleField();
       await tester.typeSequentially('9');
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
-      expect(controller.value?.amount, Decimal.zero);
+      expect(controller.value?.amount, BigDecimal.zero);
       await tester.snapshotNamed('end_to_end_flow_step_8_after_clamp_to_zero');
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
-      expect(controller.value?.amount, Decimal.zero);
+      expect(controller.value?.amount, BigDecimal.zero);
       await tester.snapshotNamed('end_to_end_flow_step_9_zero_committed');
 
       await tester.tap(find.byType(CommingleMoneyField));
@@ -298,7 +299,7 @@ void main() {
 
       expect(
         controller.value?.amount,
-        Decimal.parse('5'),
+        BigDecimal.parse('5'),
         reason: 'A zero operand should still be allowed to enter arithmetic mode.',
       );
       expect(controller.value?.currencyCode, CurrencyCodes.btc);
@@ -306,7 +307,7 @@ void main() {
     });
 
     testWidgets('operators are accepted when value is zero', (tester) async {
-      final controller = createController(amount: Decimal.zero);
+      final controller = createController(amount: BigDecimal.zero);
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -315,7 +316,7 @@ void main() {
       await tester.settleField();
       await tester.typeSequentially('7');
 
-      expect(controller.value?.amount, Decimal.parse('7'));
+      expect(controller.value?.amount, BigDecimal.parse('7'));
     });
 
     testWidgets('operators are ignored when value is empty', (tester) async {
@@ -330,7 +331,7 @@ void main() {
 
       expect(
         controller.value?.amount,
-        Decimal.parse('7'),
+        BigDecimal.parse('7'),
         reason: 'When there is no operand A yet, operator input should not enter arithmetic mode.',
       );
     });
@@ -366,7 +367,7 @@ void main() {
     });
 
     testWidgets('filled with affixes', (tester) async {
-      final controller = createController(amount: Decimal.parse('1234.56'));
+      final controller = createController(amount: BigDecimal.parse('1234.56'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(
@@ -381,7 +382,7 @@ void main() {
     });
 
     testWidgets('can pin suffix to the trailing edge', (tester) async {
-      final controller = createController(amount: Decimal.parse('1234.56'));
+      final controller = createController(amount: BigDecimal.parse('1234.56'));
       addTearDown(controller.dispose);
 
       await tester.binding.setSurfaceSize(const Size(380, 140));
@@ -424,7 +425,7 @@ void main() {
     });
 
     testWidgets('arithmetic hides affixes and shows expression', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(
@@ -441,7 +442,7 @@ void main() {
     });
 
     testWidgets('rtl arithmetic with Arabic input', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(
@@ -456,17 +457,17 @@ void main() {
       await tester.settleField();
       await tester.typeSequentially('٣');
 
-      expect(controller.value?.amount, Decimal.parse('15'));
+      expect(controller.value?.amount, BigDecimal.parse('15'));
 
       controller.mathOperatorDispatcher.dispatch(MathOperator.equal);
       await tester.settleField();
-      expect(controller.value?.amount, Decimal.parse('15'));
+      expect(controller.value?.amount, BigDecimal.parse('15'));
 
       await tester.snapshot();
     });
 
     testWidgets('uses default operator symbols', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(controller: controller);
@@ -478,7 +479,7 @@ void main() {
     });
 
     testWidgets('uses custom operator symbols', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(
@@ -516,7 +517,7 @@ void main() {
     });
 
     testWidgets('builder can wrap the field content', (tester) async {
-      final controller = createController(amount: Decimal.parse('12'));
+      final controller = createController(amount: BigDecimal.parse('12'));
       addTearDown(controller.dispose);
 
       await tester.pumpField(
@@ -566,7 +567,7 @@ final class _AnimatedAppearanceWrapperHarness extends StatelessWidget {
 }
 
 MoneyEditingController createController({
-  Decimal? amount,
+  BigDecimal? amount,
   CurrencyCode currencyCode = CurrencyCodes.usd,
 }) {
   return MoneyEditingController(

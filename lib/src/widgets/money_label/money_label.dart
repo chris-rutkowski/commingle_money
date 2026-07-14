@@ -1,8 +1,9 @@
 import 'package:animated_flip_counter/animated_flip_counter.dart';
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../../amount_format_separators.dart';
+import '../../big_decimal_utils.dart';
 import '../../currency.dart';
 import '../../fractional_mode.dart';
 import '../../money.dart';
@@ -169,7 +170,7 @@ final class MoneyLabel extends StatelessWidget {
     AmountFormatSeparatorsData separators,
     String? zeroText,
   ) {
-    if (money.amount == Decimal.zero && zeroText != null) {
+    if (money.amount == BigDecimal.zero && zeroText != null) {
       return Text(
         zeroText,
         style: style,
@@ -237,9 +238,9 @@ final class MoneyLabel extends StatelessWidget {
   Color _resolveEffectiveColor(BuildContext context, Money money) {
     final defaults = MoneyPresentationDefaults.maybeOf(context);
 
-    if (money.amount > Decimal.zero) {
+    if (money.amount > BigDecimal.zero) {
       return positiveColor ?? defaults?.positiveColor ?? Colors.green;
-    } else if (money.amount < Decimal.zero) {
+    } else if (money.amount < BigDecimal.zero) {
       return negativeColor ?? defaults?.negativeColor ?? Colors.red;
     } else {
       return zeroColor ?? defaults?.zeroColor ?? Colors.grey;
@@ -269,7 +270,7 @@ final class MoneyLabel extends StatelessWidget {
       case FractionalMode.always:
         return money.roundedToCurrencyPrecision();
       case FractionalMode.compact:
-        return money.amount.abs() < Decimal.fromInt(100) ? money.roundedToCurrencyPrecision() : money.rounded();
+        return money.amount.abs() < BigDecimalUtils.fromInt(100) ? money.roundedToCurrencyPrecision() : money.rounded();
       case FractionalMode.round:
         return money.rounded();
       case FractionalMode.accurate:

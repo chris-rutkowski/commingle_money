@@ -1,10 +1,12 @@
+export 'package:big_decimal/big_decimal.dart';
+
 export 'src/amount_format_separators.dart';
+export 'src/big_decimal_utils.dart';
 export 'src/controllers/amount_editing_controller.dart';
 export 'src/controllers/amount_editing_state.dart';
 export 'src/controllers/money_editing_controller.dart';
 export 'src/currency.dart';
 export 'src/currency_code.dart';
-export 'src/decimal_utils.dart';
 export 'src/fractional_mode.dart';
 export 'src/money.dart';
 export 'src/money_formatter.dart';

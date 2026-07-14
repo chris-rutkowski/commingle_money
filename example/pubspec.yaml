@@ -7,10 +7,10 @@ environment:
   sdk: ^3.8.0
 
 dependencies:
+  big_decimal:
   commingle_money:
     path: ..
   cupertino_icons:
-  decimal:
   flutter:
     sdk: flutter
   intl:
