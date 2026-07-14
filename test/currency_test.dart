@@ -1,15 +1,14 @@
 import 'package:commingle_money/commingle_money.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Currency', () {
     test('smallestAmount', () {
-      expect(Currency.fromCode(CurrencyCodes.usd)!.smallestAmount, Decimal.parse('0.01'));
-      expect(Currency.fromCode(CurrencyCodes.sgd)!.smallestAmount, Decimal.parse('0.01'));
-      expect(Currency.fromCode(CurrencyCodes.irr)!.smallestAmount, Decimal.parse('0.01'));
-      expect(Currency.fromCode(CurrencyCodes.mga)!.smallestAmount, Decimal.parse('0.01'));
-      expect(Currency.fromCode(CurrencyCodes.btc)!.smallestAmount, Decimal.parse('0.00000001'));
+      expect(Currency.fromCode(CurrencyCodes.usd)!.smallestAmount, BigDecimal.parse('0.01'));
+      expect(Currency.fromCode(CurrencyCodes.sgd)!.smallestAmount, BigDecimal.parse('0.01'));
+      expect(Currency.fromCode(CurrencyCodes.irr)!.smallestAmount, BigDecimal.parse('0.01'));
+      expect(Currency.fromCode(CurrencyCodes.mga)!.smallestAmount, BigDecimal.parse('0.01'));
+      expect(Currency.fromCode(CurrencyCodes.btc)!.smallestAmount, BigDecimal.parse('0.00000001'));
     });
 
     test('list', () {

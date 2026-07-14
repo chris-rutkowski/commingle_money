@@ -1,16 +1,16 @@
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../amount_format_separators.dart';
 import 'amount_editing_state.dart';
 import 'private/amount_editing_state_private.dart';
-import 'private/decimal_utils_private.dart';
+import 'private/big_decimal_utils_private.dart';
 import 'private/evaluate_math_text.dart';
 import 'private/format_decimal.dart';
 import 'private/unformat.dart';
 
 /// Controller for plain amount text field with formatting and parsing capability
-final class AmountEditingController extends ValueNotifier<Decimal?> {
+final class AmountEditingController extends ValueNotifier<BigDecimal?> {
   AmountFormatSeparatorsData _separators;
 
   /// Separators for parsing and formatting the text field
@@ -52,11 +52,11 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
     value = rounded;
   }
 
-  /// Current value or [Decimal.zero] if `null`.
-  Decimal get valueOrZero => value ?? Decimal.zero;
+  /// Current value or [BigDecimal.zero] if `null`.
+  BigDecimal get valueOrZero => value ?? BigDecimal.zero;
 
   @override
-  set value(Decimal? newValue) {
+  set value(BigDecimal? newValue) {
     if (newValue == super.value) return;
 
     final rounded = newValue?.roundOptional(scale: precision);
@@ -74,7 +74,7 @@ final class AmountEditingController extends ValueNotifier<Decimal?> {
   /// of [separators] using `AmountFormatSeparators.read(context)`.
   AmountEditingController({
     AmountFormatSeparatorsData separators = const AmountFormatSeparatorsData(),
-    Decimal? amount,
+    BigDecimal? amount,
     int? precision,
   }) : state = ValueNotifier(AmountEditingStatePrivate.fromValue(amount)),
        _separators = separators,

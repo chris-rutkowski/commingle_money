@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:commingle_money/commingle_money.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -22,7 +21,7 @@ void main() {
           child: MoneyLabel(
             money: Money(
               currencyCode: CurrencyCodes.usd,
-              amount: Decimal.parse('1234.56'),
+              amount: BigDecimal.parse('1234.56'),
             ),
           ),
         ),
@@ -37,7 +36,7 @@ void main() {
           child: MoneyLabel(
             money: Money(
               currencyCode: CurrencyCodes.eur,
-              amount: Decimal.parse('-6126.99'),
+              amount: BigDecimal.parse('-6126.99'),
             ),
           ),
         ),
@@ -54,7 +53,7 @@ void main() {
             separators: const AmountFormatSeparatorsData(),
             money: Money(
               currencyCode: CurrencyCodes.gbp,
-              amount: Decimal.parse('1234567.89'),
+              amount: BigDecimal.parse('1234567.89'),
             ),
             primaryTextStyle: const TextStyle(fontFamily: 'Noto', fontSize: 25),
             secondaryTextStyle: const TextStyle(fontFamily: 'Noto', fontSize: 20),
@@ -73,7 +72,7 @@ void main() {
           child: MoneyLabel(
             money: Money(
               currencyCode: CurrencyCodes.hkd,
-              amount: Decimal.zero,
+              amount: BigDecimal.zero,
             ),
           ),
         ),
@@ -89,7 +88,7 @@ void main() {
             fractionalMode: FractionalMode.always,
             money: Money(
               currencyCode: CurrencyCodes.pln,
-              amount: Decimal.fromInt(123),
+              amount: BigDecimalUtils.fromInt(123),
             ),
           ),
         ),
@@ -105,7 +104,7 @@ void main() {
             fractionalMode: FractionalMode.round,
             money: Money(
               currencyCode: CurrencyCodes.aud,
-              amount: Decimal.parse('5623.5'),
+              amount: BigDecimal.parse('5623.5'),
             ),
           ),
         ),
@@ -121,7 +120,7 @@ void main() {
             fractionalMode: FractionalMode.round,
             money: Money(
               currencyCode: CurrencyCodes.cny,
-              amount: Decimal.parse('72316.49'),
+              amount: BigDecimal.parse('72316.49'),
             ),
           ),
         ),
@@ -137,7 +136,7 @@ void main() {
             fractionalMode: FractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.inr,
-              amount: Decimal.parse('84321.6225'),
+              amount: BigDecimal.parse('84321.6225'),
             ),
           ),
         ),
@@ -153,7 +152,7 @@ void main() {
             fractionalMode: FractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.irr,
-              amount: Decimal.parse('7281.1'),
+              amount: BigDecimal.parse('7281.1'),
             ),
           ),
         ),
@@ -169,7 +168,7 @@ void main() {
             fractionalMode: FractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.zar,
-              amount: Decimal.parse('241'),
+              amount: BigDecimal.parse('241'),
             ),
           ),
         ),
@@ -186,7 +185,7 @@ void main() {
             fractionalMode: FractionalMode.accurate,
             money: Money(
               currencyCode: CurrencyCodes.sgd,
-              amount: Decimal.parse('-126.1'),
+              amount: BigDecimal.parse('-126.1'),
             ),
           ),
         ),
@@ -203,7 +202,7 @@ void main() {
             fractionalMode: FractionalMode.compact,
             money: Money(
               currencyCode: CurrencyCodes.bif,
-              amount: Decimal.parse('99'),
+              amount: BigDecimal.parse('99'),
             ),
           ),
         ),
@@ -220,7 +219,7 @@ void main() {
             fractionalMode: FractionalMode.compact,
             money: Money(
               currencyCode: CurrencyCodes.bmd,
-              amount: Decimal.parse('99.99'),
+              amount: BigDecimal.parse('99.99'),
             ),
           ),
         ),
@@ -237,7 +236,7 @@ void main() {
             fractionalMode: FractionalMode.compact,
             money: Money(
               currencyCode: CurrencyCodes.bnd,
-              amount: Decimal.parse('100.59'),
+              amount: BigDecimal.parse('100.59'),
             ),
           ),
         ),
@@ -262,7 +261,7 @@ void main() {
                 child: MoneyLabel(
                   money: Money(
                     currencyCode: CurrencyCodes.bob,
-                    amount: Decimal.parse('6432.52'),
+                    amount: BigDecimal.parse('6432.52'),
                   ),
                 ),
               );

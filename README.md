@@ -23,7 +23,7 @@ Watch the high-quality demo on [🎬 **YouTube** ](https://www.youtube.com/short
 // Create a controller with currency and optional initial amount.
 final controller = MoneyEditingController(
   currencyCode: CurrencyCodes.usd,
-  amount: Decimal.parse('123.45'), // optional
+  amount: BigDecimal.parse('123.45'), // optional
 );
 
 // Add Commingle Money Field to your widget tree
@@ -74,7 +74,7 @@ Clone the repository and run the included Example app to see the library in acti
 MoneyLabel(
   money: Money(
     currencyCode: 'USD', 
-    amount: Decimal.parse('1234.56')
+    amount: BigDecimal.parse('1234.56')
   ),
   fractionalMode: MoneyLabelFractionalMode.flexible,
   displayCurrency: true,
@@ -112,7 +112,7 @@ You can wrap your app with the `MoneyLabelDefaults` inherited widget to provide 
 ```dart
 final controller = MoneyEditingController(
   currencyCode: CurrencyCodes.usd, // or 'USD'
-  amount: Decimal.parse('123.45'),
+  amount: BigDecimal.parse('123.45'),
   separators: AmountFormatSeparatorsData(
     grouping: 
     decimal: 
@@ -148,18 +148,18 @@ controller.addListener(() {
 
 ### 🔢 Amount Editing Controller
 
-`AmountEditingController` is a lightweight alternative to `MoneyEditingController` that operates directly on `Decimal` values. It lets you control the desired precision without involving currency logic.
+`AmountEditingController` is a lightweight alternative to `MoneyEditingController` that operates directly on `BigDecimal` values. It lets you control the desired precision without involving currency logic.
 
 💡 `MoneyEditingController` is built on top of `AmountEditingController`.
 
 ## 💵 Money
 
-`Money` is a simple yet powerful value class that combines a `currencyCode` with a `Decimal` amount.
+`Money` is a simple yet powerful value class that combines a `currencyCode` with a `BigDecimal` amount.
 
 ```dart
 Money(
   currencyCode: CurrencyCodes.usd, // or simply 'USD'
-  amount: Decimal.parse('123.45'),
+  amount: BigDecimal.parse('123.45'),
 );
 ```
 
@@ -169,12 +169,12 @@ It provides utility methods like:
 -  `roundedToCurrencyPrecision()`: 2.567 → 2.57.
 -  `abs()`
 
-You can also use math operators directly: `+ – × ÷`. All operations return a new `Money` instance, rounded to the currency precision. You can combine `Money` values of the same currency with `int`, `double`, or `Decimal` values.
+You can also use math operators directly: `+ – × ÷`. All operations return a new `Money` instance, rounded to the currency precision. You can combine `Money` values of the same currency with `int`, `double`, or `BigDecimal` values.
 
 
 ```dart
-final usd1 = Money(currencyCode: 'USD', amount: Decimal.fromInt(1))
-final usd2 = Money(currencyCode: 'USD', amount: Decimal.fromInt(2))
+final usd1 = Money(currencyCode: 'USD', amount: BigDecimalUtils.fromInt(1))
+final usd2 = Money(currencyCode: 'USD', amount: BigDecimalUtils.fromInt(2))
 
 final total = usd1 + usd2 * 3 - 1 / 2; // = 6.5 USD
 ```
@@ -211,21 +211,22 @@ Currency.list((c) => c.englishName.contains(searchQuery))
 
 You can also use constants like `CurrencyCodes.chf` for quick access to a curated subset of popular currencies.
 
-## 🧮 Decimal Utilities
+## 🧮 BigDecimal Utilities
 
-`DecimalUtils` is an extension on `Decimal` that provides helpful utilities for rounding, scaling, and working with numeric data in a finance-friendly way.
+`BigDecimalUtils` is an extension on `BigDecimal` that provides helpful utilities for rounding, scaling, and working with numeric data in a finance-friendly way.
 
-- `round2()` rounds the decimal to two decimal places (unless `scale` is provided).
+- `round2()` rounds the value to two decimal places (unless `scale` is provided).
 - `upperBound` and `lowerBound` help round values to chart-friendly boundaries,  
   e.g. `1234.56` → `1300` (upper), `1200` (lower).
 - utility functions like `min`, `max`, and `sum`
-- converters `Decimal` → `int` as well as `double` → `Decimal`
+- converters `BigDecimal` → `int` as well as `double` → `BigDecimal`
+- helpers such as `shift`, `round`, `truncateToInt`, and `toOperandString`
 
 ## 🙌 Acknowledgements
 
 This library wouldn’t be possible without the excellent work of the Flutter community.
 
-[decimal](https://pub.dev/packages/decimal), [equatable](https://pub.dev/packages/equatable), [expressions](https://pub.dev/packages/expressions), [animated_flip_counter](animated_flip_counter)
+[big_decimal](https://pub.dev/packages/big_decimal), [equatable](https://pub.dev/packages/equatable), [expressions](https://pub.dev/packages/expressions), [animated_flip_counter](https://pub.dev/packages/animated_flip_counter)
 
 While not part of the core library, I recommend using [locale_plus](https://pub.dev/packages/locale_plus) like demonstrated in Example app.
 

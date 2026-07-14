@@ -1,8 +1,9 @@
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../amount_format_separators.dart';
+import '../../big_decimal_utils.dart';
 import '../../controllers/money_editing_controller.dart';
 import '../../currency.dart';
 import '../../money.dart';
@@ -134,7 +135,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     } else {
       widget.controller.value = Money(
         currencyCode: widget.controller.currencyCode,
-        amount: Decimal.parse(value),
+        amount: BigDecimal.parse(value),
       );
     }
   }
@@ -162,7 +163,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
     effectiveFocusNode.addListener(handleFocusNodeChanged);
     widget.controller.addListener(handleControllerChanged);
 
-    operandA = widget.controller.value?.amount.toString() ?? '';
+    operandA = widget.controller.value?.amount.toOperandString() ?? '';
   }
 
   @override
@@ -188,7 +189,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       return;
     }
 
-    final operatorADecimal = Decimal.tryParse(operandA);
+    final operatorADecimal = BigDecimal.tryParse(operandA);
 
     // Ignore operation if operandA is empty or otherwise not parseable.
     if (operatorADecimal == null) {
@@ -199,11 +200,11 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       if (operator == .equal) {
         activeOperator = null;
         operandB = '';
-        operandA = widget.controller.value?.amount.toString() ?? '';
+        operandA = widget.controller.value?.amount.toOperandString() ?? '';
       } else if (activeOperator != null) {
         activeOperator = operator;
         operandB = '';
-        operandA = widget.controller.value?.amount.toString() ?? '';
+        operandA = widget.controller.value?.amount.toOperandString() ?? '';
       } else {
         activeOperator = operator;
       }
@@ -217,7 +218,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       if (!effectiveFocusNode.hasFocus) {
         activeOperator = null;
         operandB = '';
-        operandA = widget.controller.value?.amount.toString() ?? '';
+        operandA = widget.controller.value?.amount.toOperandString() ?? '';
       }
     });
   }
@@ -231,7 +232,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       reset = true;
     }
 
-    if (evaluated == null && widget.controller.value?.amount != Decimal.tryParse(operandA)) {
+    if (evaluated == null && widget.controller.value?.amount != BigDecimal.tryParse(operandA)) {
       reset = true;
     }
 
@@ -241,7 +242,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
 
       if (reset) {
         setState(() {
-          operandA = widget.controller.value?.amount.toString() ?? '';
+          operandA = widget.controller.value?.amount.toOperandString() ?? '';
           activeOperator = null;
           operandB = '';
         });
@@ -396,8 +397,8 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
   }
 
   Money? evaluate() {
-    final operandADecimal = Decimal.tryParse(operandA);
-    final operandBDecimal = Decimal.tryParse(operandB);
+    final operandADecimal = BigDecimal.tryParse(operandA);
+    final operandBDecimal = BigDecimal.tryParse(operandB);
 
     if (operandADecimal == null || operandBDecimal == null) {
       return null;
@@ -414,15 +415,15 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
       case .minus:
         // for going below zero simply sets the value to zero
         final result = operandAMoney - operandBDecimal;
-        return result.amount >= Decimal.zero ? result : operandAMoney * Decimal.zero;
+        return result.amount >= BigDecimal.zero ? result : operandAMoney * BigDecimal.zero;
       case .multiply:
         return operandAMoney * operandBDecimal;
       case .divide:
         // for invalid operation simply sets the value to zero
-        if (operandBDecimal != Decimal.zero) {
+        if (operandBDecimal != BigDecimal.zero) {
           return operandAMoney / operandBDecimal;
         } else {
-          return operandAMoney * Decimal.zero;
+          return operandAMoney * BigDecimal.zero;
         }
       case .equal:
       case null:
@@ -515,7 +516,7 @@ final class _CommingleMoneyFieldState extends State<CommingleMoneyField> {
                 styleTypeOverride: .placeholder,
               ),
               AnimatedNumberWidget(
-                text: operandB.isEmpty ? null : widget.controller.value?.amount.toString(),
+                text: operandB.isEmpty ? null : widget.controller.value?.amount.toOperandString(),
                 textStyle: textStyle,
                 placeholder: '',
                 placeholderColor: widget.placeholderColor,

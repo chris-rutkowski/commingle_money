@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs
 
 import 'package:commingle_money/commingle_money.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/separators_type.dart';
@@ -16,7 +15,7 @@ final class AmountEditingControllerScreen extends StatefulWidget {
 final class _AmountEditingControllerScreenState extends State<AmountEditingControllerScreen> {
   var separatorsType = SeparatorsType.standard;
 
-  final controller = AmountEditingController(precision: 2, amount: Decimal.parse('3532.2312'));
+  final controller = AmountEditingController(precision: 2, amount: BigDecimal.parse('3532.2312'));
 
   @override
   void initState() {
@@ -88,7 +87,7 @@ final class _AmountEditingControllerScreenState extends State<AmountEditingContr
           ListTile(
             title: const Text('Set value: 12345.6789'),
             onTap: () {
-              controller.value = Decimal.parse('12345.6789');
+              controller.value = BigDecimal.parse('12345.6789');
             },
           ),
 

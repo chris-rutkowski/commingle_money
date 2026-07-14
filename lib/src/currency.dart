@@ -1,4 +1,4 @@
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:equatable/equatable.dart';
 
 import 'currency_code.dart';
@@ -63,7 +63,7 @@ final class Currency extends Equatable {
   }
 
   /// Returns the smallest fractional unit for this currency, e.g. 0.01 for USD, 0.001 for BHD.
-  Decimal get smallestAmount => Decimal.fromInt(10).pow(-precision).toDecimal();
+  BigDecimal get smallestAmount => BigDecimal(intVal: BigInt.one, scale: precision);
 
   @override
   List<Object?> get props => [code];

@@ -1,7 +1,7 @@
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 
+import '../big_decimal_utils.dart';
 import '../currency.dart';
-import '../decimal_utils.dart';
 import '../money.dart';
 
 /// Represents the sign of a number.
@@ -13,7 +13,7 @@ enum NumberSign {
   negative,
 }
 
-/// A simple structure that represents a [Decimal] value as integer (`main`)
+/// A simple structure that represents a [BigDecimal] value as integer (`main`)
 /// and fractional (`fractional`) components.
 final class DecimalComponents {
   /// Whether the value is negative.
@@ -32,15 +32,15 @@ final class DecimalComponents {
     required this.fractional,
   });
 
-  /// Creates [DecimalComponents] from [Decimal].
-  factory DecimalComponents.fromDecimal(Decimal value) {
+  /// Creates [DecimalComponents] from [BigDecimal].
+  factory DecimalComponents.fromDecimal(BigDecimal value) {
     final abs = value.abs();
-    final main = abs.truncate().toInt();
+    final main = abs.truncate().truncateToInt();
 
-    final fractionalRaw = abs - Decimal.fromInt(main);
-    final fractional = fractionalRaw.shift(value.scale).toInt();
+    final fractionalRaw = abs - BigDecimalUtils.fromInt(main);
+    final fractional = fractionalRaw.shift(value.scale).truncateToInt();
     return DecimalComponents(
-      sign: value < Decimal.zero ? NumberSign.negative : NumberSign.positive,
+      sign: value < BigDecimal.zero ? NumberSign.negative : NumberSign.positive,
       main: main,
       fractional: fractional,
     );
@@ -48,19 +48,19 @@ final class DecimalComponents {
 
   /// Creates [DecimalComponents] from whole-number [digits].
   factory DecimalComponents.fromDigits(List<int> digits, {NumberSign sign = .positive}) {
-    var main = Decimal.zero;
+    var main = BigDecimal.zero;
 
     for (final digit in digits) {
       if (digit < 0 || digit > 9) {
         throw ArgumentError.value(digit, 'digits', 'Each digit must be between 0 and 9');
       }
 
-      main = main.shift(1) + Decimal.fromInt(digit);
+      main = main.shift(1) + BigDecimalUtils.fromInt(digit);
     }
 
     return DecimalComponents(
       sign: sign,
-      main: main.toInt(),
+      main: main.truncateToInt(),
       fractional: 0,
     );
   }
@@ -73,9 +73,9 @@ final class DecimalComponents {
     final precision = Currency.getPrecision(money.currencyCode);
 
     return DecimalComponents(
-      sign: money.amount < Decimal.zero ? NumberSign.negative : NumberSign.positive,
-      main: main.toInt(),
-      fractional: (abs - main).shift(precision).toInt(),
+      sign: money.amount < BigDecimal.zero ? NumberSign.negative : NumberSign.positive,
+      main: main.truncateToInt(),
+      fractional: (abs - main).shift(precision).truncateToInt(),
     );
   }
 
@@ -92,10 +92,11 @@ final class DecimalComponents {
     );
   }
 
-  /// Converts this [DecimalComponents] back to a [Decimal] value.
-  Decimal toDecimal() {
-    final decimal = Decimal.fromInt(main) + Decimal.fromInt(fractional).shift(-fractional.toString().length);
-    return sign == NumberSign.negative ? -decimal : decimal;
+  /// Converts this [DecimalComponents] back to a [BigDecimal] value.
+  BigDecimal toBigDecimal() {
+    final fractionalDigits = fractional == 0 ? 1 : fractional.toString().length;
+    final value = BigDecimalUtils.fromInt(main) + BigDecimalUtils.fromInt(fractional).shift(-fractionalDigits);
+    return sign == NumberSign.negative ? -value : value;
   }
 
   @override

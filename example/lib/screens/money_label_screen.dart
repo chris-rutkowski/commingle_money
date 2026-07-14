@@ -1,5 +1,4 @@
 import 'package:commingle_money/commingle_money.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/separators_type.dart';
@@ -26,8 +25,8 @@ final class _MoneyLabelScreenState extends State<MoneyLabelScreen> {
   var decimalLowSlider = 0;
 
   Money get money {
-    final whole = Decimal.fromInt(highSlider * 10000 + mediumSlider * 100 + lowSlider);
-    final fractional = Decimal.fromInt(decimalHighSlider).shift(-2) + Decimal.fromInt(decimalLowSlider).shift(-4);
+    final whole = BigDecimalUtils.fromInt(highSlider * 10000 + mediumSlider * 100 + lowSlider);
+    final fractional = BigDecimalUtils.fromInt(decimalHighSlider).shift(-2) + BigDecimalUtils.fromInt(decimalLowSlider).shift(-4);
     final total = whole + fractional;
 
     return Money(

@@ -1,17 +1,17 @@
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:equatable/equatable.dart';
 
+import 'big_decimal_utils.dart';
 import 'currency.dart';
 import 'currency_code.dart';
-import 'decimal_utils.dart';
 
 /// A value object that represents a monetary amount in a specific currency.
 final class Money extends Equatable {
   /// The ISO 4217 currency code (e.g. "USD", "EUR", "AED").
   final CurrencyCode currencyCode;
 
-  /// The monetary amount, represented as a [Decimal] for high precision.
-  final Decimal amount;
+  /// The monetary amount, represented as a [BigDecimal] for high precision.
+  final BigDecimal amount;
 
   /// Creates a [Money] instance with the given [currencyCode] and [amount].
   const Money({
@@ -22,17 +22,17 @@ final class Money extends Equatable {
   /// Creates a [Money] instance with the given [currencyCode] and `0` [amount].
   static Money zero(CurrencyCode currencyCode) => Money(
     currencyCode: currencyCode,
-    amount: Decimal.zero,
+    amount: BigDecimal.zero,
   );
 
   /// Creates a [Money] instance with the given [amount] in USD.
-  static Money usd(Decimal amount) => Money(
+  static Money usd(BigDecimal amount) => Money(
     currencyCode: CurrencyCodes.usd,
     amount: amount,
   );
 
   /// Creates a [Money] instance with the given [amount] in EUR.
-  static Money eur(Decimal amount) => Money(
+  static Money eur(BigDecimal amount) => Money(
     currencyCode: CurrencyCodes.eur,
     amount: amount,
   );
@@ -48,7 +48,7 @@ final class Money extends Equatable {
   /// If a parameter is not provided, the existing value from this instance is used
   Money copyWith({
     CurrencyCode? currencyCode,
-    Decimal? amount,
+    BigDecimal? amount,
   }) {
     return Money(
       currencyCode: currencyCode ?? this.currencyCode,
@@ -83,38 +83,38 @@ final class Money extends Equatable {
   }
 
   /// Returns sum of this [Money] and [other].
-  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [BigDecimal]).
   Money operator +(dynamic other) {
     return Money(
       currencyCode: currencyCode,
-      amount: amount + _getDecimal(other, currencyCode),
+      amount: amount + _getBigDecimal(other, currencyCode),
     ).roundedToCurrencyPrecision();
   }
 
   /// Returns difference of this [Money] and [other].
-  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [BigDecimal]).
   Money operator -(dynamic other) {
     return Money(
       currencyCode: currencyCode,
-      amount: amount - _getDecimal(other, currencyCode),
+      amount: amount - _getBigDecimal(other, currencyCode),
     ).roundedToCurrencyPrecision();
   }
 
   /// Returns product of this [Money] and [other].
-  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [BigDecimal]).
   Money operator *(dynamic other) {
     return Money(
       currencyCode: currencyCode,
-      amount: amount * _getDecimal(other, currencyCode),
+      amount: amount * _getBigDecimal(other, currencyCode),
     ).roundedToCurrencyPrecision();
   }
 
   /// Returns quotient of this [Money] and [other].
-  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [BigDecimal]).
   Money operator /(dynamic other) {
-    final decimalDivisor = _getDecimal(other, currencyCode);
+    final divisor = _getBigDecimal(other, currencyCode);
 
-    if (decimalDivisor == Decimal.zero) {
+    if (divisor == BigDecimal.zero) {
       throw ArgumentError('Division by zero is not allowed');
     }
 
@@ -122,39 +122,49 @@ final class Money extends Equatable {
 
     return Money(
       currencyCode: currencyCode,
-      amount: (amount / decimalDivisor).toDecimal(scaleOnInfinitePrecision: precision),
+      amount: amount.divide(
+        divisor,
+        scale: precision,
+        roundingMode: RoundingMode.HALF_UP,
+      ),
     ).roundedToCurrencyPrecision();
   }
 
   /// Returns truncated quotient of this [Money] and [other].
-  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [Decimal]).
+  /// [other] can be either a [Money] with the same [currencyCode], or a numeric type ([int], [double], [BigDecimal]).
   Money operator ~/(dynamic other) {
-    final decimalDivisor = _getDecimal(other, currencyCode);
+    final divisor = _getBigDecimal(other, currencyCode);
 
-    if (decimalDivisor == Decimal.zero) {
+    if (divisor == BigDecimal.zero) {
       throw ArgumentError('Division by zero is not allowed');
     }
 
+    final quotient = amount.divide(
+      divisor,
+      scale: 0,
+      roundingMode: RoundingMode.DOWN,
+    );
+
     return Money(
       currencyCode: currencyCode,
-      amount: Decimal.fromBigInt(amount ~/ decimalDivisor),
+      amount: quotient,
     );
   }
 }
 
-Decimal _getDecimal(dynamic value, CurrencyCode currencyCode) {
-  if (value is Decimal) {
+BigDecimal _getBigDecimal(dynamic value, CurrencyCode currencyCode) {
+  if (value is BigDecimal) {
     return value;
   } else if (value is int) {
-    return Decimal.fromInt(value);
+    return BigDecimalUtils.fromInt(value);
   } else if (value is double) {
-    return DecimalUtils.fromDouble(value);
+    return BigDecimalUtils.fromDouble(value);
   } else if (value is Money) {
     if (value.currencyCode != currencyCode) {
       throw ArgumentError('Currency mismatch: expected $currencyCode, got ${value.currencyCode}');
     }
     return value.amount;
   } else {
-    throw ArgumentError('Invalid type for conversion to Decimal: `$value` of type ${value.runtimeType}');
+    throw ArgumentError('Invalid type for conversion to BigDecimal: `$value` of type ${value.runtimeType}');
   }
 }

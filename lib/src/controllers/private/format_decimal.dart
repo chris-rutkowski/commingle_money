@@ -1,18 +1,19 @@
 // ignore_for_file: public_member_api_docs
 
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 
 import '../../amount_format_separators.dart';
+import '../../big_decimal_utils.dart';
 
 String formatDecimal(
-  Decimal value, {
+  BigDecimal value, {
   int? precision,
   required AmountFormatSeparatorsData separators,
 }) {
   // rounds the value if `precision` is provided, otherwise uses the value as is
   final roundedValue = precision != null ? value.round(scale: precision) : value;
 
-  final parts = roundedValue.toString().split('.');
+  final parts = roundedValue.toPlainString().split('.');
 
   final integer = parts[0];
   final fraction = parts.length > 1 ? parts[1] : null;
@@ -23,7 +24,7 @@ String formatDecimal(
   );
 
   // if there is no fraction, returns only the formatted integer
-  if (fraction == null || Decimal.parse('0.$fraction') == Decimal.zero) {
+  if (fraction == null || BigDecimal.parse('0.$fraction') == BigDecimal.zero) {
     return formattedInteger;
   }
 

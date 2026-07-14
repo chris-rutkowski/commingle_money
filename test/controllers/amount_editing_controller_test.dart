@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:commingle_money/commingle_money.dart';
-import 'package:decimal/decimal.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,23 +18,23 @@ void main() {
 
   group('AmountEditingController', () {
     testWidgets('standard', (WidgetTester tester) async {
-      final controller = AmountEditingController(precision: 2, amount: Decimal.parse('3532.2312'));
+      final controller = AmountEditingController(precision: 2, amount: BigDecimal.parse('3532.2312'));
 
-      Decimal? listenerValue;
+      BigDecimal? listenerValue;
       controller.addListener(() {
         listenerValue = controller.value;
       });
 
       void expectState({
         required String text,
-        required Decimal? value,
+        required BigDecimal? value,
         required bool quiet,
         required AmountEditingState state,
       }) {
         expect(controller.textController.text, text);
 
         expect(controller.value, value);
-        expect(controller.valueOrZero, value ?? Decimal.zero);
+        expect(controller.valueOrZero, value ?? BigDecimal.zero);
 
         if (quiet) {
           expect(listenerValue, isNull);
@@ -61,39 +60,39 @@ void main() {
       );
 
       // Initial state
-      expectState(text: '3,532.23', value: Decimal.parse('3532.23'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '3,532.23', value: BigDecimal.parse('3532.23'), quiet: true, state: AmountEditingState.value);
 
       // User modifies
       await tester.type('1234.56');
-      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '1234.56', value: BigDecimal.parse('1234.56'), quiet: false, state: AmountEditingState.value);
 
       // Users dismisses keyboard - value should be formatted
       await tester.dismissKeyboard(controller);
-      expectState(text: '1,234.56', value: Decimal.parse('1234.56'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '1,234.56', value: BigDecimal.parse('1234.56'), quiet: true, state: AmountEditingState.value);
 
       // App changes precision
       controller.precision = 1;
       await tester.pump();
-      expectState(text: '1,234.6', value: Decimal.parse('1234.6'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '1,234.6', value: BigDecimal.parse('1234.6'), quiet: false, state: AmountEditingState.value);
 
       // App changes value
-      controller.value = Decimal.parse('9876.9');
+      controller.value = BigDecimal.parse('9876.9');
       await tester.pump();
-      expectState(text: '9,876.9', value: Decimal.parse('9876.9'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '9,876.9', value: BigDecimal.parse('9876.9'), quiet: false, state: AmountEditingState.value);
 
       // App changes precision without affecting value, listener shouldn't trigger
       controller.precision = 3;
       await tester.pump();
-      expectState(text: '9,876.900', value: Decimal.parse('9876.9'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '9,876.900', value: BigDecimal.parse('9876.9'), quiet: true, state: AmountEditingState.value);
 
       // App changes value as user types
       await tester.type('4');
-      expectState(text: '4', value: Decimal.parse('4'), quiet: false, state: AmountEditingState.value);
-      controller.value = Decimal.parse('5');
+      expectState(text: '4', value: BigDecimal.parse('4'), quiet: false, state: AmountEditingState.value);
+      controller.value = BigDecimal.parse('5');
       await tester.pump();
-      expectState(text: '4', value: Decimal.parse('5'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '4', value: BigDecimal.parse('5'), quiet: false, state: AmountEditingState.value);
       await tester.dismissKeyboard(controller);
-      expectState(text: '5', value: Decimal.parse('5'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '5', value: BigDecimal.parse('5'), quiet: true, state: AmountEditingState.value);
 
       // App erases value
       controller.value = null;
@@ -102,7 +101,7 @@ void main() {
 
       // User erases value
       await tester.type('1234.56');
-      expectState(text: '1234.56', value: Decimal.parse('1234.56'), quiet: false, state: AmountEditingState.value);
+      expectState(text: '1234.56', value: BigDecimal.parse('1234.56'), quiet: false, state: AmountEditingState.value);
       await tester.type('');
       expectState(text: '', value: null, quiet: false, state: AmountEditingState.empty);
 
@@ -110,40 +109,40 @@ void main() {
       await tester.type('2(5-1)*3×4/1.5÷3‒1');
       expectState(
         text: '2(5-1)*3×4/1.5÷3‒1',
-        value: Decimal.parse('20.333'),
+        value: BigDecimal.parse('20.333'),
         quiet: false,
         state: AmountEditingState.value,
       );
       await tester.dismissKeyboard(controller);
-      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '20.333', value: BigDecimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
 
       // User divides by zero
       await tester.type('2/0');
       expectState(
         text: '2/0',
-        value: Decimal.parse('20.333'), // previous legal value
+        value: BigDecimal.parse('20.333'), // previous legal value
         quiet: true,
         state: AmountEditingState.error,
       );
       await tester.dismissKeyboard(controller);
-      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '20.333', value: BigDecimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
 
       // User enters invalid formula
       await tester.type('2)');
       expectState(
         text: '2)',
-        value: Decimal.parse('20.333'), // previous legal value
+        value: BigDecimal.parse('20.333'), // previous legal value
         quiet: true,
         state: AmountEditingState.error,
       );
       await tester.dismissKeyboard(controller);
-      expectState(text: '20.333', value: Decimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
+      expectState(text: '20.333', value: BigDecimal.parse('20.333'), quiet: true, state: AmountEditingState.value);
 
       // User types zero
       await tester.type('0');
       expectState(
         text: '0',
-        value: Decimal.zero,
+        value: BigDecimal.zero,
         quiet: false,
         state: AmountEditingState.zero,
       );
@@ -155,17 +154,17 @@ void main() {
       final controller = AmountEditingController(
         separators: const AmountFormatSeparatorsData(grouping: 'g', decimal: 'd'),
         precision: 2,
-        amount: Decimal.parse('3532.2312'),
+        amount: BigDecimal.parse('3532.2312'),
       );
 
-      Decimal? listenerValue;
+      BigDecimal? listenerValue;
       controller.addListener(() {
         listenerValue = controller.value;
       });
 
       void expectState({
         required String text,
-        required Decimal? value,
+        required BigDecimal? value,
         required bool quiet,
       }) {
         expect(controller.textController.text, text);
@@ -193,15 +192,15 @@ void main() {
       );
 
       // Initial state
-      expectState(text: '3g532d23', value: Decimal.parse('3532.23'), quiet: true);
+      expectState(text: '3g532d23', value: BigDecimal.parse('3532.23'), quiet: true);
 
       // User modifies
       await tester.type('1234d56');
-      expectState(text: '1234d56', value: Decimal.parse('1234.56'), quiet: false);
+      expectState(text: '1234d56', value: BigDecimal.parse('1234.56'), quiet: false);
       await tester.type('2g4g59g1gd12');
-      expectState(text: '2g4g59g1gd12', value: Decimal.parse('24591.12'), quiet: false);
+      expectState(text: '2g4g59g1gd12', value: BigDecimal.parse('24591.12'), quiet: false);
       await tester.dismissKeyboard(controller);
-      expectState(text: '24g591d12', value: Decimal.parse('24591.12'), quiet: true);
+      expectState(text: '24g591d12', value: BigDecimal.parse('24591.12'), quiet: true);
 
       controller.dispose();
     });
@@ -224,12 +223,12 @@ void main() {
 
       await tester.type('.01');
       expect(controller.textController.text, '.01');
-      expect(controller.value, Decimal.parse('0.01'));
+      expect(controller.value, BigDecimal.parse('0.01'));
       expect(controller.state.value, AmountEditingState.value);
 
       await tester.type('1+.01');
       expect(controller.textController.text, '1+.01');
-      expect(controller.value, Decimal.parse('1.01'));
+      expect(controller.value, BigDecimal.parse('1.01'));
       expect(controller.state.value, AmountEditingState.value);
 
       controller.dispose();

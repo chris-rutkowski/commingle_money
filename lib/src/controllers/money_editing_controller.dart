@@ -1,4 +1,4 @@
-import 'package:decimal/decimal.dart';
+import 'package:big_decimal/big_decimal.dart';
 import 'package:flutter/material.dart';
 
 import '../amount_format_separators.dart';
@@ -39,6 +39,9 @@ final class MoneyEditingController extends ChangeNotifier {
 
   CurrencyCode _currencyCode;
 
+  /// When true, [_onAmountChanged] is suppressed so [value] can notify once.
+  var _syncingFromValueSetter = false;
+
   /// The current currency associated with the controller.
   CurrencyCode get currencyCode => _currencyCode;
 
@@ -64,13 +67,21 @@ final class MoneyEditingController extends ChangeNotifier {
   /// Programmatically sets the value of the controller.
   set value(Money? newValue) {
     if (newValue == null) {
+      if (_amountController.value == null) return;
       _amountController.value = null;
       return;
     }
+    if (value == newValue) return;
 
-    _currencyCode = newValue.currencyCode;
-    _amountController.precision = Currency.fromCode(newValue.currencyCode)?.precision;
-    _amountController.value = newValue.amount;
+    _syncingFromValueSetter = true;
+    try {
+      _currencyCode = newValue.currencyCode;
+      _amountController.precision = Currency.fromCode(newValue.currencyCode)?.precision;
+      _amountController.value = newValue.amount;
+    } finally {
+      _syncingFromValueSetter = false;
+    }
+    notifyListeners();
   }
 
   /// Creates an [MoneyEditingController] instance.
@@ -78,7 +89,7 @@ final class MoneyEditingController extends ChangeNotifier {
   /// of [separators] using `AmountFormatSeparators.read(context)`.
   MoneyEditingController({
     required CurrencyCode currencyCode,
-    Decimal? amount,
+    BigDecimal? amount,
     AmountFormatSeparatorsData separators = const AmountFormatSeparatorsData(),
   }) : _currencyCode = currencyCode,
        _amountController = AmountEditingController(
@@ -90,6 +101,7 @@ final class MoneyEditingController extends ChangeNotifier {
   }
 
   void _onAmountChanged() {
+    if (_syncingFromValueSetter) return;
     notifyListeners();
   }
 

@@ -10,7 +10,6 @@ dependencies:
   commingle_money:
     path: ..
   cupertino_icons:
-  decimal:
   flutter:
     sdk: flutter
   intl:
