@@ -39,6 +39,9 @@ final class MoneyEditingController extends ChangeNotifier {
 
   CurrencyCode _currencyCode;
 
+  /// When true, [_onAmountChanged] is suppressed so [value] can notify once.
+  var _syncingFromValueSetter = false;
+
   /// The current currency associated with the controller.
   CurrencyCode get currencyCode => _currencyCode;
 
@@ -64,13 +67,21 @@ final class MoneyEditingController extends ChangeNotifier {
   /// Programmatically sets the value of the controller.
   set value(Money? newValue) {
     if (newValue == null) {
+      if (_amountController.value == null) return;
       _amountController.value = null;
       return;
     }
+    if (value == newValue) return;
 
-    _currencyCode = newValue.currencyCode;
-    _amountController.precision = Currency.fromCode(newValue.currencyCode)?.precision;
-    _amountController.value = newValue.amount;
+    _syncingFromValueSetter = true;
+    try {
+      _currencyCode = newValue.currencyCode;
+      _amountController.precision = Currency.fromCode(newValue.currencyCode)?.precision;
+      _amountController.value = newValue.amount;
+    } finally {
+      _syncingFromValueSetter = false;
+    }
+    notifyListeners();
   }
 
   /// Creates an [MoneyEditingController] instance.
@@ -90,6 +101,7 @@ final class MoneyEditingController extends ChangeNotifier {
   }
 
   void _onAmountChanged() {
+    if (_syncingFromValueSetter) return;
     notifyListeners();
   }
 
